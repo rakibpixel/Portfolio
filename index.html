@@ -169,6 +169,7 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   opacity:0;
   animation:hpIn 1s .5s cubic-bezier(.22,1,.36,1) forwards;
   display:block;
+  margin-top: 100px;
 }
 @keyframes hpIn{to{opacity:1}}
 /* left gradient blend */
@@ -192,7 +193,8 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   position:relative;z-index:3;
   display:flex;gap:48px;
   padding:0 70px;
-  margin-bottom:auto;
+  margin-top: auto;
+  margin-bottom: 60px;
   opacity:0;transform:translateY(-12px);
   animation:fdUp .8s .4s cubic-bezier(.22,1,.36,1) forwards;
 }
@@ -210,10 +212,11 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   position:relative;z-index:3;
   padding:0 70px;
   flex-shrink:0;
+  margin-bottom: auto;
 }
 .hero-h1{
   font-family:var(--dp);
-  font-size:clamp(100px,16vw,220px);
+  font-size: clamp(100px, 20vw, 300px);
   font-weight:800;
   line-height:.85;
   letter-spacing:-8px;
@@ -370,22 +373,45 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
 .about .stitle{margin-bottom:22px}
 .about p{font-size:16px;font-weight:300;color:var(--mu);line-height:1.85;margin-bottom:18px}
 .about p strong{color:var(--fg);font-weight:600}
-.ab-frame{border-radius:24px;overflow:hidden;aspect-ratio:3/4;background:var(--s2);position:relative}
+.ab-frame{border-radius:24px;
+overflow:hidden;
+aspect-ratio:3/4;
+background:var(--s2);
+position: relative;
+max-height: 700px;
+width: 100%;
+	}
+	
 .ab-frame img{width:100%;height:100%;object-fit:cover;object-position:top}
 .ab-glow{position:absolute;top:-30px;right:-30px;width:180px;height:180px;
   background:var(--v);opacity:.1;filter:blur(55px);border-radius:50%}
 .ab-badge{
-  position:absolute;bottom:24px;left:-28px;
-  background:rgba(15,14,22,.94);backdrop-filter:blur(16px);
+  position:absolute;
+  bottom: 107px;
+  left: -69px;
+  background: rgb(208 201 255 / 26%);
+  backdrop-filter:blur(16px);
   border:1px solid var(--ln);border-radius:14px;
   padding:15px 19px;display:flex;align-items:center;gap:11px;
 }
 .abb-ico{
-  width:36px;height:36px;border-radius:9px;background:var(--vd);
-  display:flex;align-items:center;justify-content:center;font-size:18px;
+  width:36px;height:36px;
+  border-radius:9px;
+  background: rgb(179 165 255 / 42%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
 }
-.abb-t strong{display:block;font-size:13px;font-weight:700;letter-spacing:-.2px}
-.abb-t span{font-size:10px;color:var(--mu)}
+.abb-t strong{display:block;
+font-size:13px;
+font-weight:700;
+letter-spacing:-.2px;
+color: #403d50;
+}
+
+.abb-t span{font-size:10px;
+color: #403d50}
 
 /* philosophy */
 .philo{display:grid;grid-template-columns:repeat(3,1fr);gap:0;
@@ -865,7 +891,7 @@ footer a:hover{color:var(--v)}
 
   <!-- photo: right half, clipped within hero -->
   <div class="hero-photo">
-    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidmxWAns7RC9lGwE7rR5ky0ct8nk2-p9mbwr3D-3ysIZcD7M_q_j31L4RiKhVXdA9hIZxQjUdj5xErs3YrhyER2TLLdgZ5fn5jbwmnPrnLYPukTAAyWXOWWh56G_xStjsyv9a80O7YhEjz5l2n2MiOAJFgDcsa4mnxvs7zz4DZLQ7sVa8OAHbIgZy9hIA/s4864/RH.webp" alt="Rakibul Hassan" />
+    <img src="https://raw.githubusercontent.com/rakibpixel/Portfolio/refs/heads/main/RH.webp" alt="Rakibul Hassan" />
   </div>
 
   <!-- top spacer below nav -->
