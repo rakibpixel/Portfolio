@@ -68,12 +68,10 @@ body.cta #cr{width:70px;height:70px;margin-left:-35px;margin-top:-35px;border-co
   transition:opacity .7s cubic-bezier(.22,1,.36,1);
 }
 #loader.done{opacity:0;pointer-events:none}
-.ld-logo-svg{height:clamp(22px,4vw,40px);width:auto;
+.ld-logo-svg{height:clamp(60px,10vw,100px);width:auto;
   opacity:0;animation:ldFade .8s .1s cubic-bezier(.22,1,.36,1) forwards}
-.ld-wordmark{font-family:var(--dp);font-size:clamp(36px,6vw,80px);
-  font-weight:800;letter-spacing:-3px;color:var(--fg);overflow:hidden}
-.ld-wm-inner{display:block;opacity:0;transform:translateY(60px);
-  animation:ldUp .9s .25s cubic-bezier(.22,1,.36,1) forwards}
+
+
 .ld-pct{font-family:var(--dp);font-size:clamp(11px,1.2vw,14px);
   letter-spacing:4px;color:var(--mu);opacity:0;animation:ldFade .5s .5s forwards}
 .ld-bar-wrap{width:min(200px,60vw);height:1.5px;background:var(--ln);border-radius:2px;overflow:hidden}
@@ -139,23 +137,8 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   pointer-events:none;z-index:0;
 }
 
-/* left rotated label */
-.hero-side-label{
-  position:absolute;left:-28px;top:50%;
-  transform:rotate(-90deg) translateX(-50%);
-  font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;
-  color:rgba(12,10,26,.3);white-space:nowrap;
-  transform-origin:center center;
-  z-index:2;
-}
-/* year bottom left */
-.hero-year{
-  position:absolute;left:20px;bottom:48px;
-  font-size:10px;font-weight:600;letter-spacing:3px;
-  color:rgba(12,10,26,.3);
-  writing-mode:vertical-rl;
-  z-index:2;
-}
+
+
 
 /* photo — right side, fills height */
 .hero-photo{
@@ -307,29 +290,19 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   /* NO transform on base state to avoid flicker */
   box-shadow:none;
   transition:background .4s var(--e),box-shadow .4s var(--e),opacity .4s var(--e);
-  will-change:box-shadow;
-  backface-visibility:hidden;
 }
-.btn-dark:hover{background:var(--v);box-shadow:0 16px 40px var(--vg)}
+.btn-dark:hover{background:var(--v)}
 .btn-outline-dark{
   display:inline-flex;align-items:center;gap:8px;
   padding:13px 30px;border-radius:100px;
   border:1.5px solid rgba(12,10,26,.2);
   color:rgba(12,10,26,.6);font-weight:600;font-size:13px;
   transition:border-color .4s var(--e),color .4s var(--e),background .4s var(--e);
-  will-change:border-color;
-  backface-visibility:hidden;
 }
 .btn-outline-dark:hover{border-color:var(--lt);color:var(--lt)}
-.hero-socials{
-  display:flex;gap:16px;
-  opacity:0;animation:fadeD .8s 1.2s var(--e) forwards;
-}
-.hsoc{
-  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:rgba(12,10,26,.4);transition:color .4s var(--e);
-}
-.hsoc:hover{color:var(--v)}
+
+
+
 
 /* ══════════════════════════════════════
    BRANDS MARQUEE
@@ -497,9 +470,7 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
 .wc.c7{grid-column:span 7}.wc.c5{grid-column:span 5}
 .wc.c4{grid-column:span 4}.wc.c8{grid-column:span 8}
 .wc img{width:100%;height:100%;min-height:300px;object-fit:cover;display:block;
-  transition:transform 1s var(--e);will-change:transform}
-.wc:hover img{transform:scale(1.055)}
-.wc-ov{position:absolute;inset:0;padding:28px;
+  transition:transform 1s var(--e);inset:0;padding:28px;
   background:linear-gradient(to top,rgba(6,6,10,.95) 0%,rgba(6,6,10,.15) 55%,transparent 100%);
   display:flex;flex-direction:column;justify-content:flex-end;
   opacity:0;transition:opacity .55s var(--e)}
@@ -520,7 +491,6 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   border-radius:100px;border:1.5px solid var(--ln);color:var(--mu);
   font-weight:600;font-size:13px;
   transition:border-color .4s var(--e),color .4s var(--e);
-  will-change:border-color;backface-visibility:hidden;
 }
 .btn-gw:hover{border-color:var(--fg);color:var(--fg)}
 
@@ -600,7 +570,6 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   font-size:13px;font-weight:500;color:var(--mu);
   background:transparent;
   transition:border-color .4s var(--e),color .4s var(--e),background .4s var(--e),transform .35s var(--e);
-  will-change:transform;backface-visibility:hidden;
 }
 .sk-pill:hover{border-color:var(--v);color:var(--fg);background:var(--vd);transform:translateY(-2px)}
 .sk-pill svg{opacity:.5;transition:opacity .4s}
@@ -628,7 +597,6 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   background:var(--s1);border:1px solid var(--ln);border-radius:20px;
   padding:36px;position:relative;overflow:hidden;
   transition:border-color .5s var(--e),background .5s var(--e),transform .5s var(--e);
-  will-change:transform;backface-visibility:hidden;
 }
 .tcard:hover{border-color:var(--v);background:var(--s2);transform:translateY(-4px)}
 /* big quote mark */
@@ -686,15 +654,13 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   border-radius:100px;background:#fff;color:var(--v);font-weight:700;font-size:14px;
   box-shadow:none;
   transition:box-shadow .4s var(--e),opacity .4s var(--e);
-  will-change:box-shadow;backface-visibility:hidden;
 }
-.btn-wh:hover{box-shadow:0 18px 48px rgba(0,0,0,.22)}
+.btn-wh:hover{opacity:.92}
 .btn-ow{
   display:inline-flex;align-items:center;gap:8px;padding:14px 34px;
   border-radius:100px;border:1.5px solid rgba(255,255,255,.35);color:#fff;
   font-weight:600;font-size:14px;
   transition:border-color .4s var(--e),background .4s var(--e);
-  will-change:border-color;backface-visibility:hidden;
 }
 .btn-ow:hover{border-color:#fff;background:rgba(255,255,255,.12)}
 
@@ -742,7 +708,6 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   cursor:none;width:fit-content;
   box-shadow:none;
   transition:box-shadow .4s var(--e),opacity .4s var(--e);
-  will-change:box-shadow;backface-visibility:hidden;
 }
 .cf-sub:hover{box-shadow:0 16px 40px var(--vg)}
 
@@ -753,7 +718,7 @@ footer{
   padding:32px 60px;display:flex;justify-content:space-between;align-items:center;
   border-top:1px solid var(--ln);font-size:11px;color:var(--mu);
 }
-.foot-svg{height:18px;width:auto;display:block;opacity:.7}
+.foot-svg{height:22px;width:auto;display:block}
 footer a{color:var(--mu);transition:color .35s var(--e)}
 footer a:hover{color:var(--v)}
 .foot-links{display:flex;gap:22px}
@@ -761,11 +726,11 @@ footer a:hover{color:var(--v)}
 /* ══════════════════════════════════════
    REVEAL
 ══════════════════════════════════════ */
-.r{opacity:0;transform:translateY(28px);will-change:opacity,transform;
+.r{opacity:0;transform:translateY(28px);
   transition:opacity 1s var(--e),transform 1s var(--e)}
-.rl{opacity:0;transform:translateX(-32px);will-change:opacity,transform;
+.rl{opacity:0;transform:translateX(-32px);
   transition:opacity 1s var(--e),transform 1s var(--e)}
-.rr{opacity:0;transform:translateX(32px);will-change:opacity,transform;
+.rr{opacity:0;transform:translateX(32px);
   transition:opacity 1s var(--e),transform 1s var(--e)}
 .r.in,.rl.in,.rr.in{opacity:1;transform:translate(0)}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
@@ -790,8 +755,8 @@ footer a:hover{color:var(--v)}
   .hero-content{padding-left:30px;padding-right:30px}
   .hero-bottom{padding-left:30px;padding-right:30px}
   .hero-vline{left:24px}
-  .hero-year{left:10px}
-  .hero-side-label{display:none}
+  
+  
   .testi-head{flex-direction:column;align-items:flex-start;gap:16px}
   .testi-sub{text-align:left}
   footer{flex-direction:column;gap:12px;text-align:center}
@@ -807,24 +772,41 @@ footer a:hover{color:var(--v)}
   .cta{padding:90px 20px}
   .cta-btns{flex-direction:column;align-items:center}
 }
+
+/* Hide Blogger default navbar */
+#navbar-iframe, .navbar-iframe,
+#NavBar, .b-navbar,
+[id*="navbar"], [class*="b-navbar"]{
+  display:none !important;
+  height:0 !important;
+  visibility:hidden !important;
+}
+
+/* Hero social icon buttons */
+.hero-socials{display:flex;gap:10px;opacity:0;animation:fdUp .8s 1.2s var(--e) forwards}
+.hsoc{
+  width:36px;height:36px;border-radius:50%;
+  border:1.5px solid rgba(12,10,26,.18);
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .35s var(--e),background .35s var(--e);
+}
+.hsoc:hover{border-color:var(--v);background:var(--v)}
+.hsoc svg{width:15px;height:15px;color:rgba(12,10,26,.5);transition:color .35s var(--e)}
+.hsoc:hover svg{color:#fff}
 </style>
 </head>
 <body>
 
 <!-- ════ LOADER — cinematic split ════ -->
 <div id="loader">
-  <!-- Logo With Text SVG -->
-  <svg class="ld-logo-svg" viewBox="0 0 1558 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg class="ld-logo-svg" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M231.672 279.7L199.605 217.127L269.686 184.588L202.11 0L0 20.0207L0 279.7H100.115L48.1804 51.9346L188.343 148.295L81.7811 199.304L231.672 279.7Z" fill="#5E43EC"/>
     <path fill-rule="evenodd" clip-rule="evenodd" d="M236.483 213.463L216.866 222.568L226.601 241.561L236.483 213.463Z" fill="#5E43EC"/>
-    <path d="M399.242 226.524H374V54.6375H457.179C473.586 55.8795 480.678 58.3637 487.81 60.8478C493.94 64.3336 499.069 68.8211C504.237 73.2685 508.244 78.5974 511.089 84.8078C513.933 90.978 515.356 97.7894 515.356 105.242C515.356 118.223 511.75 123.753C509.386 129.242 506.02 133.95 501.653 137.876C497.286 141.803 485.907 146.951C479.776 149.075 465.472 150.137V150.016C472.164 150.597 475.209 151.759C483.803 156.928C486.528 159.212 491.376 165.402C493.7 168.768 497.806 177.062L519.983 226.524H492.277L470.16 177.122C468.718 173.876 465.172 168.948C461.085 164.901 449.065 160.594C441.172 159.693 436.204 159.693H396.057L399.242 155.546V226.524ZM397.199 78.0765L399.242 75.4922V140.34L396.057 136.254H453.933C464.651 135.572 469.139 134.21C480.498 128.38C487.649 119.005C490.114 106.504C487.71 94.3637C480.678 85.4689C469.259 79.9997C453.813 78.0765H397.199Z" fill="white"/>
-    <path d="M1057 226.524V54.6375H1136.63C1145.6 54.6375 1153.86 55.9997 1161.39 58.7243C1175.47 65.2752 1180.92 70.2034C1193.66 87.6926C1198.23 109.93C1193.6 132.227C1175.41 154.764C1153.8 164.14C1136.63 165.522H1077.85L1082.18 160.594V226.524H1057ZM1080.13 78.0765L1082.18 75.4922V146.17L1078.99 142.083H1134.64C1145.78 141.342C1155.24 138.337C1165.92 130.624C1172.09 119.305C1172.99 109.93C1168.58 92.781C1150.81 80.3002C1135.13 78.0765H1080.13Z" fill="white"/>
-    <path d="M1557.02 48.6274V226.524H1532.68V48.6274H1557.02Z" fill="white"/>
   </svg>
-  <div class="ld-wordmark"><span class="ld-wm-inner">Rakibul</span></div>
   <div class="ld-pct" id="ldPct">0%</div>
   <div class="ld-bar-wrap"><div class="ld-bar" id="ldBar"></div></div>
 </div>
+
 
 <!-- CURSOR -->
 <div id="cd"></div><div id="cr"></div>
@@ -859,9 +841,6 @@ footer a:hover{color:var(--v)}
 <section class="hero" id="home">
   <div class="hero-grid"></div>
   <div class="hero-vline"></div>
-  <div class="hero-side-label">Creative Designer</div>
-  <div class="hero-year">2025</div>
-
   <!-- photo fills right side -->
   <div class="hero-photo">
     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidmxWAns7RC9lGwE7rR5ky0ct8nk2-p9mbwr3D-3ysIZcD7M_q_j31L4RiKhVXdA9hIZxQjUdj5xErs3YrhyER2TLLdgZ5fn5jbwmnPrnLYPukTAAyWXOWWh56G_xStjsyv9a80O7YhEjz5l2n2MiOAJFgDcsa4mnxvs7zz4DZLQ7sVa8OAHbIgZy9hIA/s4864/RH.webp" alt="Rakibul Hassan"
@@ -914,9 +893,15 @@ footer a:hover{color:var(--v)}
       <a href="#work" class="btn-outline-dark">View Work →</a>
     </div>
     <div class="hero-socials">
-      <a href="https://be.net/rakibpixel" target="_blank" class="hsoc">Be</a>
-      <a href="https://www.linkedin.com/in/rakibpixel/" target="_blank" class="hsoc">Li</a>
-      <a href="https://www.instagram.com/rakibpixel" target="_blank" class="hsoc">Ig</a>
+      <a href="https://be.net/rakibpixel" target="_blank" class="hsoc" title="Behance">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 8H14.5V9.5H9.5V8ZM4 7H8.5C10.4 7 11.5 8 11.5 9.5C11.5 11 10.5 11.5 10.5 11.5C10.5 11.5 12 12 12 13.8C12 15.8 10.6 17 8.4 17H4V7ZM6 11H8C8.8 11 9.5 10.6 9.5 9.8C9.5 9 8.8 8.7 8 8.7H6V11ZM6 15.3H8.3C9.3 15.3 10 14.8 10 13.9C10 13 9.2 12.6 8.2 12.6H6V15.3ZM15.5 10C13.3 10 12 11.5 12 13.7C12 16 13.3 17.3 15.6 17.3C17.3 17.3 18.4 16.5 18.9 15.3H17.3C17 15.8 16.4 16.1 15.6 16.1C14.5 16.1 13.8 15.4 13.7 14.2H19C19 14.2 19.1 13.8 19.1 13.5C19 11.4 17.8 10 15.5 10ZM13.7 13.1C13.9 12.1 14.5 11.4 15.5 11.4C16.5 11.4 17.1 12.1 17.2 13.1H13.7Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/rakibpixel/" target="_blank" class="hsoc" title="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 8C7.32843 8 8 7.32843 8 6.5C8 5.67157 7.32843 5 6.5 5C5.67157 5 5 5.67157 5 6.5C5 7.32843 5.67157 8 6.5 8ZM5 10C5 9.44772 5.44772 9 6 9H7C7.55228 9 8 9.44772 8 10V18C8 18.5523 7.55228 19 7 19H6C5.44772 19 5 18.5523 5 18V10ZM10 9H13V10.5C13.6667 9.5 14.8 9 16 9C18.2091 9 20 10.7909 20 13V18C20 18.5523 19.5523 19 19 19H18C17.4477 19 17 18.5523 17 18V13.5C17 12.1193 15.8807 11 14.5 11C13.1193 11 12 12.1193 12 13.5V18C12 18.5523 11.5523 19 11 19H10C9.44772 19 9 18.5523 9 18V10C9 9.44772 9.44772 9 10 9Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/rakibpixel" target="_blank" class="hsoc" title="Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C9.284 2 8.944 2.012 7.877 2.06C4.246 2.228 2.228 4.242 2.06 7.877C2.012 8.944 2 9.284 2 12C2 14.716 2.012 15.057 2.06 16.123C2.228 19.754 4.242 21.772 7.877 21.94C8.944 21.988 9.284 22 12 22C14.716 22 15.057 21.988 16.123 21.94C19.75 21.772 21.774 19.756 21.94 16.123C21.988 15.057 22 14.716 22 12C22 9.284 21.988 8.944 21.94 7.877C21.775 4.249 19.756 2.228 16.123 2.06C15.057 2.012 14.716 2 12 2ZM12 7C14.761 7 17 9.239 17 12C17 14.761 14.761 17 12 17C9.239 17 7 14.761 7 12C7 9.239 9.239 7 12 7ZM12 9C10.343 9 9 10.343 9 12C9 13.657 10.343 15 12 15C13.657 15 15 13.657 15 12C15 10.343 13.657 9 12 9ZM17.5 5.75C18.052 5.75 18.5 6.198 18.5 6.75C18.5 7.302 18.052 7.75 17.5 7.75C16.948 7.75 16.5 7.302 16.5 6.75C16.5 6.198 16.948 5.75 17.5 5.75Z"/></svg>
+      </a>
     </div>
   </div>
 </section>
@@ -1223,11 +1208,20 @@ footer a:hover{color:var(--v)}
 
 <!-- ════ FOOTER ════ -->
 <footer>
-  <svg class="foot-svg" viewBox="0 0 1558 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M231.672 279.7L199.605 217.127L269.686 184.588L202.11 0L0 20.0207L0 279.7H100.115L48.1804 51.9346L188.343 148.295L81.7811 199.304L231.672 279.7Z" fill="#5E43EC"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M236.483 213.463L216.866 222.568L226.601 241.561L236.483 213.463Z" fill="#5E43EC"/>
-    <path d="M1557.02 48.6274V226.524H1532.68V48.6274H1557.02Z" fill="white" opacity=".5"/>
-  </svg>
+  <svg class="foot-svg" width="1558" height="280" viewBox="0 0 1558 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M231.672 279.7L199.605 217.127L269.686 184.588L202.11 0L0 20.0207L0 279.7H100.115L48.1804 51.9346L188.343 148.295L81.7811 199.304L231.672 279.7Z" fill="#5E43EC"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M236.483 213.463L216.866 222.568L226.601 241.561L236.483 213.463Z" fill="#5E43EC"/>
+<path d="M399.242 226.524H374V54.6375H457.179C465.753 54.6375 473.586 55.8795 480.678 58.3637C487.81 60.8478 493.94 64.3336 499.069 68.8211C504.237 73.2685 508.244 78.5974 511.089 84.8078C513.933 90.978 515.356 97.7894 515.356 105.242C515.356 112.053 514.154 118.223 511.75 123.753C509.386 129.242 506.02 133.95 501.653 137.876C497.286 141.803 492.037 144.828 485.907 146.951C479.776 149.075 472.965 150.137 465.472 150.137V150.016C468.918 150.016 472.164 150.597 475.209 151.759C478.254 152.921 481.119 154.644 483.803 156.928C486.528 159.212 489.052 162.036 491.376 165.402C493.7 168.768 495.843 172.654 497.806 177.062L519.983 226.524H492.277L470.16 177.122C468.718 173.876 467.055 171.152 465.172 168.948C463.329 166.704 461.085 164.901 458.441 163.539C455.796 162.177 452.671 161.195 449.065 160.594C445.459 159.993 441.172 159.693 436.204 159.693H396.057L399.242 155.546V226.524ZM397.199 78.0765L399.242 75.4922V140.34L396.057 136.254H453.933C459.583 136.254 464.651 135.572 469.139 134.21C473.626 132.848 477.412 130.905 480.498 128.38C483.623 125.816 486.007 122.691 487.649 119.005C489.292 115.319 490.114 111.152 490.114 106.504C490.114 101.936 489.312 97.8896 487.71 94.3637C486.107 90.8378 483.763 87.8729 480.678 85.4689C477.593 83.0648 473.786 81.2418 469.259 79.9997C464.771 78.7176 459.623 78.0765 453.813 78.0765H397.199Z" fill="white"/>
+<path d="M532.402 140.16C532.402 132.547 533.804 125.676 536.609 119.546C539.413 113.415 543.42 108.187 548.629 103.86C553.877 99.5323 560.228 96.2068 567.68 93.8829C575.133 91.559 583.487 90.3971 592.742 90.3971C602.559 90.3971 611.353 91.7193 619.126 94.3637C626.899 96.968 633.49 100.734 638.899 105.663C644.308 110.591 648.455 116.621 651.34 123.753C654.225 130.844 655.667 138.898 655.667 147.913V226.524H631.326V190.223H631.507C630.465 194.35 629.043 198.197 627.24 201.763C625.437 205.329 623.293 208.594 620.809 211.559C618.325 214.524 615.5 217.168 612.335 219.492C609.21 221.776 605.784 223.719 602.058 225.322C598.372 226.885 594.405 228.067 590.158 228.868C585.911 229.709 581.443 230.13 576.755 230.13C569.503 230.13 562.912 229.168 556.983 227.245C551.053 225.362 545.964 222.678 541.717 219.192C537.51 215.666 534.245 211.459 531.921 206.571C529.637 201.643 528.495 196.173 528.495 190.163C528.495 184.113 529.677 178.664 532.041 173.816C534.445 168.968 537.871 164.861 542.318 161.496C546.806 158.09 552.235 155.486 558.605 153.683C564.976 151.88 572.168 150.978 580.181 150.978H632.228V171.412H579.941C575.453 171.412 571.507 171.793 568.101 172.554C564.695 173.315 561.831 174.457 559.507 175.98C557.223 177.502 555.48 179.385 554.278 181.629C553.116 183.873 552.535 186.457 552.535 189.382C552.535 192.507 553.196 195.292 554.518 197.736C555.881 200.18 557.864 202.223 560.468 203.866C563.073 205.509 566.278 206.771 570.084 207.653C573.931 208.494 578.338 208.915 583.306 208.915C587.994 208.915 592.422 208.534 596.589 207.773C600.796 207.011 604.682 205.93 608.248 204.527C611.814 203.125 615.019 201.422 617.864 199.419C620.709 197.415 623.133 195.172 625.136 192.688C627.139 190.163 628.662 187.419 629.704 184.454C630.786 181.489 631.326 178.364 631.326 175.078V147.913C631.326 142.464 630.405 137.556 628.562 133.188C626.759 128.821 624.175 125.095 620.809 122.01C617.443 118.925 613.357 116.561 608.548 114.918C603.74 113.275 598.331 112.454 592.321 112.454C586.191 112.454 580.882 113.115 576.395 114.437C571.947 115.759 568.261 117.622 565.336 120.026C562.452 122.43 560.288 125.355 558.846 128.801C557.443 132.207 556.742 135.993 556.742 140.16H532.402Z" fill="white"/>
+<path d="M793.007 94.0031L718.603 162.277V161.315L799.378 226.524H764.52L698.169 171.172L698.71 170.871V226.524H674.369V48.6274H698.71V153.622L698.169 153.382L761.755 94.0031H793.007Z" fill="white"/>
+<path d="M837.222 94.0031V226.524H812.882V94.0031H837.222ZM837.823 48.6274V78.6775H812.281V48.6274H837.823Z" fill="white"/>
+<path d="M880.889 48.6274V135.532L880.708 135.592C882.391 128.701 884.755 122.471 887.8 116.901C890.885 111.332 894.532 106.584 898.739 102.658C902.986 98.731 907.754 95.7059 913.042 93.5824C918.331 91.4588 924.001 90.3971 930.051 90.3971C935.5 90.3971 940.668 91.1784 945.557 92.741C950.445 94.3036 954.952 96.5473 959.079 99.4722C963.246 102.357 966.992 105.883 970.318 110.05C973.683 114.217 976.528 118.885 978.852 124.053C981.176 129.222 982.959 134.851 984.201 140.941C985.483 147.031 986.124 153.462 986.124 160.233C986.124 167.005 985.483 173.435 984.201 179.526C982.959 185.616 981.176 191.265 978.852 196.474C976.528 201.643 973.683 206.31 970.318 210.477C966.992 214.604 963.246 218.13 959.079 221.055C954.952 223.98 950.445 226.223 945.557 227.786C940.668 229.349 935.5 230.13 930.051 230.13C924.001 230.13 918.331 229.068 913.042 226.945C907.754 224.821 902.986 221.796 898.739 217.87C894.532 213.943 890.885 209.195 887.8 203.626C884.755 198.016 882.391 191.766 880.708 184.875L880.889 184.995V226.524H856.548V48.6274H880.889ZM880.889 160.233C880.889 165.282 881.309 169.99 882.151 174.357C882.992 178.684 884.214 182.651 885.817 186.257C887.42 189.863 889.403 193.068 891.767 195.873C894.131 198.638 896.815 200.981 899.82 202.905C902.865 204.788 906.211 206.23 909.857 207.232C913.543 208.234 917.51 208.734 921.757 208.734C928.248 208.734 933.977 207.693 938.946 205.609C943.914 203.486 948.081 200.38 951.446 196.294C954.852 192.167 957.416 187.098 959.139 181.088C960.902 175.038 961.784 168.087 961.784 160.233C961.784 152.38 960.902 145.449 959.139 139.439C957.416 133.389 954.872 128.32 951.506 124.233C948.141 120.147 943.954 117.062 938.946 114.978C933.977 112.855 928.248 111.793 921.757 111.793C917.51 111.793 913.543 112.294 909.857 113.295C906.211 114.297 902.865 115.759 899.82 117.683C896.815 119.566 894.131 121.91 891.767 124.714C889.403 127.479 887.42 130.664 885.817 134.27C884.214 137.836 882.992 141.803 882.151 146.17C881.309 150.497 880.889 155.185 880.889 160.233Z" fill="white"/>
+<path d="M1056.94 226.524V54.6375H1136.63C1145.6 54.6375 1153.86 55.9997 1161.39 58.7243C1168.96 61.4488 1175.47 65.2752 1180.92 70.2034C1186.37 75.0916 1190.62 80.9213 1193.66 87.6926C1196.71 94.4238 1198.23 101.836 1198.23 109.93C1198.23 117.983 1196.69 125.415 1193.6 132.227C1190.56 139.038 1186.31 144.908 1180.86 149.836C1175.41 154.764 1168.9 158.611 1161.33 161.375C1153.8 164.14 1145.56 165.522 1136.63 165.522H1077.85L1082.18 160.594V226.524H1056.94ZM1080.13 78.0765L1082.18 75.4922V146.17L1078.99 142.083H1134.64C1140.49 142.083 1145.78 141.342 1150.51 139.86C1155.24 138.337 1159.27 136.193 1162.59 133.429C1165.92 130.624 1168.48 127.238 1170.28 123.272C1172.09 119.305 1172.99 114.858 1172.99 109.93C1172.99 105.041 1172.11 100.634 1170.34 96.7076C1168.58 92.781 1166.06 89.4355 1162.77 86.6709C1159.49 83.9062 1155.5 81.7827 1150.81 80.3002C1146.16 78.8178 1140.94 78.0765 1135.13 78.0765H1080.13Z" fill="white"/>
+<path d="M1240.55 94.0031V226.524H1216.21V94.0031H1240.55ZM1241.15 48.6274V78.6775H1215.61V48.6274H1241.15Z" fill="white"/>
+<path d="M1390.29 94.0031L1341.25 159.753V158.611L1394.5 226.524H1365.65L1322.56 171.713H1323.4L1281.51 226.524H1254.17L1306.51 158.911V160.053L1256.81 94.0031H1285.66L1325.27 146.831H1324.36L1362.95 94.0031H1390.29Z" fill="white"/>
+<path d="M1414.32 160.714C1414.32 168.006 1415.29 174.577 1417.21 180.427C1419.13 186.277 1421.88 191.265 1425.44 195.392C1429.05 199.479 1433.4 202.624 1438.49 204.828C1443.61 207.032 1449.36 208.133 1455.73 208.133C1460.1 208.133 1464.13 207.592 1467.81 206.511C1471.5 205.429 1474.83 203.826 1477.79 201.703C1480.8 199.539 1483.44 196.875 1485.72 193.709C1488.05 190.504 1490.01 186.798 1491.61 182.591H1515.95C1514.23 190.003 1511.55 196.654 1507.9 202.544C1504.25 208.434 1499.81 213.422 1494.56 217.509C1489.35 221.596 1483.4 224.721 1476.71 226.885C1470.06 229.048 1462.87 230.13 1455.13 230.13C1445.36 230.13 1436.46 228.447 1428.45 225.082C1420.48 221.716 1413.62 216.968 1407.89 210.838C1402.2 204.708 1397.8 197.335 1394.67 188.721C1391.55 180.107 1389.98 170.551 1389.98 160.053C1389.98 149.636 1391.53 140.16 1394.61 131.626C1397.7 123.052 1402.06 115.719 1407.71 109.629C1413.36 103.499 1420.13 98.771 1428.03 95.4455C1435.96 92.0799 1444.74 90.3971 1454.35 90.3971C1463.85 90.3971 1472.42 92.0398 1480.07 95.3253C1487.73 98.5707 1494.26 103.198 1499.67 109.208C1505.08 115.218 1509.24 122.491 1512.17 131.025C1515.09 139.559 1516.56 149.115 1516.56 159.693C1516.56 161.215 1516.52 162.738 1516.44 164.26C1516.39 165.743 1516.29 167.365 1516.13 169.128H1409.16V148.093H1504.66L1491.79 168.948C1491.91 167.586 1491.99 166.183 1492.03 164.741C1492.11 163.299 1492.15 161.856 1492.15 160.414C1492.15 152.721 1491.31 145.91 1489.63 139.98C1487.99 134.01 1485.56 128.981 1482.36 124.895C1479.15 120.808 1475.21 117.703 1470.52 115.579C1465.87 113.456 1460.52 112.394 1454.47 112.394C1448.26 112.394 1442.67 113.496 1437.7 115.699C1432.78 117.903 1428.57 121.068 1425.08 125.195C1421.64 129.322 1418.97 134.33 1417.09 140.22C1415.25 146.11 1414.32 152.721 1414.32 160.053V160.714Z" fill="white"/>
+<path d="M1557.02 48.6274V226.524H1532.68V48.6274H1557.02Z" fill="white"/>
+</svg>
   <span>© 2025 Rakibul — All rights reserved</span>
   <div class="foot-links">
     <a href="https://be.net/rakibpixel" target="_blank">Behance</a>
