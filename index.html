@@ -22,7 +22,8 @@
   --e:cubic-bezier(.22,1,.36,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{overflow-x:hidden}
 body{background:var(--bg);color:var(--fg);font-family:var(--sans);
   line-height:1.6;overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit}
@@ -849,7 +850,7 @@ footer a:hover{color:var(--v)}
   nav.sk{padding:12px 20px}
   .nav-links{display:none}
   .nav-cta{padding:8px 16px;font-size:10px}
-  .nav-logo-svg{height:18px}
+  .nav-logo-svg{height:20px !important;width:auto}
 
   /* ── Sections ── */
   .sec{padding:60px 20px}
@@ -916,25 +917,25 @@ footer a:hover{color:var(--v)}
     overflow:hidden;
   }
   .hero-vline{display:none}
-  .hero-spacer{height:64px;flex-shrink:0;order:1}
+  .hero-spacer{height:56px;flex-shrink:0;order:1}
 
   /* Stats — order:2, top */
   .hero-stats{
-    order:2;
-    position:relative;z-index:3;
-    padding:0 24px;
+    order:2;position:relative;z-index:3;
+    padding:25px 24px 0 !important;
     gap:0;
-    justify-content:space-between;
-    flex-shrink:0;
+	justify-content:space-between;
+	flex-shrink:0;
+	margin-bottom: 17px;
   }
   .hs-n{font-size:clamp(26px,6.5vw,38px);letter-spacing:-1.5px}
   .hs-l{font-size:10px}
 
   /* Hello + subtitle — order:3 */
   .hero-body{
-    order:3;
-    position:relative;z-index:3;
-    padding:10px 24px 16px;
+    order:3;position:relative;
+	z-index:3;
+    padding:2px 24px 9px !important;
     flex-shrink:0;
   }
   
@@ -945,44 +946,35 @@ footer a:hover{color:var(--v)}
   .rw-wrap{overflow:hidden}
 
   /* Photo — order:4, middle, flex:1 fills remaining space */
-  .hero-photo{
-    order:4;
-    position:relative;
-    top:auto;bottom:auto;left:auto;right:auto;
-    width:100%;
-    flex:1;
-    min-height:180px;
-    z-index:2;
-    overflow:hidden;
-  }
-  .hero-photo img{
-    width:100%;height:100%;
-    object-fit:cover;
-    object-position:center 5%;
-    filter:grayscale(1) contrast(1.1);
-    opacity:1;animation:none;display:block;
-  }
-  .hero-photo::before{
-    background:linear-gradient(to bottom,var(--lbg) 0%,transparent 20%,transparent 80%,var(--lbg) 100%);
-  }
-  .hero-photo::after{display:none}
+  
+  
+  
+  
 
   /* Buttons — order:5, bottom */
   .hero-bot{
     order:5;
     position:relative;z-index:3;
-    flex-direction:column;align-items:center;
-    gap:10px;padding:14px 24px 20px;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    padding:12px 24px 18px !important;
     border-top:1px solid rgba(12,10,26,.1);
     margin-top:0;flex-shrink:0;
   }
   .h-scroll{display:none}
   .h-ctas{
-    width:100%;display:flex;gap:10px;justify-content:center;
+    width:100%;
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    flex-direction:row !important;
   }
   .btn-dark,.btn-outline-dark{
-    flex:1;justify-content:center;
-    padding:12px 14px;font-size:13px;
+    flex:1;
+    justify-content:center;
+    padding:11px 12px !important;
+    font-size:12px !important;
   }
   .hero-socials{display:flex;gap:12px;justify-content:center}
 
@@ -1008,11 +1000,19 @@ footer a:hover{color:var(--v)}
   }
 
   /* Fix 2: Hero gap — reduce spacer */
-  .hero-spacer{height:72px !important}
+  .hero-spacer{height:56px;flex-shrink:0;order:1}
   
   /* Gap between stats and Hello */
-  .hero-stats{padding:20px 24px 8px !important;gap:0;justify-content:space-between;flex-shrink:0}
-  .hero-body{padding-top:4px !important;padding-bottom:12px !important}
+  .hero-stats{
+    order:2;position:relative;z-index:3;
+    padding:16px 24px 0 !important;
+    gap:0;justify-content:space-between;flex-shrink:0;
+  }
+  .hero-body{
+    order:3;position:relative;z-index:3;
+    padding:2px 24px 6px !important;
+    flex-shrink:0;
+  }
 
   /* Fix 3: About buttons — equal size */
   .about-btns{display:flex;gap:10px;flex-wrap:wrap}
@@ -1028,6 +1028,72 @@ footer a:hover{color:var(--v)}
   .hero-rline{
     font-size:clamp(18px,4.5vw,24px) !important;
   }
+
+
+  /* Prevent horizontal overflow on all sections */
+  section, .brands, .svc-ticker, .testi-mq{overflow:hidden}
+  .mq-tr, .svc-tr, .testi-track{max-width:none}
+  
+  
+  
+  
+  /* Fix hero width */
+  .hero{max-width:100vw;overflow-x:hidden}
+
+  /* Buttons full width on small screen */  
+  .h-ctas{
+    width:100%;
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    flex-direction:row !important;
+  }
+  .btn-dark{flex:1;text-align:center;justify-content:center}
+  .btn-outline-dark{flex:1;text-align:center;justify-content:center}
+
+
+  /* Hero photo — mobile, show full upper body */
+  .hero-photo{
+    order:4;
+    position:relative !important;
+    top:auto !important;bottom:auto !important;
+    left:auto !important;right:auto !important;
+    width:100% !important;
+    flex:1 !important;
+    min-height:240px !important;
+    z-index:2;
+    overflow:hidden;
+  }
+  .hero-photo img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+    object-position:center 5% !important;
+    filter:grayscale(1) contrast(1.1) !important;
+    opacity:1 !important;
+    animation:none !important;
+    display:block;
+    transform:scale(1.05);
+    transform-origin:center 15%;
+	padding-right: 52px;
+  }
+  .hero-photo::before{
+    background:linear-gradient(to bottom,
+      var(--lbg) 0%,
+      transparent 10%,
+      transparent 85%,
+      var(--lbg) 100%
+    ) !important;
+  }
+  .hero-photo::after{display:none !important}
+
+
+
+
+  /* Nav logo — always correct on mobile */
+  .nav-logo-svg{height:20px !important;width:auto !important}
+  nav:not(.sk) .ltx{fill:#0c0a1a !important}
+  nav.sk .ltx{fill:#ffffff !important}
 
 }
 
@@ -1342,7 +1408,7 @@ footer a:hover{color:var(--v)}
     <!-- PROJECT 2 — href=link, src=thumbnail -->
     <a href="https://www.behance.net/gallery/239347273/CASE-STUDY-ID-Card-Automation-System"
        target="_blank" class="wc r d1">
-      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/b3c0f3239347273.6847e8ffa6c04.jpg" alt="ID Card Automation" />
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/690abd239347273.Y3JvcCw4MDgsNjMyLDAsMA.jpg" alt="ID Card Automation" />
       <div class="wc-num">02</div>
       <div class="wc-ov">
         <div class="wc-tags"><span class="wc-tag">UI/UX</span><span class="wc-tag">Case Study</span></div>
@@ -1354,7 +1420,7 @@ footer a:hover{color:var(--v)}
     <!-- PROJECT 3 — href=link, src=thumbnail -->
     <a href="https://www.behance.net/gallery/217720957/Youtube-Thumbnail"
        target="_blank" class="wc r d2">
-      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/f4c5dc217720957.6847e8ff9b76f.jpg" alt="YouTube Thumbnail" />
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/9937b9217720957.Y3JvcCwzMDAwLDIzNDYsMCww.png" alt="YouTube Thumbnail" />
       <div class="wc-num">03</div>
       <div class="wc-ov">
         <div class="wc-tags"><span class="wc-tag">Thumbnail</span><span class="wc-tag">YouTube</span></div>
@@ -1366,7 +1432,7 @@ footer a:hover{color:var(--v)}
     <!-- PROJECT 4 — href=link, src=thumbnail -->
     <a href="https://www.behance.net/gallery/201488859/Creative-ADS-for-Nike-Shoes"
        target="_blank" class="wc r d1">
-      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/8e3d07201488859.6847e8ff91234.jpg" alt="Nike Ads" />
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/612f4f201488859.Y3JvcCwzOTk5LDMxMjgsMCww.jpg" alt="Nike Ads" />
       <div class="wc-num">04</div>
       <div class="wc-ov">
         <div class="wc-tags"><span class="wc-tag">Ad Creative</span><span class="wc-tag">Nike</span></div>
@@ -1376,25 +1442,25 @@ footer a:hover{color:var(--v)}
     </a>
 
     <!-- PROJECT 5 — href=link, src=thumbnail -->
-    <a href="https://www.behance.net/gallery/244548443/Portfolio-2025-Creative-Design-Works"
+    <a href="https://www.behance.net/gallery/188268843/Social-Media-ADS"
        target="_blank" class="wc r d2">
-      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/5bdaa8244548443.6847e8ffb0da2.jpg" alt="Project 5" />
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/dd7780188268843.Y3JvcCwzMDAwLDIzNDYsMCww.jpg" alt="Project 5" />
       <div class="wc-num">05</div>
       <div class="wc-ov">
-        <div class="wc-tags"><span class="wc-tag">Motion</span><span class="wc-tag">Brand</span></div>
-        <h3 class="wc-title">Motion Graphics &#38; Brand Identity</h3>
+        <div class="wc-tags"><span class="wc-tag">ADS</span><span class="wc-tag">Brand</span></div>
+        <h3 class="wc-title">Social Media ADS</h3>
         <div class="wc-arr">&#8599;</div>
       </div>
     </a>
 
     <!-- PROJECT 6 — href=link, src=thumbnail -->
-    <a href="https://www.behance.net/gallery/239347273/CASE-STUDY-ID-Card-Automation-System"
+    <a href="https://www.behance.net/gallery/182336311/Ecommerce-Shop-Gadget-Banner-Design-Portfolio"
        target="_blank" class="wc r d3">
-      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/b3c0f3239347273.6847e8ffa6c04.jpg" alt="Project 6" />
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/87b1f8182336311.Y3JvcCwxOTk5LDE1NjQsMCww.jpg" alt="Project 6" />
       <div class="wc-num">06</div>
       <div class="wc-ov">
-        <div class="wc-tags"><span class="wc-tag">Social Media</span></div>
-        <h3 class="wc-title">Social Media Design Pack</h3>
+        <div class="wc-tags"><span class="wc-tag">Social Media</span><span class="wc-tag">Gadget</span></div>
+        <h3 class="wc-title">Ecommerce Gadget Banner</h3>
         <div class="wc-arr">&#8599;</div>
       </div>
     </a>
