@@ -39,24 +39,22 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
    CURSOR  — no transform flicker
 ══════════════════════════════════════ */
 #cd{
-  position:fixed;width:8px;height:8px;
-  background:var(--v);border-radius:50%;
+  position:fixed;width:7px;height:7px;
+  background:#fff;border-radius:50%;
   pointer-events:none;z-index:99999;
-  /* use left/top set by JS, no transform needed for position */
-  margin-left:-4px;margin-top:-4px;
-  transition:width .35s var(--e),height .35s var(--e);
+  transform:translate(-50%,-50%);
+  border:1.5px solid rgba(94,67,236,.8);
 }
 #cr{
-  position:fixed;width:36px;height:36px;
-  border:1.5px solid rgba(255,255,255,.18);
+  position:fixed;width:38px;height:38px;
+  border:1.5px solid rgba(94,67,236,.5);
   border-radius:50%;pointer-events:none;z-index:99998;
-  margin-left:-18px;margin-top:-18px;
-  transition:width .45s var(--e),height .45s var(--e),
-             margin .45s var(--e),border-color .4s,opacity .4s;
+  transform:translate(-50%,-50%);
+  transition:width .3s cubic-bezier(.22,1,.36,1),height .3s cubic-bezier(.22,1,.36,1),border-color .3s;
 }
-body.hov #cd{width:12px;height:12px;margin-left:-6px;margin-top:-6px}
-body.hov #cr{width:52px;height:52px;margin-left:-26px;margin-top:-26px;border-color:var(--v);opacity:.6}
-body.cta #cr{width:70px;height:70px;margin-left:-35px;margin-top:-35px;border-color:var(--v);opacity:.35;border-style:dashed}
+body.hov #cd{width:7px;height:7px}
+body.hov #cr{width:52px;height:52px;border-color:rgba(94,67,236,.9)}
+body.cta #cr{width:64px;height:64px;border-color:rgba(94,67,236,.7);border-style:dashed}
 
 /* ══════════════════════════════════════
    LOADER — simple fade overlay
@@ -169,7 +167,7 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   opacity:0;
   animation:hpIn 1s .5s cubic-bezier(.22,1,.36,1) forwards;
   display:block;
-  margin-top: 100px;
+  margin-top:0px;
 }
 @keyframes hpIn{to{opacity:1}}
 /* left gradient blend */
@@ -259,7 +257,7 @@ nav.sk .nav-logo-svg .ltx{fill:#ffffff}
   height:1.3em;
   position:relative;
   vertical-align:middle;
-  min-width:12ch;
+  min-width: 260px !important;
 }
 .rw-w{
   position:absolute;top:0;left:0;white-space:nowrap;
@@ -395,13 +393,10 @@ width: 100%;
   padding:15px 19px;display:flex;align-items:center;gap:11px;
 }
 .abb-ico{
-  width:36px;height:36px;
-  border-radius:9px;
-  background: rgb(179 165 255 / 42%);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(94,67,236,.12);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
 }
 .abb-t strong{display:block;
 font-size:13px;
@@ -450,7 +445,7 @@ color: #403d50}
 .svc-list{border:1px solid var(--ln);margin-bottom:0}
 .sr{
   display:grid;grid-template-columns:58px 1fr auto 50px;
-  gap:24px;align-items:center;padding:32px 44px;
+  gap:24px;align-items:center;padding:32px 32px 32px 24px;
   border-bottom:1px solid var(--ln);
   position:relative;overflow:hidden;
 }
@@ -511,35 +506,71 @@ color: #403d50}
 /* ══════════════════════════════════════
    WORK
 ══════════════════════════════════════ */
-.work-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px}
-.wg{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-.wc{position:relative;overflow:hidden;border-radius:20px;background:var(--s1);display:block}
-.wc.c7{grid-column:span 7}.wc.c5{grid-column:span 5}
-.wc.c4{grid-column:span 4}.wc.c8{grid-column:span 8}
-.wc img{width:100%;height:100%;min-height:300px;object-fit:cover;display:block;
-  transition:transform 1s var(--e);inset:0;padding:28px;
-  background:linear-gradient(to top,rgba(6,6,10,.95) 0%,rgba(6,6,10,.15) 55%,transparent 100%);
-  display:flex;flex-direction:column;justify-content:flex-end;
-  opacity:0;transition:opacity .55s var(--e)}
-.wc:hover .wc-ov{opacity:1}
-.wc-cat{display:inline-block;padding:4px 12px;border-radius:100px;
-  background:var(--v);color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;margin-bottom:10px;width:fit-content}
-.wc-title{font-family:var(--dp);font-size:20px;font-weight:800;color:#fff;letter-spacing:-.3px}
-.wc-num{position:absolute;top:20px;left:20px;
-  font-family:var(--dp);font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.2)}
-.wc-arr{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;
-  background:rgba(255,255,255,.07);backdrop-filter:blur(8px);
-  display:flex;align-items:center;justify-content:center;font-size:15px;
-  transform:scale(0) rotate(-45deg);transition:transform .45s var(--e)}
-.wc:hover .wc-arr{transform:scale(1) rotate(0)}
-.btn-gw{
-  display:inline-flex;align-items:center;gap:8px;padding:12px 26px;
-  border-radius:100px;border:1.5px solid var(--ln);color:var(--mu);
-  font-weight:600;font-size:13px;
-  transition:border-color .4s var(--e),color .4s var(--e);
+.work-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px;gap:24px}
+
+/* ── Portfolio Grid ── */
+.wg{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
 }
-.btn-gw:hover{border-color:var(--fg);color:var(--fg)}
+/* Item sizes */
+.wc{
+  position:relative;overflow:hidden;
+  border-radius:16px;background:#111;
+  display:block;cursor:none;
+  aspect-ratio:4/3;
+}
+/* tall item spans 2 rows */
+
+
+.wc img{
+  width:100%;height:100%;
+  object-fit:cover;
+  transition:transform .7s cubic-bezier(.22,1,.36,1);
+  display:block;
+}
+.wc:hover img{transform:scale(1.05)}
+
+/* overlay — shows on hover */
+.wc-ov{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(6,6,10,.9) 0%,rgba(6,6,10,.3) 50%,transparent 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:24px;
+  opacity:0;
+  transition:opacity .4s cubic-bezier(.22,1,.36,1);
+}
+.wc:hover .wc-ov{opacity:1}
+
+.wc-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.wc-tag{
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 11px;border-radius:100px;
+  background:rgba(94,67,236,.35);
+  border:1px solid rgba(94,67,236,.5);
+  color:#fff;
+}
+.wc-title{
+  font-family:var(--dp);font-size:clamp(14px,1.6vw,20px);
+  font-weight:700;letter-spacing:-.2px;line-height:1.25;color:#fff;
+  margin-bottom:8px;
+}
+.wc-arr{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  color:#fff;font-size:15px;
+  transition:background .35s,border-color .35s;
+}
+.wc:hover .wc-arr{background:var(--v);border-color:var(--v)}
+
+/* always-visible number badge */
+.wc-num{
+  position:absolute;top:16px;left:18px;
+  font-family:var(--dp);font-size:11px;font-weight:700;
+  letter-spacing:2px;color:rgba(255,255,255,.35);
+}
 
 /* ══════════════════════════════════════
    PROCESS — light
@@ -547,12 +578,11 @@ color: #403d50}
 .process{background:var(--lbg);color:var(--lt)}
 .process .chip{color:var(--v)}
 .process .stitle{color:var(--lt);margin-bottom:56px}
-.pg{display:grid;grid-template-columns:repeat(4,1fr);gap:0;
-  background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.07)}
+.pg{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden}
 .ps{
   background:var(--lbg);padding:44px 34px;
   border-right:1px solid rgba(0,0,0,.07);
-  transition:background .5s var(--e);
+  transition:background .4s var(--e),box-shadow .4s var(--e);
 }
 .ps:last-child{border-right:none}
 .ps:hover{background:#fff}
@@ -614,11 +644,13 @@ color: #403d50}
   display:inline-flex;align-items:center;gap:7px;
   padding:10px 18px;border-radius:100px;
   border:1px solid var(--ln);
-  font-size:13px;font-weight:500;color:var(--mu);
+  font-size:22px;
+  font-weight:500;
+  color:var(--mu);
   background:transparent;
   transition:border-color .4s var(--e),color .4s var(--e),background .4s var(--e),transform .35s var(--e);
 }
-.sk-pill:hover{border-color:var(--v);color:var(--fg);background:var(--vd);transform:translateY(-2px)}
+.sk-pill:hover{border-color:var(--v);color:var(--fg);background:var(--vd)}
 .sk-pill svg{opacity:.5;transition:opacity .4s}
 .sk-pill:hover svg{opacity:1}
 
@@ -635,6 +667,7 @@ color: #403d50}
   display:flex;gap:20px;
   animation:testiMq 40s linear infinite;
   width:max-content;
+  padding: 10px 0px;
 }
 .testi-track:hover{animation-play-state:paused}
 @keyframes testiMq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
@@ -645,7 +678,7 @@ color: #403d50}
   padding:36px;position:relative;overflow:hidden;
   transition:border-color .5s var(--e),background .5s var(--e),transform .5s var(--e);
 }
-.tcard:hover{border-color:var(--v);background:var(--s2);transform:translateY(-4px)}
+.tcard:hover{border-color:var(--v);background:var(--s2)}
 /* big quote mark */
 .tcard::before{
   content:'\201C';
@@ -756,7 +789,7 @@ color: #403d50}
   box-shadow:none;
   transition:box-shadow .4s var(--e),opacity .4s var(--e);
 }
-.cf-sub:hover{box-shadow:0 16px 40px var(--vg)}
+.cf-sub:hover{opacity:.9}
 
 /* ══════════════════════════════════════
    FOOTER
@@ -783,6 +816,8 @@ footer a:hover{color:var(--v)}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
 .d4{transition-delay:.4s}.d5{transition-delay:.5s}
 
+.ps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+
 /* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
@@ -791,7 +826,7 @@ footer a:hover{color:var(--v)}
   nav.sk{padding-left:30px;padding-right:30px}
   .sec{padding:88px 30px}
   .about{grid-template-columns:1fr;gap:52px}
-  .philo,.pg{grid-template-columns:1fr}
+  .philo{grid-template-columns:1fr}
   .svc-top{flex-direction:column;align-items:flex-start;gap:16px}
   .svc-sub{text-align:left;max-width:100%}
   .sr{grid-template-columns:44px 1fr 42px;gap:12px}
@@ -808,16 +843,200 @@ footer a:hover{color:var(--v)}
   .testi-sub{text-align:left}
   footer{flex-direction:column;gap:12px;text-align:center}
 }
-@media(max-width:680px){
-  nav{padding:14px 20px}.nav-links{display:none}
-  .sec{padding:70px 20px}
-  .hero-stats-row{padding:100px 20px 0;gap:28px}
-  .hero-content{padding:16px 20px 0}
-  .hero-bottom{padding:20px 20px 36px;flex-wrap:wrap;gap:16px}
-  .pg{grid-template-columns:1fr}
+@media(max-width:768px){
+  /* ── Nav ── */
+  nav{padding:14px 20px}
+  nav.sk{padding:12px 20px}
+  .nav-links{display:none}
+  .nav-cta{padding:8px 16px;font-size:10px}
+  .nav-logo-svg{height:18px}
+
+  /* ── Sections ── */
+  .sec{padding:60px 20px}
+
+  /* ── About ── */
+  .about{grid-template-columns:1fr;gap:36px}
+  .about-img{max-width:100%;aspect-ratio:1}
+  .philo{grid-template-columns:1fr}
+  .ab-badge{left:12px;bottom:12px;padding:10px 12px}
+  .about-btns{flex-wrap:wrap;gap:10px}
+  .btn-gw{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
+
+  /* ── Services ── */
+  .svc-top{flex-direction:column;align-items:flex-start;gap:10px}
+  .svc-sub{text-align:left;max-width:100%}
+  .sr{grid-template-columns:36px 1fr 36px;gap:8px;padding:18px 16px}
+  .sr-tags{display:none}
+  .sr-n{font-size:15px}
+  .sr-arr{width:34px;height:34px;font-size:13px}
+
+  /* ── Work ── */
+  .work-top{flex-direction:column;align-items:flex-start;gap:10px}
+  .work-top p{text-align:left;max-width:100%}
+  .wg{grid-template-columns:1fr;gap:12px}
+  .wc{aspect-ratio:16/10}
+  .wc-ov{opacity:1;background:linear-gradient(to top,rgba(6,6,10,.85) 0%,transparent 55%)}
+
+  /* ── Process ── */
+  
+  .ps{padding:28px 24px}
+
+  /* ── Experience ── */
+  .exp-grid{grid-template-columns:1fr;gap:36px}
+  .sk-grid{gap:8px}
+  .sk-pill{font-size:11px;padding:7px 13px}
+
+  /* ── Testimonials ── */
+  .testi-head{flex-direction:column;align-items:flex-start;gap:10px}
+  .testi-sub{text-align:left;max-width:100%}
+  .tcard{width:260px;padding:22px}
+
+  /* ── CTA Band ── */
+  .cta-band{padding:80px 20px}
+  .cta-title{font-size:clamp(26px,7vw,48px);letter-spacing:-2px}
+  .cta-btns{flex-direction:column;align-items:center;gap:10px}
+  .btn-wh,.btn-ow{width:100%;max-width:260px;justify-content:center;padding:13px 24px}
+
+  /* ── Contact ── */
+  .contact{grid-template-columns:1fr;gap:36px}
   .cfr{grid-template-columns:1fr}
-  .cta{padding:90px 20px}
-  .cta-btns{flex-direction:column;align-items:center}
+  .cf-sub{width:100%;justify-content:center}
+
+  /* ── Footer ── */
+  footer{padding:22px 20px;flex-direction:column;gap:12px;text-align:center}
+  .foot-links{justify-content:center}
+  .foot-svg{height:18px}
+
+  
+  
+  /* ══ HERO MOBILE ══ */
+  .hero{
+    height:100svh;min-height:620px;
+    display:flex;flex-direction:column;
+    overflow:hidden;
+  }
+  .hero-vline{display:none}
+  .hero-spacer{height:64px;flex-shrink:0;order:1}
+
+  /* Stats — order:2, top */
+  .hero-stats{
+    order:2;
+    position:relative;z-index:3;
+    padding:0 24px;
+    gap:0;
+    justify-content:space-between;
+    flex-shrink:0;
+  }
+  .hs-n{font-size:clamp(26px,6.5vw,38px);letter-spacing:-1.5px}
+  .hs-l{font-size:10px}
+
+  /* Hello + subtitle — order:3 */
+  .hero-body{
+    order:3;
+    position:relative;z-index:3;
+    padding:10px 24px 16px;
+    flex-shrink:0;
+  }
+  
+  .hero-rline{
+    font-size:clamp(16px,4vw,22px);
+    gap:8px;flex-wrap:nowrap;white-space:nowrap;overflow:hidden;
+  }
+  .rw-wrap{overflow:hidden}
+
+  /* Photo — order:4, middle, flex:1 fills remaining space */
+  .hero-photo{
+    order:4;
+    position:relative;
+    top:auto;bottom:auto;left:auto;right:auto;
+    width:100%;
+    flex:1;
+    min-height:180px;
+    z-index:2;
+    overflow:hidden;
+  }
+  .hero-photo img{
+    width:100%;height:100%;
+    object-fit:cover;
+    object-position:center 5%;
+    filter:grayscale(1) contrast(1.1);
+    opacity:1;animation:none;display:block;
+  }
+  .hero-photo::before{
+    background:linear-gradient(to bottom,var(--lbg) 0%,transparent 20%,transparent 80%,var(--lbg) 100%);
+  }
+  .hero-photo::after{display:none}
+
+  /* Buttons — order:5, bottom */
+  .hero-bot{
+    order:5;
+    position:relative;z-index:3;
+    flex-direction:column;align-items:center;
+    gap:10px;padding:14px 24px 20px;
+    border-top:1px solid rgba(12,10,26,.1);
+    margin-top:0;flex-shrink:0;
+  }
+  .h-scroll{display:none}
+  .h-ctas{
+    width:100%;display:flex;gap:10px;justify-content:center;
+  }
+  .btn-dark,.btn-outline-dark{
+    flex:1;justify-content:center;
+    padding:12px 14px;font-size:13px;
+  }
+  .hero-socials{display:flex;gap:12px;justify-content:center}
+
+
+  .pg{grid-template-columns:1fr !important}
+
+
+  /* Nav — always fixed on mobile */
+  nav{
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    right:0 !important;
+    z-index:1000 !important;
+    background:rgba(242,241,248,.95) !important;
+    backdrop-filter:blur(12px) !important;
+    border-bottom:1px solid rgba(12,10,26,.08) !important;
+    padding:12px 20px !important;
+  }
+  nav.sk{
+    background:rgba(6,6,10,.95) !important;
+    border-bottom:1px solid rgba(255,255,255,.07) !important;
+  }
+
+  /* Fix 2: Hero gap — reduce spacer */
+  .hero-spacer{height:72px !important}
+  
+  /* Gap between stats and Hello */
+  .hero-stats{padding:20px 24px 8px !important;gap:0;justify-content:space-between;flex-shrink:0}
+  .hero-body{padding-top:4px !important;padding-bottom:12px !important}
+
+  /* Fix 3: About buttons — equal size */
+  .about-btns{display:flex;gap:10px;flex-wrap:wrap}
+  .btn-wh{flex:1;justify-content:center;min-width:0;padding:13px 16px}
+  .btn-gw{flex:1;justify-content:center;min-width:0;padding:13px 16px}
+
+
+  .hero-h1{
+    font-size:clamp(80px,20vw,130px) !important;
+    letter-spacing:-4px !important;
+    margin-bottom:12px !important;
+  }
+  .hero-rline{
+    font-size:clamp(18px,4.5vw,24px) !important;
+  }
+
+}
+
+@media(max-width:400px){
+  .hero-h1{font-size:clamp(50px,15vw,76px);letter-spacing:-3px}
+  .hero-rline{font-size:14px}
+  .h-ctas{flex-direction:column}
+  .btn-dark,.btn-outline-dark{width:100%;justify-content:center}
+  .hs-n{font-size:24px}
 }
 
 /* Hide Blogger default navbar */
@@ -840,6 +1059,15 @@ footer a:hover{color:var(--v)}
 .hsoc:hover{border-color:var(--v);background:var(--v)}
 .hsoc svg{width:15px;height:15px;color:rgba(12,10,26,.5);transition:color .35s var(--e)}
 .hsoc:hover svg{color:#fff}
+
+.btn-gw{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 26px;border-radius:100px;
+  border:1.5px solid var(--ln);
+  color:var(--fg);font-weight:600;font-size:13px;
+  transition:border-color .35s,color .35s;
+}
+.btn-gw:hover{border-color:var(--fg);color:var(--fg)}
 </style>
 </head>
 <body>
@@ -891,7 +1119,7 @@ footer a:hover{color:var(--v)}
 
   <!-- photo: right half, clipped within hero -->
   <div class="hero-photo">
-    <img src="https://raw.githubusercontent.com/rakibpixel/Portfolio/refs/heads/main/RH.webp" alt="Rakibul Hassan" />
+    <img src="https://raw.githubusercontent.com/rakibpixel/Portfolio/refs/heads/main/Hero-IMG.png" alt="Rakibul Hassan" />
   </div>
 
   <!-- top spacer below nav -->
@@ -900,15 +1128,15 @@ footer a:hover{color:var(--v)}
   <!-- stats row -->
   <div class="hero-stats">
     <div>
-      <div class="hs-n"><span>+</span>50</div>
+      <div class="hs-n"><span>+</span><span class="cnt" data-target="50">0</span></div>
       <div class="hs-l">Projects completed</div>
     </div>
     <div>
-      <div class="hs-n"><span>+</span>15</div>
+      <div class="hs-n"><span>+</span><span class="cnt" data-target="15">0</span></div>
       <div class="hs-l">Clients served</div>
     </div>
     <div>
-      <div class="hs-n">3<span>+</span></div>
+      <div class="hs-n"><span class="cnt" data-target="3">0</span><span>+</span></div>
       <div class="hs-l">Years experience</div>
     </div>
   </div>
@@ -959,23 +1187,23 @@ footer a:hover{color:var(--v)}
   <p class="brands-lbl">Brands I've collaborated with</p>
   <div class="mq-row">
     <div class="mq-tr">
-      <div class="mq-item"><svg width="108" height="24" viewBox="0 0 108 24"><text y="19" font-family="Arial" font-weight="800" font-size="15" fill="white">FNMarkets</text></svg></div>
-      <div class="mq-item"><svg width="86" height="24" viewBox="0 0 86 24"><rect width="8" height="24" rx="2" fill="white"/><text x="12" y="18" font-family="Arial" font-weight="700" font-size="14" fill="white">BuyMode</text></svg></div>
-      <div class="mq-item"><svg width="76" height="24" viewBox="0 0 76 24"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="1.5"/><text x="26" y="17" font-family="Arial" font-weight="700" font-size="12" fill="white">Probfly</text></svg></div>
-      <div class="mq-item"><svg width="124" height="24" viewBox="0 0 124 24"><polygon points="10,0 20,24 0,24" fill="white"/><text x="26" y="17" font-family="Arial" font-weight="700" font-size="11" fill="white">NextVentures</text></svg></div>
-      <div class="mq-item"><svg width="68" height="24" viewBox="0 0 68 24"><text y="21" font-family="Arial" font-weight="900" font-size="22" fill="white" letter-spacing="-1">NIKE</text></svg></div>
-      <div class="mq-item"><svg width="76" height="24" viewBox="0 0 76 24"><rect x="0" y="3" width="15" height="15" rx="3" fill="white"/><text x="20" y="17" font-family="Arial" font-weight="700" font-size="13" fill="white">Behance</text></svg></div>
-      <div class="mq-item"><svg width="58" height="24" viewBox="0 0 58 24"><text y="19" font-family="Arial" font-weight="800" font-size="15" fill="white">Canva</text></svg></div>
-      <div class="mq-item"><svg width="52" height="24" viewBox="0 0 52 24"><text y="18" font-family="Arial" font-weight="800" font-size="13" fill="white">Figma</text></svg></div>
-      <!-- dupe for loop -->
-      <div class="mq-item"><svg width="108" height="24" viewBox="0 0 108 24"><text y="19" font-family="Arial" font-weight="800" font-size="15" fill="white">FNMarkets</text></svg></div>
-      <div class="mq-item"><svg width="86" height="24" viewBox="0 0 86 24"><rect width="8" height="24" rx="2" fill="white"/><text x="12" y="18" font-family="Arial" font-weight="700" font-size="14" fill="white">BuyMode</text></svg></div>
-      <div class="mq-item"><svg width="76" height="24" viewBox="0 0 76 24"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="1.5"/><text x="26" y="17" font-family="Arial" font-weight="700" font-size="12" fill="white">Probfly</text></svg></div>
-      <div class="mq-item"><svg width="124" height="24" viewBox="0 0 124 24"><polygon points="10,0 20,24 0,24" fill="white"/><text x="26" y="17" font-family="Arial" font-weight="700" font-size="11" fill="white">NextVentures</text></svg></div>
-      <div class="mq-item"><svg width="68" height="24" viewBox="0 0 68 24"><text y="21" font-family="Arial" font-weight="900" font-size="22" fill="white" letter-spacing="-1">NIKE</text></svg></div>
-      <div class="mq-item"><svg width="76" height="24" viewBox="0 0 76 24"><rect x="0" y="3" width="15" height="15" rx="3" fill="white"/><text x="20" y="17" font-family="Arial" font-weight="700" font-size="13" fill="white">Behance</text></svg></div>
-      <div class="mq-item"><svg width="58" height="24" viewBox="0 0 58 24"><text y="19" font-family="Arial" font-weight="800" font-size="15" fill="white">Canva</text></svg></div>
-      <div class="mq-item"><svg width="52" height="24" viewBox="0 0 52 24"><text y="18" font-family="Arial" font-weight="800" font-size="13" fill="white">Figma</text></svg></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhAn92z1DBBtX48uDPaiSM9dfXMmx_ehmiDeelmfv5S1Jb4IZbOu_2BEwsiK2dPiJ73wMJtx0PpMpcyAKl5a2016RVK2KRnM98rKROd0HKGcbJUoeyw2RY8WYXi4OdvoHAv1HcH3ftY-AG0k-Fjoa40dBtP__56CCg2J_8o5pq4nhZEM3Xipkr3q7VoH9E/s1532/Device%20Hunt.png" alt="Device Hunt" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiuAsGtbJ_wwNm0fu84KVGnKOA5XtPLZ8FvyYV4P4TXsG24sIuaXDXeK6u79gCzWj0IPewqyBkf7QLzhJRPwGpPUb5T-0SSNNybHVFJvj32NORA3Izv9rLNPA0JNwen6xNJdkgr3XDjD2qtQFlOBhB9_ViKzZpMvYJfvvbsihMj0FrZS1BKQ6Udq-uQrKY/s320/probfly-it-.png" alt="Probfly IT" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgpRRTuwJEoGezvS6IBcLUZny1mTVJhxuLMDHJrIi1x3LCIxs5nCHFCF8RdlbeEqxb2ZlZRM2t3RVhqlfCeMJHn6Cm7-KtSqU7gN7ouzimXPO5LhMUAfdinded7-Np-AsgYtlcaiG6zDwgLhiKPYBWGFWm9nPktieUNhW2QVB5L2AeCeU1CGi4aCDgv6CA/s1600/Next%20Ventures.png" alt="Next Ventures" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLvfr6MXqLqTUc9UlPrD0nhbwHvjCCLuZQp1BmyVCt5DI8eqUeYMHQQNNEtvNUPAGUq9C56jCh5a__P3O5I-g7KqS88quoXSS5ydb7lGrTOVQEpCoBQ6j6bryn1hfNcqV8BfO2gXz_HyL09l3JyM7EVAIWqaHxIq_H-68z2LpUcQQ2TA49tF8T2FsBsUU/s1600/KRY.png" alt="KRY" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEha-d8j3-fp1xcw92bA6y9loOgIFMQvzDtlb7znXHDQsfzNUc-MyQ14uaLDZyOE1DZ5TMJn0dIuBgzf5qYQDFwIMLQmLc7s6x6-nx6loOOmpis2uZYrGxyo7YQv8EgpR8iKnPAAy6TDs9nAAVuWi7C5oVlwxYUp06QQ_k9vOu8BSMLzofFg2UfPapNadIs/s1600/Fundednext.png" alt="FundedNext" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgn5fXJGtXnbGl-DY2wkQiCMvCSVb_OJoof5vt64WfTlZe5uyUkyKhwlV01XrfLQmht0O6WQ2HIaLg077ySVTpGW18Nb84EW6qGMzKX_z3wZYoH5E3Hi8XDfHwHuVSxnE0nZraBb_4aegd5ZZiR5Yxj9gUgJ22y-9CECBB8Pqo0gUTY_3EPSYt44BGpyMM/s1600/Buymode.png" alt="Buymode" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhWlFFWBHOnD3ZlGiUrLFuuQNiG3eqWAg4opbs1lK3w77A7xY314xlQD5clsXR7tHui9cUIdusXq8o5AIphbYgjSNAyPUniNbuMa2RPiV2gL-SyFhkEKm7KNTicHoy864QvHHo7d47FIrdWE7IVpndDyetvf8HkIMLPQoXizA_mgkEBZHEHFK9Mo5wFymA/s320/fnmarkets.png" alt="FNMarkets" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgblewnOHtmfgqTcARV0yBox1tbXy_1nYiuF9i0Aia4eG7WpVlItcUE9Ibot7CAC3h5lW3iNRv1wHToNTUTjmSYal1u0rcr1UNte0kpIBwFGxyxT6XusQlHUF-e56Zm1oZuB1KYiJ_5VI39UnfvXi8yMSY5SWlnTyYRuP28_tVoSUn1c7wkX3gzFZLfryA/w400-h41/FN%20Futures.png" alt="FN Futures" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhAn92z1DBBtX48uDPaiSM9dfXMmx_ehmiDeelmfv5S1Jb4IZbOu_2BEwsiK2dPiJ73wMJtx0PpMpcyAKl5a2016RVK2KRnM98rKROd0HKGcbJUoeyw2RY8WYXi4OdvoHAv1HcH3ftY-AG0k-Fjoa40dBtP__56CCg2J_8o5pq4nhZEM3Xipkr3q7VoH9E/s1532/Device%20Hunt.png" alt="Device Hunt" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiuAsGtbJ_wwNm0fu84KVGnKOA5XtPLZ8FvyYV4P4TXsG24sIuaXDXeK6u79gCzWj0IPewqyBkf7QLzhJRPwGpPUb5T-0SSNNybHVFJvj32NORA3Izv9rLNPA0JNwen6xNJdkgr3XDjD2qtQFlOBhB9_ViKzZpMvYJfvvbsihMj0FrZS1BKQ6Udq-uQrKY/s320/probfly-it-.png" alt="Probfly IT" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgpRRTuwJEoGezvS6IBcLUZny1mTVJhxuLMDHJrIi1x3LCIxs5nCHFCF8RdlbeEqxb2ZlZRM2t3RVhqlfCeMJHn6Cm7-KtSqU7gN7ouzimXPO5LhMUAfdinded7-Np-AsgYtlcaiG6zDwgLhiKPYBWGFWm9nPktieUNhW2QVB5L2AeCeU1CGi4aCDgv6CA/s1600/Next%20Ventures.png" alt="Next Ventures" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLvfr6MXqLqTUc9UlPrD0nhbwHvjCCLuZQp1BmyVCt5DI8eqUeYMHQQNNEtvNUPAGUq9C56jCh5a__P3O5I-g7KqS88quoXSS5ydb7lGrTOVQEpCoBQ6j6bryn1hfNcqV8BfO2gXz_HyL09l3JyM7EVAIWqaHxIq_H-68z2LpUcQQ2TA49tF8T2FsBsUU/s1600/KRY.png" alt="KRY" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEha-d8j3-fp1xcw92bA6y9loOgIFMQvzDtlb7znXHDQsfzNUc-MyQ14uaLDZyOE1DZ5TMJn0dIuBgzf5qYQDFwIMLQmLc7s6x6-nx6loOOmpis2uZYrGxyo7YQv8EgpR8iKnPAAy6TDs9nAAVuWi7C5oVlwxYUp06QQ_k9vOu8BSMLzofFg2UfPapNadIs/s1600/Fundednext.png" alt="FundedNext" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgn5fXJGtXnbGl-DY2wkQiCMvCSVb_OJoof5vt64WfTlZe5uyUkyKhwlV01XrfLQmht0O6WQ2HIaLg077ySVTpGW18Nb84EW6qGMzKX_z3wZYoH5E3Hi8XDfHwHuVSxnE0nZraBb_4aegd5ZZiR5Yxj9gUgJ22y-9CECBB8Pqo0gUTY_3EPSYt44BGpyMM/s1600/Buymode.png" alt="Buymode" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhWlFFWBHOnD3ZlGiUrLFuuQNiG3eqWAg4opbs1lK3w77A7xY314xlQD5clsXR7tHui9cUIdusXq8o5AIphbYgjSNAyPUniNbuMa2RPiV2gL-SyFhkEKm7KNTicHoy864QvHHo7d47FIrdWE7IVpndDyetvf8HkIMLPQoXizA_mgkEBZHEHFK9Mo5wFymA/s320/fnmarkets.png" alt="FNMarkets" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+      <div class="mq-item"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgblewnOHtmfgqTcARV0yBox1tbXy_1nYiuF9i0Aia4eG7WpVlItcUE9Ibot7CAC3h5lW3iNRv1wHToNTUTjmSYal1u0rcr1UNte0kpIBwFGxyxT6XusQlHUF-e56Zm1oZuB1KYiJ_5VI39UnfvXi8yMSY5SWlnTyYRuP28_tVoSUn1c7wkX3gzFZLfryA/w400-h41/FN%20Futures.png" alt="FN Futures" style="height:28px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.55" /></div>
+    </div>
     </div>
   </div>
 </div>
@@ -998,7 +1226,15 @@ footer a:hover{color:var(--v)}
       <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEidmxWAns7RC9lGwE7rR5ky0ct8nk2-p9mbwr3D-3ysIZcD7M_q_j31L4RiKhVXdA9hIZxQjUdj5xErs3YrhyER2TLLdgZ5fn5jbwmnPrnLYPukTAAyWXOWWh56G_xStjsyv9a80O7YhEjz5l2n2MiOAJFgDcsa4mnxvs7zz4DZLQ7sVa8OAHbIgZy9hIA/s4864/RH.webp" alt="Rakibul Hassan" onerror="this.parentElement.style.background='linear-gradient(160deg,#1a1530,#0f0e16)'" />
     </div>
     <div class="ab-badge">
-      <div class="abb-ico">🎨</div>
+      <div class="abb-ico">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Pen nib / design tool icon -->
+          <path d="M14 2L20 8L14 26L8 8L14 2Z" stroke="#5E43EC" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8 8L14 12L20 8" stroke="#5E43EC" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="14" cy="12" r="2" fill="#5E43EC"/>
+          <path d="M14 12L14 26" stroke="#5E43EC" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
       <div class="abb-t"><strong>3+ Years</strong><span>Design Experience</span></div>
     </div>
   </div>
@@ -1080,28 +1316,93 @@ footer a:hover{color:var(--v)}
 </section>
 
 <!-- ════ WORK ════ -->
-<section class="sec" id="work">
+<section class="sec sec-dark" id="work">
   <div class="work-top r">
-    <div><div class="chip">Selected Work</div><h2 class="stitle" style="margin-top:6px">Latest <em>Projects</em></h2></div>
-    <a href="https://be.net/rakibpixel" target="_blank" class="btn-gw">All on Behance →</a>
+    <div>
+      <div class="chip">Selected Work</div>
+      <h2 class="stitle" style="margin-top:6px">Latest <em>Projects</em></h2>
+    </div>
+    <p style="color:var(--mu);font-size:14px;max-width:280px;text-align:right">Explore my portfolio full of creative solutions.</p>
   </div>
+
   <div class="wg">
-    <a href="https://www.behance.net/gallery/244548443/Portfolio-2025-Creative-Design-Works" target="_blank" class="wc c7 r">
+
+    <!-- PROJECT 1 — href=link, src=thumbnail -->
+    <a href="https://www.behance.net/gallery/244548443/Portfolio-2025-Creative-Design-Works"
+       target="_blank" class="wc r">
       <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/aea3e7244548443.Y3JvcCwzMDAwLDIzNDYsMCww.png" alt="Portfolio 2025" />
-      <div class="wc-num">01</div><div class="wc-ov"><span class="wc-cat">Creative Design</span><h3 class="wc-title">Creative Design Works 2025</h3></div><div class="wc-arr">→</div>
+      <div class="wc-num">01</div>
+      <div class="wc-ov">
+        <div class="wc-tags"><span class="wc-tag">Branding</span><span class="wc-tag">Design</span></div>
+        <h3 class="wc-title">Creative Design Works 2025</h3>
+        <div class="wc-arr">&#8599;</div>
+      </div>
     </a>
-    <a href="https://www.behance.net/gallery/239347273/CASE-STUDY-ID-Card-Automation-System" target="_blank" class="wc c5 r d1">
-      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/239347273.png" alt="ID Card" style="background:#1a1530" onerror="this.style.background='#1a1530'" />
-      <div class="wc-num">02</div><div class="wc-ov"><span class="wc-cat">UI/UX</span><h3 class="wc-title">ID Card Automation System</h3></div><div class="wc-arr">→</div>
+
+    <!-- PROJECT 2 — href=link, src=thumbnail -->
+    <a href="https://www.behance.net/gallery/239347273/CASE-STUDY-ID-Card-Automation-System"
+       target="_blank" class="wc r d1">
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/b3c0f3239347273.6847e8ffa6c04.jpg" alt="ID Card Automation" />
+      <div class="wc-num">02</div>
+      <div class="wc-ov">
+        <div class="wc-tags"><span class="wc-tag">UI/UX</span><span class="wc-tag">Case Study</span></div>
+        <h3 class="wc-title">ID Card Automation System</h3>
+        <div class="wc-arr">&#8599;</div>
+      </div>
     </a>
-    <a href="https://www.behance.net/gallery/217720957/Youtube-Thumbnail" target="_blank" class="wc c4 r d2">
-      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/217720957.png" alt="Thumbnails" style="background:#120a28" onerror="this.style.background='#120a28'" />
-      <div class="wc-num">03</div><div class="wc-ov"><span class="wc-cat">Thumbnail</span><h3 class="wc-title">YouTube Thumbnails</h3></div><div class="wc-arr">→</div>
+
+    <!-- PROJECT 3 — href=link, src=thumbnail -->
+    <a href="https://www.behance.net/gallery/217720957/Youtube-Thumbnail"
+       target="_blank" class="wc r d2">
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/f4c5dc217720957.6847e8ff9b76f.jpg" alt="YouTube Thumbnail" />
+      <div class="wc-num">03</div>
+      <div class="wc-ov">
+        <div class="wc-tags"><span class="wc-tag">Thumbnail</span><span class="wc-tag">YouTube</span></div>
+        <h3 class="wc-title">YouTube Thumbnail Design</h3>
+        <div class="wc-arr">&#8599;</div>
+      </div>
     </a>
-    <a href="https://www.behance.net/gallery/201488859/Creative-ADS-for-Nike-Shoes" target="_blank" class="wc c8 r d3">
-      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/201488859.png" alt="Nike" style="background:#111" onerror="this.style.background='#111'" />
-      <div class="wc-num">04</div><div class="wc-ov"><span class="wc-cat">Ad Creative</span><h3 class="wc-title">Nike Shoes Campaign</h3></div><div class="wc-arr">→</div>
+
+    <!-- PROJECT 4 — href=link, src=thumbnail -->
+    <a href="https://www.behance.net/gallery/201488859/Creative-ADS-for-Nike-Shoes"
+       target="_blank" class="wc r d1">
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/8e3d07201488859.6847e8ff91234.jpg" alt="Nike Ads" />
+      <div class="wc-num">04</div>
+      <div class="wc-ov">
+        <div class="wc-tags"><span class="wc-tag">Ad Creative</span><span class="wc-tag">Nike</span></div>
+        <h3 class="wc-title">Creative ADS &#8212; Nike Shoes</h3>
+        <div class="wc-arr">&#8599;</div>
+      </div>
     </a>
+
+    <!-- PROJECT 5 — href=link, src=thumbnail -->
+    <a href="https://www.behance.net/gallery/244548443/Portfolio-2025-Creative-Design-Works"
+       target="_blank" class="wc r d2">
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/5bdaa8244548443.6847e8ffb0da2.jpg" alt="Project 5" />
+      <div class="wc-num">05</div>
+      <div class="wc-ov">
+        <div class="wc-tags"><span class="wc-tag">Motion</span><span class="wc-tag">Brand</span></div>
+        <h3 class="wc-title">Motion Graphics &#38; Brand Identity</h3>
+        <div class="wc-arr">&#8599;</div>
+      </div>
+    </a>
+
+    <!-- PROJECT 6 — href=link, src=thumbnail -->
+    <a href="https://www.behance.net/gallery/239347273/CASE-STUDY-ID-Card-Automation-System"
+       target="_blank" class="wc r d3">
+      <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/b3c0f3239347273.6847e8ffa6c04.jpg" alt="Project 6" />
+      <div class="wc-num">06</div>
+      <div class="wc-ov">
+        <div class="wc-tags"><span class="wc-tag">Social Media</span></div>
+        <h3 class="wc-title">Social Media Design Pack</h3>
+        <div class="wc-arr">&#8599;</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div style="text-align:center;margin-top:48px">
+    <a href="https://be.net/rakibpixel" target="_blank" class="btn-gw">View All on Behance &#8599;</a>
   </div>
 </section>
 
@@ -1316,8 +1617,8 @@ var cr = document.getElementById('cr');
 var mx = 0, my = 0, rx = 0, ry = 0;
 document.addEventListener('mousemove', function(e){ mx = e.clientX; my = e.clientY; }, {passive:true});
 (function loop(){
-  rx += (mx - rx) * 0.09;
-  ry += (my - ry) * 0.09;
+  rx += (mx - rx) * 0.14;
+  ry += (my - ry) * 0.14;
   cd.style.left = mx + 'px';
   cd.style.top  = my + 'px';
   cr.style.left = rx + 'px';
@@ -1328,11 +1629,6 @@ var hovEls = document.querySelectorAll('a,button,.sr,.wc,.tcard,.ps,.pc,.sk-pill
 for(var i = 0; i < hovEls.length; i++){
   hovEls[i].addEventListener('mouseenter', function(){ document.body.classList.add('hov'); }, {passive:true});
   hovEls[i].addEventListener('mouseleave', function(){ document.body.classList.remove('hov'); }, {passive:true});
-}
-var ctaEls = document.querySelectorAll('.btn-dark,.btn-wh,.cf-sub');
-for(var j = 0; j < ctaEls.length; j++){
-  ctaEls[j].addEventListener('mouseenter', function(){ document.body.classList.add('cta'); }, {passive:true});
-  ctaEls[j].addEventListener('mouseleave', function(){ document.body.classList.remove('cta'); }, {passive:true});
 }
 
 /* NAV STICKY + light-hero mode */
@@ -1364,7 +1660,6 @@ for(var m = 0; m < revEls.length; m++){ obs.observe(revEls[m]); }
   if(!rwBox) return;
   var words = rwBox.querySelectorAll('.rw-w');
   if(!words.length) return;
-  /* size box to longest word */
   var maxW = 0;
   for(var n = 0; n < words.length; n++){
     words[n].style.position = 'static';
@@ -1386,6 +1681,49 @@ for(var m = 0; m < revEls.length; m++){ obs.observe(revEls[m]); }
     cur = (cur + 1) % words.length;
     words[cur].classList.add('on');
   }, 2100);
+/* COUNTER ANIMATION */
+(function(){
+  var counters = document.querySelectorAll('.cnt');
+  if(!counters.length) return;
+  var started = false;
+  function startCounters(){
+    if(started) return;
+    started = true;
+    for(var i = 0; i < counters.length; i++){
+      (function(el){
+        var target = parseInt(el.getAttribute('data-target'));
+        var duration = 2800;
+        var start = null;
+        function step(ts){
+          if(!start) start = ts;
+          var progress = Math.min((ts - start) / duration, 1);
+          /* ease out quint — very smooth deceleration */
+          var ease = 1 - Math.pow(1 - progress, 5);
+          el.textContent = Math.floor(ease * target);
+          if(progress < 1){
+            requestAnimationFrame(step);
+          } else {
+            el.textContent = target;
+          }
+        }
+        /* stagger each counter slightly */
+        setTimeout(function(){
+          requestAnimationFrame(step);
+        }, i * 120);
+      })(counters[i]);
+    }
+  }
+  var statsEl = document.querySelector('.hero-stats');
+  if(!statsEl){ startCounters(); return; }
+  var statsObs = new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting){
+      startCounters();
+      statsObs.disconnect();
+    }
+  }, {threshold: 0.3});
+  statsObs.observe(statsEl);
+})();
+
 })();
 
 })();
