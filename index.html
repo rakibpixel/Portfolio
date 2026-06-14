@@ -1145,6 +1145,163 @@ footer a:hover{color:var(--v)}
   transition:border-color .35s,color .35s;
 }
 .btn-gw:hover{border-color:var(--fg);color:var(--fg)}
+
+/* ══════════════════════════════════════
+   DEV & TOOLS — Terminal Style
+══════════════════════════════════════ */
+.tools-sec{background:var(--bg);position:relative;overflow:hidden}
+.tools-sec::before{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(rgba(94,67,236,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(94,67,236,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;z-index:0;
+}
+.tools-top{position:relative;z-index:1;margin-bottom:48px}
+.tools-eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--v);margin-bottom:12px;display:flex;align-items:center;gap:8px;
+}
+.tools-eyebrow::before{content:'';width:20px;height:1px;background:var(--v)}
+.tools-title{
+  font-family:var(--dp);font-size:clamp(36px,5.5vw,72px);
+  font-weight:800;letter-spacing:-3px;line-height:.95;
+  color:var(--fg);margin-bottom:14px;
+}
+.tools-title span{color:var(--v)}
+.tools-sub{font-size:15px;color:var(--mu);max-width:480px;line-height:1.7}
+
+/* Terminal grid */
+.tools-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  position:relative;z-index:1;
+}
+
+/* Terminal card */
+.tool-card{
+  background:#0a0a10;
+  border:1px solid rgba(94,67,236,.2);
+  border-radius:12px;
+  overflow:hidden;
+  text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;
+  transition:border-color .35s var(--e),box-shadow .35s var(--e);
+  position:relative;
+}
+.tool-card:hover{
+  border-color:rgba(94,67,236,.6);
+  box-shadow:0 0 24px rgba(94,67,236,.15),inset 0 0 24px rgba(94,67,236,.04);
+}
+
+/* Terminal top bar */
+.tool-bar{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 14px;
+  background:rgba(255,255,255,.03);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  flex-shrink:0;
+}
+.tool-dot{width:9px;height:9px;border-radius:50%}
+.tool-dot.r{background:#ff5f57}
+.tool-dot.y{background:#febc2e}
+.tool-dot.g{background:#28c840}
+.tool-bar-name{
+  margin-left:auto;
+  font-family:monospace;font-size:10px;
+  color:rgba(255,255,255,.25);letter-spacing:.5px;
+}
+
+/* Card body */
+.tool-body{padding:18px 16px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+
+/* Terminal prompt line */
+.tool-prompt{
+  font-family:'Courier New',monospace;
+  font-size:11px;color:rgba(94,67,236,.8);
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:2px;
+}
+.tool-prompt::before{content:'$';color:rgba(255,255,255,.3)}
+
+/* Badge */
+.tool-type{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:monospace;font-size:9px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  color:var(--v);
+  background:rgba(94,67,236,.1);
+  border:1px solid rgba(94,67,236,.25);
+  padding:3px 8px;border-radius:4px;
+  width:fit-content;
+}
+.tool-type::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--v);animation:blink 1.4s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.tool-name{
+  font-family:var(--dp);font-size:16px;font-weight:800;
+  letter-spacing:-.3px;color:#fff;line-height:1.2;
+}
+.tool-desc{
+  font-size:11.5px;color:rgba(255,255,255,.38);
+  line-height:1.7;flex:1;
+  font-family:monospace;
+}
+
+/* CTA */
+.tool-cta{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:monospace;font-size:10px;font-weight:700;
+  letter-spacing:1px;color:var(--v);margin-top:6px;
+  padding:7px 12px;border-radius:6px;
+  background:rgba(94,67,236,.08);border:1px solid rgba(94,67,236,.2);
+  width:fit-content;
+  transition:background .3s,border-color .3s;
+}
+.tool-card:hover .tool-cta{background:rgba(94,67,236,.18);border-color:rgba(94,67,236,.5)}
+.tool-cta::before{content:'→';color:var(--v)}
+
+/* Scan line effect on hover */
+.tool-card::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,transparent 2px,
+    rgba(94,67,236,.015) 2px,rgba(94,67,236,.015) 4px
+  );
+  pointer-events:none;opacity:0;
+  transition:opacity .35s var(--e);
+}
+.tool-card:hover::after{opacity:1}
+
+@media(max-width:1100px){.tools-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){
+  .tools-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .tool-bar{padding:8px 10px}
+  .tool-body{padding:14px 12px 16px}
+  .tool-name{font-size:14px}
+  .tools-title{letter-spacing:-2px}
+}
+@media(max-width:400px){.tools-grid{grid-template-columns:1fr}}
+
+/* Typewriter cursor */
+#twTarget::after{
+  content:'';
+  display:inline-block;
+  width:1.5px;
+  height:.85em;
+  background:#fff;
+  vertical-align:middle;
+  margin-left:3px;
+  animation:twBlink .7s step-end infinite;
+}
+
+@keyframes twBlink{0%,100%{opacity:1}50%{opacity:0}}
 </style>
 </head>
 <body>
@@ -1205,15 +1362,15 @@ footer a:hover{color:var(--v)}
   <!-- stats row -->
   <div class="hero-stats">
     <div>
-      <div class="hs-n"><span>+</span><span class="cnt" data-target="350">0</span></div>
+      <div class="hs-n"><span>+</span><span class="cnt" data-target="50">0</span></div>
       <div class="hs-l">Projects completed</div>
     </div>
     <div>
-      <div class="hs-n"><span>+</span><span class="cnt" data-target="30">0</span></div>
+      <div class="hs-n"><span>+</span><span class="cnt" data-target="15">0</span></div>
       <div class="hs-l">Clients served</div>
     </div>
     <div>
-      <div class="hs-n"><span class="cnt" data-target="5">0</span><span>+</span></div>
+      <div class="hs-n"><span class="cnt" data-target="3">0</span><span>+</span></div>
       <div class="hs-l">Years experience</div>
     </div>
   </div>
@@ -1493,6 +1650,137 @@ footer a:hover{color:var(--v)}
     <div class="ps r d1"><div class="ps-n">02</div><div class="ps-ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none"><rect x="5" y="5" width="24" height="24" rx="4" stroke="#5E43EC" stroke-width="1.5"/><path d="M11 17l4 4 8-8" stroke="#5E43EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Define</h3><p>Translating insights into clear creative strategy and direction.</p></div>
     <div class="ps r d2"><div class="ps-n">03</div><div class="ps-ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M7 27L17 7l10 20" stroke="#5E43EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 21h14" stroke="#5E43EC" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div><h3>Design</h3><p>Crafting visuals with precision until every pixel feels exactly right.</p></div>
     <div class="ps r d3"><div class="ps-n">04</div><div class="ps-ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M17 5l12 12-12 12L5 17 17 5z" stroke="#5E43EC" stroke-width="1.5"/><circle cx="17" cy="17" r="3" fill="#5E43EC" opacity=".4"/></svg></div><h3>Deliver</h3><p>Clean handoff with all assets and ongoing support so everything lands perfectly.</p></div>
+  </div>
+</section>
+
+<!-- ════ DEV & TOOLS ════ -->
+<section class="sec tools-sec">
+  <div class="tools-top r">
+    <div class="tools-eyebrow">Dev &amp; Tools</div>
+    <h2 class="tools-title" id="toolsTitle">Think. <span id="twTarget"></span></h2>
+    <p class="tools-sub">Web apps, Chrome extensions &#38; design resources &#8212; built to solve real problems for designers.</p>
+  </div>
+
+  <div class="tools-grid">
+
+    <!-- RP-Type -->
+    <a href="https://www.rakibpixel.com/RPType.html" target="_blank" class="tool-card r">
+      <div class="tool-bar">
+        <div class="tool-dot r"></div>
+        <div class="tool-dot y"></div>
+        <div class="tool-dot g"></div>
+        <span class="tool-bar-name">rp-type.html</span>
+      </div>
+      <div class="tool-body">
+        <div class="tool-prompt">open RPType</div>
+        <div class="tool-type">Web App</div>
+        <div class="tool-name">RP&#8209;Type</div>
+        <p class="tool-desc">// Bangla typing in Bijoy layout on macOS. No learning curve.</p>
+        <div class="tool-cta">Open App</div>
+      </div>
+    </a>
+
+    <!-- Designer Toolkit -->
+    <a href="https://chromewebstore.google.com/detail/designer-toolkit-creative/mfbdgagoiolnpkofpokcfpnimgjfhoha" target="_blank" class="tool-card r d1">
+      <div class="tool-bar">
+        <div class="tool-dot r"></div>
+        <div class="tool-dot y"></div>
+        <div class="tool-dot g"></div>
+        <span class="tool-bar-name">toolkit.ext</span>
+      </div>
+      <div class="tool-body">
+        <div class="tool-prompt">install extension</div>
+        <div class="tool-type">Extension</div>
+        <div class="tool-name">Designer Toolkit</div>
+        <p class="tool-desc">// Color picker, rulers, grids &#38; more — all in your browser.</p>
+        <div class="tool-cta">Chrome Store</div>
+      </div>
+    </a>
+
+    <!-- RP-Bar -->
+    <a href="https://www.rakibpixel.com/RP-Bar.html" target="_blank" class="tool-card r d2">
+      <div class="tool-bar">
+        <div class="tool-dot r"></div>
+        <div class="tool-dot y"></div>
+        <div class="tool-dot g"></div>
+        <span class="tool-bar-name">rp-bar.html</span>
+      </div>
+      <div class="tool-body">
+        <div class="tool-prompt">launch RP-Bar</div>
+        <div class="tool-type">PS Plugin</div>
+        <div class="tool-name">RP&#8209;Bar</div>
+        <p class="tool-desc">// Photoshop quick-action plugin with 16+ helpful tools built in.</p>
+        <div class="tool-cta">Open App</div>
+      </div>
+    </a>
+
+    <!-- High-impact Copier -->
+    <a href="https://chromewebstore.google.com/detail/high-impact-copier/gmdbipccbhbheinhgiihfnmfopcffgle" target="_blank" class="tool-card r d3">
+      <div class="tool-bar">
+        <div class="tool-dot r"></div>
+        <div class="tool-dot y"></div>
+        <div class="tool-dot g"></div>
+        <span class="tool-bar-name">copier.ext</span>
+      </div>
+      <div class="tool-body">
+        <div class="tool-prompt">copy --high-impact</div>
+        <div class="tool-type">Extension</div>
+        <div class="tool-name">High&#8209;impact Copier</div>
+        <p class="tool-desc">// Copy web content with precision. Built for designers.</p>
+        <div class="tool-cta">Chrome Store</div>
+      </div>
+    </a>
+
+    <!-- Local Library -->
+    <a href="https://rakibpixel.gumroad.com/l/PSLocalLibrary" target="_blank" class="tool-card r d1">
+      <div class="tool-bar">
+        <div class="tool-dot r"></div>
+        <div class="tool-dot y"></div>
+        <div class="tool-dot g"></div>
+        <span class="tool-bar-name">local-library.ps</span>
+      </div>
+      <div class="tool-body">
+        <div class="tool-prompt">get PSLocalLibrary</div>
+        <div class="tool-type">PS / AI Plugin</div>
+        <div class="tool-name">Local Library</div>
+        <p class="tool-desc">// Store design resources right inside Photoshop &#38; Illustrator.</p>
+        <div class="tool-cta">Get on Gumroad</div>
+      </div>
+    </a>
+    <!-- Trip Expense -->
+    <a href="https://tripexpense.pro.bd" target="_blank" class="tool-card r d2">
+      <div class="tool-bar">
+        <div class="tool-dot r"></div>
+        <div class="tool-dot y"></div>
+        <div class="tool-dot g"></div>
+        <span class="tool-bar-name">trip-expense.app</span>
+      </div>
+      <div class="tool-body">
+        <div class="tool-prompt">run TripExpense</div>
+        <div class="tool-type">Web App</div>
+        <div class="tool-name">Trip Expense</div>
+        <p class="tool-desc">// Track &#38; split travel expenses with friends, the easy way.</p>
+        <div class="tool-cta">Open App</div>
+      </div>
+    </a>
+
+    <!-- Breakfast Order -->
+    <a href="https://breakfast.bro.bd" target="_blank" class="tool-card r d3">
+      <div class="tool-bar">
+        <div class="tool-dot r"></div>
+        <div class="tool-dot y"></div>
+        <div class="tool-dot g"></div>
+        <span class="tool-bar-name">breakfast.app</span>
+      </div>
+      <div class="tool-body">
+        <div class="tool-prompt">order breakfast</div>
+        <div class="tool-type">Web App</div>
+        <div class="tool-name">Breakfast Order</div>
+        <p class="tool-desc">// Simple breakfast ordering system for teams &#38; offices.</p>
+        <div class="tool-cta">Open App</div>
+      </div>
+    </a>
+
   </div>
 </section>
 
@@ -1810,6 +2098,39 @@ for(var m = 0; m < revEls.length; m++){ obs.observe(revEls[m]); }
 
 })();
 
+
+/* TYPEWRITER — Tools Title (loop) */
+(function(){
+  var el = document.getElementById('twTarget');
+  if(!el) return;
+  var words = ['Build.', 'Launch.', 'Ship.'];
+  var wi = 0, ci = 0, deleting = false, pause = 0;
+  function tick(){
+    var word = words[wi];
+    if(pause > 0){ pause--; setTimeout(tick, 100); return; }
+    if(!deleting){
+      el.textContent = word.slice(0, ci+1);
+      ci++;
+      if(ci === word.length){ pause = 18; deleting = true; }
+      setTimeout(tick, 110);
+    } else {
+      el.textContent = word.slice(0, ci-1);
+      ci--;
+      if(ci === 0){
+        deleting = false;
+        wi = (wi + 1) % words.length;
+        pause = 5;
+      }
+      setTimeout(tick, 55);
+    }
+  }
+  var sec = document.querySelector('.tools-sec');
+  if(!sec){ setTimeout(tick, 1000); return; }
+  var o = new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting){ setTimeout(tick, 400); o.disconnect(); }
+  }, {threshold: 0.3});
+  o.observe(sec);
+})();
 //]]>
 </script>
 </body>
