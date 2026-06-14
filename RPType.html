@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RP-Type — বিজয়-স্টাইল বাংলা কীবোর্ড for macOS · by Rakib Pixel</title>
+<meta name="description" content="RP-Type — ম্যাকের জন্য বিজয়-স্টাইল বাংলা কীবোর্ড লেআউট। কার আগে, বর্ণ পরে। তৈরি করেছেন Rakib Pixel।">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --violet:#5E42EC;
+  --violet-bright:#7B5CFF;
+  --violet-deep:#3A269C;
+  --ink:#080608;
+  --ink-soft:#100C1C;
+  --card:#15101F;
+  --line:rgba(123,92,255,.18);
+  --text:#ECE9F5;
+  --text-dim:#9A93B0;
+  --text-faint:#615A78;
+  --display:"Space Grotesk",sans-serif;
+  --body:"Hind Siliguri",sans-serif;
+  --mono:"JetBrains Mono",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--text);
+  font-family:var(--body);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--violet);color:#fff}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* ---------- ambient glow ---------- */
+.glow{
+  position:fixed;border-radius:50%;filter:blur(120px);opacity:.45;
+  pointer-events:none;z-index:0;
+}
+.glow-1{width:600px;height:600px;background:var(--violet-deep);top:-200px;right:-150px}
+.glow-2{width:500px;height:500px;background:var(--violet);bottom:-200px;left:-200px;opacity:.25}
+
+/* ---------- nav ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  backdrop-filter:blur(14px);
+  background:rgba(8,6,8,.6);
+  border-bottom:1px solid var(--line);
+}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:600;letter-spacing:-.02em}
+.brand img{width:30px;height:30px;border-radius:7px}
+.brand span b{color:var(--violet-bright)}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:14px;color:var(--text-dim);transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{
+  background:var(--violet);color:#fff!important;padding:9px 18px;border-radius:10px;
+  font-weight:600;font-size:14px;transition:transform .15s,box-shadow .2s;
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(94,66,236,.4)}
+.menu-toggle{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer}
+
+/* ---------- hero ---------- */
+.hero{position:relative;z-index:1;padding:160px 0 90px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--violet-bright);border:1px solid var(--line);
+  padding:6px 14px;border-radius:100px;margin-bottom:26px;
+}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--violet-bright);box-shadow:0 0 10px var(--violet-bright)}
+h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(38px,5.5vw,64px);line-height:1.04;letter-spacing:-.03em;
+  margin-bottom:22px;
+}
+h1 .hl{color:var(--violet-bright)}
+.hero p.lead{font-size:18px;color:var(--text-dim);max-width:480px;margin-bottom:34px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{
+  background:var(--violet);color:#fff;padding:15px 28px;border-radius:12px;
+  font-weight:600;font-size:16px;display:inline-flex;align-items:center;gap:10px;
+  transition:transform .15s,box-shadow .25s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(94,66,236,.45)}
+.btn-ghost{
+  border:1px solid var(--line);padding:15px 26px;border-radius:12px;
+  font-weight:500;font-size:16px;color:var(--text-dim);transition:.2s;
+}
+.btn-ghost:hover{border-color:var(--violet);color:var(--text)}
+
+/* ---------- live demo card ---------- */
+.demo{
+  background:linear-gradient(160deg,var(--card),var(--ink-soft));
+  border:1px solid var(--line);border-radius:20px;padding:26px;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+.demo-top{display:flex;align-items:center;gap:7px;margin-bottom:20px}
+.demo-top i{width:11px;height:11px;border-radius:50%;display:block}
+.demo-top i:nth-child(1){background:#FF5F57}
+.demo-top i:nth-child(2){background:#FEBC2E}
+.demo-top i:nth-child(3){background:#28C840}
+.demo-top span{margin-left:10px;font-family:var(--mono);font-size:12px;color:var(--text-faint)}
+.demo-screen{
+  background:var(--ink);border-radius:12px;padding:24px;min-height:150px;
+  border:1px solid rgba(255,255,255,.04);
+}
+.demo-label{font-family:var(--mono);font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.demo-out{font-size:34px;font-weight:600;min-height:48px;letter-spacing:.01em}
+.cursor{display:inline-block;width:2px;height:34px;background:var(--violet-bright);margin-left:2px;vertical-align:middle;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.demo-keys{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
+.demo-keys .k{
+  font-family:var(--mono);font-size:13px;padding:7px 12px;border-radius:8px;
+  background:rgba(123,92,255,.08);border:1px solid var(--line);color:var(--text-dim);
+  transition:.15s;
+}
+.demo-keys .k.active{background:var(--violet);color:#fff;border-color:var(--violet);transform:translateY(-2px)}
+.demo-note{margin-top:16px;font-size:13px;color:var(--text-faint)}
+
+/* ---------- section heading ---------- */
+.section{position:relative;z-index:1;padding:80px 0}
+.sec-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--violet-bright);margin-bottom:14px}
+.sec-title{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;margin-bottom:16px}
+.sec-sub{color:var(--text-dim);max-width:560px;font-size:16px}
+
+/* ---------- features ---------- */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.feat{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;
+  transition:transform .2s,border-color .2s;
+}
+.feat:hover{transform:translateY(-4px);border-color:var(--violet)}
+.feat .ic{
+  width:46px;height:46px;border-radius:12px;background:rgba(94,66,236,.15);
+  display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px;
+}
+.feat h3{font-family:var(--display);font-weight:600;font-size:19px;margin-bottom:9px}
+.feat p{font-size:14.5px;color:var(--text-dim)}
+
+/* ---------- install steps ---------- */
+.steps{margin-top:50px;display:flex;flex-direction:column;gap:2px}
+.step{
+  display:grid;grid-template-columns:64px 1fr;gap:24px;
+  padding:28px 0;border-bottom:1px solid var(--line);align-items:start;
+}
+.step:first-child{border-top:1px solid var(--line)}
+.step-num{font-family:var(--display);font-size:30px;font-weight:700;color:var(--violet-bright);line-height:1}
+.step h3{font-family:var(--display);font-weight:600;font-size:20px;margin-bottom:8px}
+.step p{color:var(--text-dim);font-size:15px}
+.step code{
+  font-family:var(--mono);font-size:13px;background:rgba(123,92,255,.1);
+  padding:3px 8px;border-radius:6px;color:var(--violet-bright);
+}
+.warn{
+  margin-top:14px;font-size:13.5px;color:var(--text-dim);
+  background:rgba(254,188,46,.07);border-left:2px solid #FEBC2E;
+  padding:10px 14px;border-radius:0 8px 8px 0;
+}
+/* ---------- first-open guide (Gatekeeper) ---------- */
+.gatekeep{
+  margin-top:18px;background:rgba(94,66,236,.07);
+  border:1px solid var(--line);border-radius:14px;padding:22px 24px;
+}
+.gatekeep .gk-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.gatekeep .gk-badge{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--violet);color:#fff;padding:4px 10px;border-radius:100px;
+}
+.gatekeep h4{font-family:var(--display);font-weight:600;font-size:17px}
+.gatekeep .gk-intro{font-size:14px;color:var(--text-dim);margin-bottom:16px}
+.gatekeep ol{list-style:none;counter-reset:gk;display:flex;flex-direction:column;gap:11px}
+.gatekeep ol li{
+  counter-increment:gk;position:relative;padding-left:34px;
+  font-size:14.5px;color:var(--text);line-height:1.55;
+}
+.gatekeep ol li::before{
+  content:counter(gk);position:absolute;left:0;top:0;
+  width:23px;height:23px;border-radius:7px;background:var(--violet);
+  color:#fff;font-family:var(--mono);font-size:12px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.gatekeep b{color:var(--violet-bright)}
+.gatekeep .gk-foot{
+  margin-top:15px;font-size:12.5px;color:var(--text-faint);
+  border-top:1px solid var(--line);padding-top:12px;
+}
+/* ---------- info cards (manual + toggle) ---------- */
+.info-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:50px}
+.icard{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:28px;position:relative;overflow:hidden;
+}
+.icard::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:120px;height:120px;
+  background:radial-gradient(circle,rgba(94,66,236,.18),transparent 70%);
+}
+.icard .ic-tag{
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--violet-bright);display:inline-block;margin-bottom:10px;
+}
+.icard h3{font-family:var(--display);font-weight:600;font-size:20px;margin-bottom:6px}
+.icard .ic-sub{font-size:13.5px;color:var(--text-faint);margin-bottom:18px}
+.icard ol{list-style:none;counter-reset:ic;display:flex;flex-direction:column;gap:12px}
+.icard ol li{
+  counter-increment:ic;position:relative;padding-left:32px;
+  font-size:14.5px;color:var(--text);line-height:1.55;
+}
+.icard ol li::before{
+  content:counter(ic);position:absolute;left:0;top:1px;
+  width:22px;height:22px;border-radius:7px;
+  background:rgba(94,66,236,.18);color:var(--violet-bright);
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.icard b{color:var(--violet-bright)}
+.icard code{
+  font-family:var(--mono);font-size:12.5px;background:rgba(123,92,255,.1);
+  padding:2px 7px;border-radius:5px;color:var(--violet-bright);
+  word-break:break-word;
+}
+.icard .ic-tip{
+  margin-top:16px;font-size:12.5px;color:var(--text-faint);
+  border-top:1px solid var(--line);padding-top:12px;
+}
+.icard .glb{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:6px;background:rgba(94,66,236,.15);
+  font-size:13px;vertical-align:-4px;
+}
+@media(max-width:880px){.info-cards{grid-template-columns:1fr}}
+
+/* ---------- download band ---------- */
+.dl-band{
+  position:relative;z-index:1;margin:40px auto;
+  background:linear-gradient(135deg,var(--violet-deep),var(--violet));
+  border-radius:24px;padding:56px 48px;text-align:center;overflow:hidden;
+}
+.dl-band::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.15),transparent 50%);
+}
+.dl-band h2{font-family:var(--display);font-weight:700;font-size:clamp(26px,3.5vw,38px);position:relative;letter-spacing:-.02em}
+.dl-band p{color:rgba(255,255,255,.82);margin:12px auto 28px;max-width:460px;position:relative}
+.dl-band .btn-primary{background:#fff;color:var(--violet-deep);position:relative}
+.dl-band .btn-primary:hover{box-shadow:0 12px 32px rgba(0,0,0,.3)}
+.dl-meta{margin-top:18px;font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.6);position:relative}
+
+/* ---------- contact / footer ---------- */
+footer{position:relative;z-index:1;border-top:1px solid var(--line);padding:64px 0 40px;margin-top:40px}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;margin-bottom:48px}
+.foot-brand .brand{margin-bottom:16px}
+.foot-brand p{font-size:14px;color:var(--text-dim);max-width:300px}
+.foot-col h4{font-family:var(--display);font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-faint);margin-bottom:18px}
+.foot-col a{display:block;font-size:15px;color:var(--text-dim);margin-bottom:12px;transition:color .2s}
+.foot-col a:hover{color:var(--violet-bright)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--line);flex-wrap:wrap;gap:12px}
+.foot-bottom p{font-size:13px;color:var(--text-faint)}
+.foot-bottom .wm{font-family:var(--mono);font-size:11px;color:var(--text-faint);opacity:.6}
+
+@media(max-width:880px){
+  .hero-grid{grid-template-columns:1fr;gap:44px}
+  .feat-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr;gap:32px}
+  .nav-links{display:none}
+  .menu-toggle{display:block}
+  .nav-links.open{display:flex;position:absolute;top:68px;left:0;right:0;flex-direction:column;background:var(--ink-soft);padding:24px;gap:18px;border-bottom:1px solid var(--line)}
+}
+</style>
+</head>
+<body>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="brand"><img src="https://raw.githubusercontent.com/rakibpixel/Portfolio/d36e7f9a99fa16c2904b78fd7b972f005841f8a9/favicon.svg" alt="RP-Type"><span>RP<b>-Type</b></span></a>
+    <div class="nav-links" id="navlinks">
+      <a href="#features">ফিচার</a>
+      <a href="#install">ইনস্টল</a>
+      <a href="#contact">যোগাযোগ</a>
+      <a href="#download" class="nav-cta">ডাউনলোড</a>
+    </div>
+    <button class="menu-toggle" onclick="document.getElementById('navlinks').classList.toggle('open')">☰</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>macOS · বাংলা কীবোর্ড</span>
+      <h1>বিজয়ের মতো লিখুন,<br><span class="hl">ম্যাকেই</span>।</h1>
+      <p class="lead">RP-Type এমন একটি বাংলা কীবোর্ড লেআউট যেখানে আপনি কার (ি ে ৈ) আগে চাপেন, বর্ণ পরে — ঠিক উইন্ডোজের বিজয়ের অভ্যাসেই, কোনো নতুন কিছু শেখা ছাড়াই।</p>
+      <div class="hero-btns">
+        <a href="#download" class="btn-primary">↓ ফ্রি ডাউনলোড</a>
+        <a href="#install" class="btn-ghost">ইনস্টল গাইড দেখুন</a>
+      </div>
+    </div>
+    <div class="demo">
+      <div class="demo-top"><i></i><i></i><i></i><span>RP-Type — live</span></div>
+      <div class="demo-screen">
+        <div class="demo-label">টাইপ করছি বিজয়-স্টাইলে</div>
+        <div class="demo-out" id="demoOut"><span class="cursor"></span></div>
+        <div class="demo-keys" id="demoKeys"></div>
+        <div class="demo-note" id="demoNote">কার আগে → বর্ণ পরে → সঠিক ক্রমে রেন্ডার</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="sec-eyebrow">কেন RP-Type</div>
+    <h2 class="sec-title">আপনার বিজয়-অভ্যাস, অক্ষত</h2>
+    <p class="sec-sub">পিসি থেকে ম্যাকে এসে নতুন করে টাইপিং শেখার ঝামেলা নেই। যা জানেন, তা-ই কাজে লাগবে।</p>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="ic">⌨️</div>
+        <h3>কার আগে, বর্ণ পরে</h3>
+        <p>ি, ে, ৈ — সব pre-base কার আগে চেপে বর্ণ লিখলে আউটপুট সঠিক ইউনিকোড ক্রমে বসে। "তুমি", "মেলা", "কৈ" — সব নির্ভুল।</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🧩</div>
+        <h3>৩৬টি বর্ণ ম্যাপড</h3>
+        <p>ক থেকে হ, এমনকি ড় ঢ় য় ৎ — প্রতিটি ব্যঞ্জনবর্ণে কার-সংযোগ যোগ করা, যাতে কোথাও আটকে না যায়।</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🍎</div>
+        <h3>নেটিভ macOS লেআউট</h3>
+        <p>কোনো বাড়তি অ্যাপ বা ব্যাকগ্রাউন্ড প্রসেস নয়। সরাসরি সিস্টেম ইনপুট সোর্স — হালকা, দ্রুত, নিরাপদ।</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🔁</div>
+        <h3>সহজ ইনস্টল ও আনইনস্টল</h3>
+        <p>একটি ডাবল-ক্লিকেই ইনস্টল। চাইলে এক ক্লিকেই সরিয়ে ফেলা — কোনো জটিলতা ছাড়াই।</p>
+      </div>
+      <div class="feat">
+        <div class="ic">🆓</div>
+        <h3>বিনামূল্যে শেয়ারযোগ্য</h3>
+        <p>ব্যক্তিগত ব্যবহারের জন্য উন্মুক্ত। বন্ধুদের সাথে শেয়ার করুন — শুধু ব্রান্ডিং অক্ষত রাখুন।</p>
+      </div>
+      <div class="feat">
+        <div class="ic">✦</div>
+        <h3>Rakib Pixel মেইড</h3>
+        <p>যত্ন নিয়ে তৈরি, watermark-সুরক্ষিত একটি লেআউট। নিয়মিত আপডেট ও সাপোর্টসহ।</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL -->
+<section class="section" id="install">
+  <div class="wrap">
+    <div class="sec-eyebrow">ইনস্টলেশন</div>
+    <h2 class="sec-title">৪ ধাপে চালু করুন</h2>
+    <p class="sec-sub">পুরো প্রক্রিয়াটি দুই মিনিটেরও কম সময়ের।</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div>
+          <h3>ফাইলটি আনজিপ করুন</h3>
+          <p>ডাউনলোড করা <code>RP-Type.zip</code> ডাবল-ক্লিক করে খুলুন। ভেতরে keylayout ফাইল ও ইনস্টলার পাবেন।</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div>
+          <h3>ইনস্টলার চালান</h3>
+          <p><code>install_RP-Type.command</code> ফাইলে <b>রাইট-ক্লিক</b> করে <b>Open</b> বেছে নিন (শুধু ডাবল-ক্লিক নয়)। এটি স্বয়ংক্রিয়ভাবে লেআউটটি সঠিক জায়গায় বসিয়ে দেবে।</p>
+          <div class="gatekeep">
+            <div class="gk-head">
+              <span class="gk-badge">প্রথমবার</span>
+              <h4>"Apple could not verify…" বার্তা এলে?</h4>
+            </div>
+            <p class="gk-intro">চিন্তার কিছু নেই — এটি ফাইলের কোনো সমস্যা নয়। যেহেতু এটি একটি ফ্রি, ওপেন লেআউট (Apple-এ পেইড সার্টিফিকেট ছাড়া), macOS প্রথমবার নিরাপত্তার জন্য জিজ্ঞেস করে। নিচের যেকোনো একটি উপায়ে খুলুন:</p>
+            <ol>
+              <li>ওই বার্তায় <b>Done</b> চাপুন (<b>Move to Trash</b> নয়)।</li>
+              <li>Finder-এ <code>install_RP-Type.command</code> ফাইলে <b>রাইট-ক্লিক</b> (বা Control + ক্লিক) করুন।</li>
+              <li>মেনু থেকে <b>Open</b> বেছে নিন — এবার বার্তায় একটি <b>Open</b> বাটন থাকবে, সেটি চাপুন।</li>
+            </ol>
+            <p class="gk-foot">বিকল্প: <b>System Settings → Privacy &amp; Security</b> → নিচে স্ক্রল করে <b>"Open Anyway"</b> চাপুন। একবার অনুমতি দিলে পরে আর জিজ্ঞেস করবে না।</p>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div>
+          <h3>Mac রিস্টার্ট করুন</h3>
+          <p>নতুন লেআউট চিনতে macOS-এর একবার রিস্টার্ট (বা লগআউট → লগইন) প্রয়োজন।</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div>
+          <h3>কীবোর্ড যোগ করুন</h3>
+          <p><code>System Settings → Keyboard → Text Input → Edit…</code> এ যান → <code>+</code> → <b>Bangla</b> → <b>RP-Type</b> বেছে নিন। ব্যস! মেনু-বার বা <code>Ctrl + Space</code> দিয়ে সুইচ করুন।</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="icard">
+        <span class="ic-tag">বিকল্প উপায়</span>
+        <h3>ম্যানুয়াল ইনস্টল</h3>
+        <p class="ic-sub">কোনো সতর্কতা ছাড়াই — installer চালাতে না চাইলে।</p>
+        <ol>
+          <li>Finder খুলে মেনু থেকে <b>Go → Go to Folder…</b> (বা <code>Shift + Cmd + G</code>)।</li>
+          <li>এই পথটি লিখে Enter চাপুন: <code>~/Library/Keyboard Layouts</code></li>
+          <li><b>RP-Type.bundle</b> ফোল্ডারটি টেনে এই ফোল্ডারে রাখুন।</li>
+          <li><b>Mac রিস্টার্ট</b> করে উপরের ধাপ ৪ অনুসরণ করুন।</li>
+        </ol>
+        <p class="ic-tip">আইকন দেখতে চাইলে <b>.bundle</b> ব্যবহার করুন — শুধু <code>.keylayout</code> ফাইল দিলে macOS ডিফল্ট আইকন দেখায়।</p>
+      </div>
+
+      <div class="icard">
+        <span class="ic-tag">দ্রুত সুইচ</span>
+        <h3><span class="glb">🌐</span> বাংলা ↔ ইংরেজি টগল</h3>
+        <p class="ic-sub">Globe বা Fn বাটন চেপেই ভাষা পাল্টান।</p>
+        <ol>
+          <li><code>System Settings → Keyboard</code> খুলুন।</li>
+          <li><b>"Press 🌐 key to"</b> অপশনটি <b>"Change Input Source"</b> এ সেট করুন। এবার 🌐 চাপলেই বাংলা ↔ ইংরেজি পাল্টাবে।</li>
+          <li>নিজের শর্টকাট চাইলে: <code>Keyboard Shortcuts… → Input Sources</code> → <b>"Select the previous input source"</b> এর কী বদলান (ডিফল্ট <code>Ctrl + Space</code>)।</li>
+        </ol>
+        <p class="ic-tip">টিপ: দ্রুত টগলের জন্য মাত্র ২টি ইনপুট সোর্স রাখুন — <b>English</b> ও <b>RP-Type</b>।</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="section" id="download" style="padding-top:20px">
+  <div class="wrap">
+    <div class="dl-band">
+      <h2>এখনই RP-Type নিন</h2>
+      <p>আপনার ম্যাকে বাংলা টাইপিং হোক বিজয়ের মতোই স্বচ্ছন্দ।</p>
+      <a href="RP-Type.zip" class="btn-primary" download>↓ RP-Type.zip ডাউনলোড করুন</a>
+      <div class="dl-meta">v1.0 · macOS · প্রায় ৫০ KB · বিনামূল্যে</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER / CONTACT -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="brand"><img src="https://raw.githubusercontent.com/rakibpixel/Portfolio/d36e7f9a99fa16c2904b78fd7b972f005841f8a9/favicon.svg" alt="RP-Type"><span>RP<b>-Type</b></span></a>
+        <p>বিজয়-স্টাইল বাংলা কীবোর্ড লেআউট, ম্যাকওএস-এর জন্য। ভালোবেসে তৈরি করেছেন <a href="https://www.rakibpixel.com" target="_blank" rel="noopener" style="color:var(--violet-bright);font-weight:600">Rakib Pixel</a>।</p>
+      </div>
+      <div class="foot-col">
+        <h4>প্রোডাক্ট</h4>
+        <a href="#features">ফিচার</a>
+        <a href="#install">ইনস্টল গাইড</a>
+        <a href="#download">ডাউনলোড</a>
+      </div>
+      <div class="foot-col">
+        <h4>যোগাযোগ</h4>
+        <a href="https://www.rakibpixel.com" target="_blank" rel="noopener">↗ rakibpixel.com</a>
+        <a href="https://fb.com/rakibpixel" target="_blank" rel="noopener">f&nbsp;&nbsp;Facebook</a>
+        <a href="https://behance.net/rakibpixel" target="_blank" rel="noopener">Bē&nbsp;&nbsp;Behance</a>
+        <a href="https://linkedin.com/in/rakibpixel" target="_blank" rel="noopener">in&nbsp;&nbsp;LinkedIn</a>
+        <a href="https://instagram.com/rakibpixel" target="_blank" rel="noopener">◎&nbsp;&nbsp;Instagram</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p>© <span id="yr"></span> Rakib Pixel · All rights reserved.</p>
+      <p class="wm">WATERMARK · RPTYPE-RAKIBPIXEL-1A2B3C</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ---- Live typing demo: shows Bijoy-style "kar first" ---- */
+const seq = [
+  {keys:['ত','ু'], out:'তু', note:'ত → ু কার'},
+  {keys:['ি','ম'], out:'তুমি', note:'ি কার আগে → ম পরে = মি', append:true},
+  {reset:true},
+  {keys:['ে','ম'], out:'মে', note:'ে কার আগে → ম পরে'},
+  {keys:['ল','া'], out:'মেলা', note:'ল → া কার', append:true},
+  {reset:true},
+  {keys:['ৈ','ক'], out:'কৈ', note:'ৈ কার আগে → ক পরে'},
+  {reset:true},
+];
+const outEl = document.getElementById('demoOut');
+const keysEl = document.getElementById('demoKeys');
+const noteEl = document.getElementById('demoNote');
+const cursor = '<span class="cursor"></span>';
+let si = 0, current = '';
+
+function renderKeys(keys, activeIdx){
+  keysEl.innerHTML = keys.map((k,i)=>`<span class="k${i===activeIdx?' active':''}">${k}</span>`).join('');
+}
+async function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+
+async function run(){
+  while(true){
+    const step = seq[si];
+    if(step.reset){
+      await wait(900);
+      current=''; outEl.innerHTML=cursor; keysEl.innerHTML=''; 
+      si=(si+1)%seq.length; continue;
+    }
+    if(!step.append){ current=''; }
+    renderKeys(step.keys,-1);
+    noteEl.textContent = step.note;
+    for(let i=0;i<step.keys.length;i++){
+      renderKeys(step.keys,i);
+      await wait(420);
+    }
+    await wait(220);
+    current = step.out;
+    outEl.innerHTML = current + cursor;
+    renderKeys(step.keys,-1);
+    await wait(1100);
+    si=(si+1)%seq.length;
+  }
+}
+outEl.innerHTML = cursor;
+run();
+
+/* reduced motion: just show final words */
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  outEl.innerHTML='তুমি';
+}
+</script>
+</body>
+</html>
