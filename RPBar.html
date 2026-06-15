@@ -22,17 +22,18 @@
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{background:var(--bg); color:var(--fg); font-family:var(--sans); line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased;}
+  body.locked{overflow:hidden;}
   a{color:inherit; text-decoration:none;}
   ::selection{background:var(--vg);}
   img{max-width:100%; display:block;}
   em{font-family:var(--serif); font-style:italic; font-weight:400; color:var(--v);}
- 
+
   .glow{position:fixed; border-radius:50%; filter:blur(110px); opacity:.5; z-index:0; pointer-events:none;}
   .glow.a{width:580px; height:580px; background:radial-gradient(circle,rgba(94,67,236,.4),transparent 70%); top:-220px; right:-160px;}
   .glow.b{width:520px; height:520px; background:radial-gradient(circle,rgba(94,67,236,.26),transparent 70%); top:50%; left:-200px;}
- 
+
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px; position:relative; z-index:1;}
- 
+
   /* nav */
   nav{position:sticky; top:0; z-index:50; backdrop-filter:blur(18px); background:rgba(6,6,10,.72); border-bottom:1px solid var(--ln);}
   .nav-in{max-width:var(--maxw); margin:0 auto; padding:16px 28px; display:flex; align-items:center; gap:28px;}
@@ -45,7 +46,7 @@
   .nav-cta{padding:10px 20px; border-radius:999px; background:var(--v); color:#fff !important; font-weight:600; font-size:14px; transition:transform .25s var(--e), box-shadow .25s;}
   .nav-cta:hover{transform:translateY(-2px); box-shadow:0 12px 30px -8px var(--v);}
   .burger{display:none; margin-left:auto; font-size:22px; background:none; border:none; color:var(--fg); cursor:pointer;}
- 
+
   /* hero */
   header.hero{position:relative; padding:100px 0 80px;}
   .hero-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:center;}
@@ -61,7 +62,7 @@
   .btn-ghost{background:transparent; color:var(--fg); border:1px solid var(--ln2);}
   .btn-ghost:hover{background:var(--s1); transform:translateY(-3px);}
   .hero-meta{margin-top:24px; font-size:13px; color:var(--mu);}
- 
+
   .stage{position:relative; display:flex; justify-content:center; align-items:center; min-height:400px;}
   .ps-mock{position:relative; width:320px; height:392px; border-radius:22px; background:linear-gradient(160deg,#161320,#0c0a14); border:1px solid var(--ln2); box-shadow:0 40px 100px -38px #000, inset 0 1px 0 rgba(255,255,255,.08); overflow:hidden; animation:floaty 6s ease-in-out infinite;}
   @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
@@ -74,30 +75,88 @@
   .bar-ic.lit{color:#fff; background:var(--v); box-shadow:0 6px 20px -6px var(--v);}
   .float-tip{position:absolute; left:78px; background:#000; color:#fff; font-size:12px; padding:7px 13px; border-radius:8px; white-space:nowrap; opacity:0; transform:translateX(-6px); transition:all .25s var(--e); pointer-events:none; border:1px solid var(--ln2); font-weight:500;}
   .float-tip.show{opacity:1; transform:translateX(0);}
- 
+
   section{position:relative; padding:90px 0;}
   .sec-head{max-width:680px; margin:0 auto 56px; text-align:center;}
   .sec-head .kicker{justify-content:center; margin-bottom:16px;}
   .sec-head .kicker::before{display:none;}
   .stitle{font-family:var(--dp); font-weight:800; font-size:clamp(32px,4.4vw,56px); letter-spacing:-2px; line-height:1; margin-bottom:16px;}
   .sec-head p{color:var(--mu2); font-size:17px; max-width:560px; margin:0 auto;}
- 
-  /* ===== TOOLKIT — new style: alternating list rows ===== */
-  .toolkit{display:flex; flex-direction:column; gap:0; max-width:980px; margin:0 auto; border-top:1px solid var(--ln);}
-  .tk-row{display:grid; grid-template-columns:64px 1fr auto; gap:24px; align-items:center; padding:24px 14px; border-bottom:1px solid var(--ln);
-    position:relative; transition:background .3s var(--e), padding-left .3s var(--e); opacity:0; transform:translateY(16px);}
-  .tk-row.in{opacity:1; transform:translateY(0); transition:opacity .6s var(--e),transform .6s var(--e),background .3s,padding-left .3s; transition-delay:var(--d);}
-  .tk-row::before{content:""; position:absolute; left:0; top:0; bottom:0; width:0; background:var(--v); transition:width .3s var(--e);}
-  .tk-row:hover{background:var(--s1); padding-left:24px;}
-  .tk-row:hover::before{width:3px;}
-  .tk-ic{width:52px; height:52px; border-radius:14px; background:var(--s2); border:1px solid var(--ln2); display:flex; align-items:center; justify-content:center; color:var(--v2); transition:all .3s var(--e);}
-  .tk-ic svg{width:25px; height:25px;}
-  .tk-row:hover .tk-ic{background:var(--v); color:#fff; transform:rotate(-8deg) scale(1.08); border-color:var(--v);}
-  .tk-txt h3{font-family:var(--dp); font-weight:700; font-size:19px; letter-spacing:-.4px; margin-bottom:3px;}
-  .tk-txt p{font-size:14px; color:var(--mu2); line-height:1.5; max-width:560px;}
-  .tk-num{font-family:var(--dp); font-weight:800; font-size:15px; color:var(--mu); opacity:.5; transition:color .3s, opacity .3s;}
-  .tk-row:hover .tk-num{color:var(--v); opacity:1;}
- 
+
+  /* ===== GLASSY TOOL CARDS ===== */
+  .tools{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; max-width:1060px; margin:0 auto;}
+  .gcard{position:relative; padding:26px 24px; border-radius:20px; cursor:pointer; overflow:hidden;
+    background:linear-gradient(150deg, rgba(255,255,255,.07), rgba(255,255,255,.015));
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--ln2);
+    box-shadow:0 8px 32px -16px #000, inset 0 1px 0 rgba(255,255,255,.08);
+    transition:transform .35s var(--e), border-color .35s, box-shadow .35s, background .35s;
+    opacity:0; transform:translateY(20px);}
+  .gcard.in{opacity:1; transform:translateY(0); transition:opacity .6s var(--e),transform .6s var(--e),border-color .35s,box-shadow .35s,background .35s; transition-delay:var(--d);}
+  .gcard::before{content:""; position:absolute; inset:0; border-radius:20px; padding:1px; pointer-events:none;
+    background:linear-gradient(150deg, rgba(125,99,255,.5), transparent 45%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude;
+    opacity:0; transition:opacity .35s;}
+  .gcard::after{content:""; position:absolute; width:220px; height:220px; border-radius:50%; top:-60px; right:-60px;
+    background:radial-gradient(circle, rgba(94,67,236,.34), transparent 70%); filter:blur(10px);
+    opacity:0; transition:opacity .4s var(--e); pointer-events:none;}
+  .gcard:hover{transform:translateY(-6px); border-color:transparent; background:linear-gradient(150deg, rgba(255,255,255,.1), rgba(255,255,255,.03)); box-shadow:0 26px 60px -28px rgba(94,67,236,.7), inset 0 1px 0 rgba(255,255,255,.12);}
+  .gcard:hover::before{opacity:1;}
+  .gcard:hover::after{opacity:1;}
+  .gcard-top{display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:18px; position:relative; z-index:1;}
+  .gcard-ic{width:52px; height:52px; border-radius:15px; display:flex; align-items:center; justify-content:center; color:var(--v2);
+    background:linear-gradient(150deg, rgba(125,99,255,.22), rgba(125,99,255,.05)); border:1px solid rgba(125,99,255,.3);
+    transition:all .35s var(--e);}
+  .gcard-ic svg{width:25px; height:25px;}
+  .gcard:hover .gcard-ic{color:#fff; background:var(--v); border-color:var(--v); transform:rotate(-8deg) scale(1.08); box-shadow:0 10px 24px -8px var(--v);}
+  .gcard-num{font-family:var(--dp); font-weight:800; font-size:13px; color:var(--mu); opacity:.5; transition:color .35s,opacity .35s;}
+  .gcard:hover .gcard-num{color:var(--v2); opacity:1;}
+  .gcard-kick{font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--v2); font-weight:600; display:block; margin-bottom:5px; position:relative; z-index:1;}
+  .gcard-name{font-family:var(--dp); font-weight:700; font-size:18px; letter-spacing:-.4px; line-height:1.2; margin-bottom:8px; position:relative; z-index:1;}
+  .gcard-desc{font-size:13.5px; color:var(--mu2); line-height:1.5; position:relative; z-index:1;}
+  .gcard-more{display:inline-flex; align-items:center; gap:6px; margin-top:16px; font-size:12.5px; font-weight:600; color:var(--v2); opacity:0; transform:translateY(4px); transition:opacity .3s,transform .3s; position:relative; z-index:1;}
+  .gcard:hover .gcard-more{opacity:1; transform:translateY(0);}
+  .gcard-more svg{width:14px; height:14px;}
+  .tools-note{max-width:880px; margin:44px auto 0; text-align:center;}
+  .tools-note > p{font-size:15px; color:var(--mu2); line-height:1.7; max-width:640px; margin:0 auto 24px;}
+  .note-points{display:grid; grid-template-columns:1fr 1fr; gap:16px; text-align:left;}
+  .note-pt{font-size:13.5px; color:var(--mu2); line-height:1.6; border-left:2px solid var(--v); background:var(--vd); border-radius:0 10px 10px 0; padding:14px 18px;}
+  .note-pt b{color:var(--fg);}
+  @media(max-width:640px){ .note-points{grid-template-columns:1fr;} }
+
+  /* ===== MODAL ===== */
+  .modal-back{position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; padding:24px;
+    background:rgba(4,4,8,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    opacity:0; pointer-events:none; transition:opacity .3s var(--e);}
+  .modal-back.show{opacity:1; pointer-events:auto;}
+  .modal{position:relative; width:100%; max-width:560px; max-height:86vh; overflow-y:auto; overflow-x:hidden; word-wrap:break-word; overflow-wrap:break-word; border-radius:24px;
+    background:linear-gradient(155deg, rgba(26,23,38,.96), rgba(15,14,22,.98));
+    backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px);
+    border:1px solid var(--ln2); box-shadow:0 40px 120px -30px #000, inset 0 1px 0 rgba(255,255,255,.1);
+    padding:34px; transform:scale(.92) translateY(20px); opacity:0; transition:transform .4s var(--e), opacity .4s var(--e);}
+  .modal-back.show .modal{transform:scale(1) translateY(0); opacity:1;}
+  .modal::before{content:""; position:absolute; width:300px; height:300px; border-radius:50%; top:-120px; right:-80px;
+    background:radial-gradient(circle, var(--vg), transparent 70%); filter:blur(20px); pointer-events:none;}
+  .modal-x{position:absolute; top:20px; right:20px; width:36px; height:36px; border-radius:50%; border:1px solid var(--ln2);
+    background:rgba(255,255,255,.04); color:var(--mu2); font-size:20px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:all .25s var(--e); z-index:2;}
+  .modal-x:hover{background:var(--v); color:#fff; border-color:var(--v); transform:rotate(90deg);}
+  .modal-head{display:flex; align-items:center; gap:16px; margin-bottom:22px; position:relative; z-index:1;}
+  .modal-ic{width:56px; height:56px; flex:none; border-radius:16px; display:flex; align-items:center; justify-content:center; color:#fff;
+    background:var(--v); border:1px solid var(--v); box-shadow:0 12px 28px -10px var(--v);}
+  .modal-ic svg{width:27px; height:27px;}
+  .modal-tt .doc-kick{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--v2); font-weight:600; display:block; margin-bottom:4px;}
+  .modal-tt .doc-name{font-family:var(--dp); font-weight:700; font-size:23px; letter-spacing:-.5px; line-height:1.1;}
+  .modal-body{position:relative; z-index:1;}
+  .modal-body .d-lead{font-size:15.5px; color:var(--fg); margin-bottom:15px; line-height:1.6;}
+  .modal-body .d-how{font-size:14px; color:var(--mu2); margin-bottom:15px; line-height:1.6;}
+  .d-howlbl{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--mu); margin-bottom:5px; font-weight:600;}
+  .d-modes{font-size:13.5px; color:var(--mu2); background:rgba(6,6,10,.6); border:1px solid var(--ln); border-radius:12px; padding:14px 16px; margin-bottom:13px; line-height:1.7; word-break:break-word;}
+  .d-modes b{color:var(--fg);}
+  .d-callout{font-size:13.5px; color:var(--mu2); border-left:2px solid var(--v); background:var(--vd); border-radius:0 10px 10px 0; padding:12px 15px; margin-bottom:11px; line-height:1.6;}
+  .d-callout b{color:var(--fg);}
+  .kbd,.d-modes .kbd{font-family:'Courier New',monospace; font-size:.9em; background:var(--bg); border:1px solid var(--ln2); border-radius:5px; padding:1px 6px;}
+
   /* steps */
   .steps{display:grid; grid-template-columns:repeat(4,1fr); gap:18px;}
   .step{position:relative; padding:30px 24px; background:var(--s1); border:1px solid var(--ln); border-radius:18px; transition:transform .3s var(--e), border-color .3s;}
@@ -105,34 +164,7 @@
   .step .num{font-family:var(--dp); font-weight:800; font-size:42px; line-height:1; color:var(--v);}
   .step h3{font-family:var(--dp); font-weight:700; font-size:17px; margin:16px 0 8px; letter-spacing:-.3px;}
   .step p{font-size:13.5px; color:var(--mu2);}
- 
-  /* docs */
-  .docs-wrap{max-width:830px; margin:0 auto; display:flex; flex-direction:column; gap:12px;}
-  .doc{background:var(--s1); border:1px solid var(--ln); border-radius:16px; overflow:hidden; transition:border-color .25s, background .25s;}
-  .doc[open]{border-color:var(--vg); background:var(--s2);}
-  .doc summary{list-style:none; cursor:pointer; display:flex; align-items:center; gap:16px; padding:18px 22px; transition:background .2s;}
-  .doc summary::-webkit-details-marker{display:none;}
-  .doc summary:hover{background:rgba(255,255,255,.03);}
-  .doc-ic{width:42px; height:42px; flex:none; border-radius:12px; background:var(--s2); border:1px solid var(--ln2); display:flex; align-items:center; justify-content:center; color:var(--v2); transition:all .25s var(--e);}
-  .doc-ic svg{width:21px; height:21px;}
-  .doc[open] .doc-ic{color:#fff; background:var(--v);}
-  .doc-tt{display:flex; flex-direction:column; gap:3px; flex:1;}
-  .doc-kick{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--v2); font-weight:600;}
-  .doc-name{font-family:var(--dp); font-weight:700; font-size:17px; letter-spacing:-.3px;}
-  .doc-chev{font-family:var(--dp); font-size:24px; color:var(--mu); transition:transform .3s var(--e), color .2s; line-height:1;}
-  .doc[open] .doc-chev{transform:rotate(45deg); color:var(--v);}
-  .doc-body{padding:0 22px 22px 80px;}
-  .doc-body .d-lead{font-size:15px; color:var(--fg); margin-bottom:13px; line-height:1.6;}
-  .doc-body .d-how{font-size:14px; color:var(--mu2); margin-bottom:13px; line-height:1.6;}
-  .d-howlbl{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--mu); margin-bottom:4px; font-weight:600;}
-  .d-modes{font-size:13.5px; color:var(--mu2); background:var(--bg); border:1px solid var(--ln); border-radius:11px; padding:13px 15px; margin-bottom:12px; line-height:1.7;}
-  .d-modes b{color:var(--fg);}
-  .d-callout{font-size:13.5px; color:var(--mu2); border-left:2px solid var(--v); background:var(--vd); border-radius:0 10px 10px 0; padding:12px 15px; margin-bottom:10px; line-height:1.6;}
-  .d-callout b{color:var(--fg);}
-  .kbd,.d-modes .kbd{font-family:'Courier New',monospace; font-size:.9em; background:var(--bg); border:1px solid var(--ln2); border-radius:5px; padding:1px 6px;}
-  .docs-foot{text-align:center; margin-top:32px; font-size:14px; color:var(--mu2);}
-  .docs-foot a{color:var(--v2); font-weight:500;}
- 
+
   /* license band */
   .band{background:linear-gradient(135deg,#151022,#0d0b16); border:1px solid var(--ln2); border-radius:24px; padding:50px; display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center; overflow:hidden; position:relative;}
   .band::before{content:""; position:absolute; width:380px; height:380px; right:-100px; top:-100px; background:radial-gradient(circle,var(--vg),transparent 70%); filter:blur(24px);}
@@ -141,31 +173,42 @@
   .key-demo{position:relative; font-family:'Courier New',monospace; font-size:21px; letter-spacing:2px; text-align:center; padding:24px; border:1px dashed var(--v); border-radius:14px; background:var(--bg); color:#fff;}
   .key-demo .blink{animation:blink 1.1s steps(1) infinite;}
   @keyframes blink{50%{opacity:0;}}
- 
+
   /* video */
   .video-wrap{max-width:920px; margin:0 auto; border-radius:20px; overflow:hidden; border:1px solid var(--ln2); box-shadow:0 36px 90px -34px #000; position:relative; aspect-ratio:16/9; background:#000;}
   .video-wrap iframe{width:100%; height:100%; border:0; display:block;}
- 
+
   /* download */
   .dl{text-align:center; padding:78px 40px; background:linear-gradient(135deg,#151022,#0d0b16); border:1px solid var(--ln2); border-radius:26px; position:relative; overflow:hidden;}
   .dl::before{content:""; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%, var(--vd), transparent 60%);}
   .dl .stitle{position:relative;}
   .dl p{color:var(--mu2); margin-bottom:30px; position:relative;}
- 
-  /* footer — simple, like rakibpixel.com */
-  footer{border-top:1px solid var(--ln); padding:48px 0 40px; margin-top:40px;}
-  .foot-in{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;}
-  .foot-brand{display:flex; align-items:center; gap:10px; font-family:var(--dp); font-weight:800; font-size:18px; letter-spacing:-.5px;}
-  .foot-brand img{width:26px; height:26px;}
-  .foot-brand .acc{color:var(--v);}
-  .foot-links{display:flex; gap:26px; align-items:center; font-size:14.5px;}
-  .foot-links a{color:var(--mu2); transition:color .25s var(--e);}
-  .foot-links a:hover{color:var(--v2);}
-  .foot-copy{text-align:center; margin-top:28px; color:var(--mu); font-size:13px;}
- 
+
+  /* ===== FOOTER (redesigned) ===== */
+  footer{position:relative; border-top:1px solid var(--ln); margin-top:60px; padding:70px 0 36px; overflow:hidden;}
+  footer::before{content:""; position:absolute; width:600px; height:300px; left:50%; top:0; transform:translateX(-50%); background:radial-gradient(ellipse at center top, var(--vd), transparent 70%); pointer-events:none;}
+  .foot-top{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; margin-bottom:48px;}
+  .foot-about .foot-brand{display:flex; align-items:center; gap:11px; font-family:var(--dp); font-weight:800; font-size:21px; letter-spacing:-.5px; margin-bottom:16px;}
+  .foot-about .foot-brand img{width:30px; height:30px;}
+  .foot-about .foot-brand .acc{color:var(--v);}
+  .foot-about p{font-size:14px; color:var(--mu2); max-width:300px; line-height:1.6;}
+  .foot-col h4{font-family:var(--dp); font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--mu); margin-bottom:16px; font-weight:700;}
+  .foot-col a{display:block; font-size:14.5px; color:var(--mu2); padding:6px 0; transition:color .25s var(--e), transform .25s var(--e);}
+  .foot-col a:hover{color:var(--v2); transform:translateX(4px);}
+  .foot-bottom{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding-top:28px; border-top:1px solid var(--ln); position:relative;}
+  .foot-copy{font-size:13px; color:var(--mu);}
+  .foot-copy a{color:var(--v2);}
+  .foot-social{display:flex; gap:10px;}
+  .foot-social a{width:38px; height:38px; border-radius:11px; border:1px solid var(--ln2); background:rgba(255,255,255,.03); display:flex; align-items:center; justify-content:center; color:var(--mu2); transition:all .25s var(--e);}
+  .foot-social a:hover{color:#fff; background:var(--v); border-color:var(--v); transform:translateY(-3px); box-shadow:0 10px 24px -8px var(--v);}
+  .foot-social svg{width:18px; height:18px;}
+  .foot-top-link{font-size:13px; color:var(--mu2); display:inline-flex; align-items:center; gap:6px; transition:color .25s;}
+  .foot-top-link:hover{color:var(--v2);}
+
   .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s var(--e), transform .8s var(--e);}
   .reveal.in{opacity:1; transform:translateY(0);}
- 
+
+  @media(max-width:980px){ .tools{grid-template-columns:repeat(2,1fr);} }
   @media(max-width:900px){
     .hero-grid{grid-template-columns:1fr; gap:46px;}
     .stage{order:-1;}
@@ -173,24 +216,26 @@
     .band{grid-template-columns:1fr; padding:36px;}
     .nav-links{display:none;}
     .burger{display:block;}
-    .doc-body{padding-left:22px;}
-    .tk-row{grid-template-columns:52px 1fr; }
-    .tk-num{display:none;}
+    .foot-top{grid-template-columns:1fr 1fr; gap:32px;}
+    .foot-about{grid-column:1 / -1;}
   }
   @media(max-width:540px){
+    .tools{grid-template-columns:1fr;}
     .steps{grid-template-columns:1fr;}
-    .foot-in{flex-direction:column; text-align:center;}
+    .modal{padding:26px 22px;}
+    .foot-top{grid-template-columns:1fr;}
+    .foot-bottom{flex-direction:column; text-align:center;}
   }
   @media(prefers-reduced-motion:reduce){
     *{animation:none !important; transition:none !important;}
-    .reveal,.tk-row{opacity:1; transform:none;}
+    .reveal,.gcard{opacity:1; transform:none;}
     .ps-mock{animation:none;}
   }
 </style>
 </head>
 <body>
 <div class="glow a"></div><div class="glow b"></div>
- 
+
 <nav>
   <div class="nav-in">
     <a class="brand" href="https://www.rakibpixel.com" title="Go to rakibpixel.com">
@@ -198,16 +243,15 @@
       <span>RP<span class="acc">-Bar</span></span>
     </a>
     <div class="nav-links" id="navlinks">
-      <a href="#features">Features</a>
+      <a href="#features">Tools</a>
       <a href="#how">How it works</a>
-      <a href="#docs">Docs</a>
       <a href="#tutorial">Tutorial</a>
       <a class="nav-cta" href="#download">Download</a>
     </div>
     <button class="burger" onclick="var n=document.getElementById('navlinks');n.style.display=(n.style.display==='flex'?'none':'flex');">&#9776;</button>
   </div>
 </nav>
- 
+
 <header class="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
@@ -218,7 +262,7 @@
         <a class="btn btn-primary" href="#download">&#8595; Download RP-Bar</a>
         <a class="btn btn-ghost" href="#features">Explore the tools</a>
       </div>
-      <div class="hero-meta">v4.0 &middot; Photoshop CC &middot; Windows &amp; macOS &middot; 16 tools</div>
+      <div class="hero-meta">v4.0 &middot; Photoshop CC &middot; Windows &amp; macOS &middot; 15 tools</div>
     </div>
     <div class="stage">
       <div class="ps-mock">
@@ -240,99 +284,36 @@
     </div>
   </div>
 </header>
- 
+
 <section id="features">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">The toolkit</span>
-      <h2 class="stitle">16 tools. One <em>tiny</em> bar.</h2>
-      <p>Every tool is a single click — no dialogs to dig through, no menus to memorize.</p>
+      <h2 class="stitle">15 tools. One <em>tiny</em> bar.</h2>
+      <p>Every tool is a single click. Tap any card to see exactly what it does and how to use it.</p>
     </div>
-    <div class="toolkit" id="toolkit">
-        <div class="tk-row" style="--d:0.00s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1.5"/></svg></div>
-          <div class="tk-txt"><h3>Shape from Artboard</h3><p>Turn any artboard into a clean, perfectly-sized shape layer in one click.</p></div>
-          <div class="tk-num">01</div>
-        </div>
-        <div class="tk-row" style="--d:0.03s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 15v5h-5M4 4l6 6M20 20l-6-6"/></svg></div>
-          <div class="tk-txt"><h3>Artboard Resize</h3><p>Resize artboards to exact dimensions without reshuffling your layers.</p></div>
-          <div class="tk-num">02</div>
-        </div>
-        <div class="tk-row" style="--d:0.06s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M2 6h14a2 2 0 0 1 2 2v14"/></svg></div>
-          <div class="tk-txt"><h3>Trim to Content</h3><p>Crop the canvas tight to the visible pixels — instantly, no manual cropping.</p></div>
-          <div class="tk-num">03</div>
-        </div>
-        <div class="tk-row" style="--d:0.09s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="12" height="12" rx="1.5"/><rect x="8" y="8" width="12" height="12" rx="1.5"/></svg></div>
-          <div class="tk-txt"><h3>Duplicate & Offset</h3><p>Clone a layer and nudge it by a set distance — great for stepped repeats.</p></div>
-          <div class="tk-num">04</div>
-        </div>
-        <div class="tk-row" style="--d:0.12s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6.5A1.5 1.5 0 0 1 5.5 5h13A1.5 1.5 0 0 1 20 6.5V8"/><path d="M12 5v14M9.5 19h5"/></svg></div>
-          <div class="tk-txt"><h3>Rename Layers</h3><p>Batch-rename selected layers with prefixes, names, and sequential numbers.</p></div>
-          <div class="tk-num">05</div>
-        </div>
-        <div class="tk-row" style="--d:0.15s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="4"/><path d="M7.4 16.2l2.5-8.4h1.3l2.5 8.4M8.1 13.5h4.3" stroke-width="1.5"/><path d="M16.7 8.2v8" stroke-width="1.8"/></svg></div>
-          <div class="tk-txt"><h3>Send to Illustrator</h3><p>Push layers into Illustrator — text stays editable, shapes come as vectors.</p></div>
-          <div class="tk-num">06</div>
-        </div>
-        <div class="tk-row" style="--d:0.18s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 9.5h.01M9.5 9.5h.01M13 9.5h.01M16.5 9.5h.01M6 13h.01M16.5 13h.01M9 15.5h6" stroke-width="1.8"/></svg></div>
-          <div class="tk-txt"><h3>Install Shortcuts</h3><p>Install a bundled keyboard-shortcut set into Photoshop in one click.</p></div>
-          <div class="tk-num">07</div>
-        </div>
-        <div class="tk-row" style="--d:0.21s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg></div>
-          <div class="tk-txt"><h3>Grids</h3><p>Drop precise columns, rows, and margins with centering shortcuts built in.</p></div>
-          <div class="tk-num">08</div>
-        </div>
-        <div class="tk-row" style="--d:0.24s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8h8v8H8z" fill="currentColor" fill-opacity="0.25" stroke="none"/><path d="M3 9h3M18 9h3M3 15h3M18 15h3M9 3v3M9 18v3M15 3v3M15 18v3"/></svg></div>
-          <div class="tk-txt"><h3>Convert & Rasterize</h3><p>Wrap layers into a smart object, unpack them, or flatten to pixels.</p></div>
-          <div class="tk-num">09</div>
-        </div>
-        <div class="tk-row" style="--d:0.27s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 4v13M7 17l-3-3M7 17l3-3M17 20V7M17 7l-3 3M17 7l3 3"/></svg></div>
-          <div class="tk-txt"><h3>Reverse Layers</h3><p>Flip the stacking order of selected layers, groups, or artboards.</p></div>
-          <div class="tk-num">10</div>
-        </div>
-        <div class="tk-row" style="--d:0.30s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.4 5.2A9 9 0 0 1 21 12a9 9 0 0 1-1.6 2.6M6 6.5A9 9 0 0 0 3 12a9 9 0 0 0 9 5"/></svg></div>
-          <div class="tk-txt"><h3>Delete Hidden</h3><p>Sweep away every hidden layer across the whole document.</p></div>
-          <div class="tk-num">11</div>
-        </div>
-        <div class="tk-row" style="--d:0.33s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/></svg></div>
-          <div class="tk-txt"><h3>Empty Cleanup</h3><p>Find and remove empty pixel layers that bloat your file.</p></div>
-          <div class="tk-num">12</div>
-        </div>
-        <div class="tk-row" style="--d:0.36s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="12" rx="6"/><circle cx="9" cy="12" r="3" fill="currentColor" stroke="none"/></svg></div>
-          <div class="tk-txt"><h3>Guides & Rulers</h3><p>Toggle guides and rulers on or off without the View menu.</p></div>
-          <div class="tk-num">13</div>
-        </div>
-        <div class="tk-row" style="--d:0.39s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12M12 15l-4-4M12 15l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
-          <div class="tk-txt"><h3>Export Artboards</h3><p>Export artboards with custom prefixes — something Export As can't do.</p></div>
-          <div class="tk-num">14</div>
-        </div>
-        <div class="tk-row" style="--d:0.42s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11V6a1.5 1.5 0 0 1 3 0v5M12 11V5a1.5 1.5 0 0 1 3 0v6M15 11V7a1.5 1.5 0 0 1 3 0v7a6 6 0 0 1-6 6h-1.5a5 5 0 0 1-3.8-1.8L4 14.5a1.6 1.6 0 0 1 2.4-2L9 15"/><path d="M9 11V8a1.5 1.5 0 0 0-3 0v6"/></svg></div>
-          <div class="tk-txt"><h3>Middle-Button Pan</h3><p>Pan the canvas by dragging the middle mouse button, like Illustrator.</p></div>
-          <div class="tk-num">15</div>
-        </div>
-        <div class="tk-row" style="--d:0.45s">
-          <div class="tk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></div>
-          <div class="tk-txt"><h3>About & Docs</h3><p>Quick access to the full guide and everything the toolbar can do.</p></div>
-          <div class="tk-num">16</div>
-        </div>
+    <div class="tools" id="tools"></div>
+    <div class="tools-note reveal">
+      <p>The panel is a vertical strip of icons — hover any icon to see its name and shortcut, then click to run. Some tools open a small floating window for extra options; others run instantly.</p>
+      <div class="note-points">
+        <div class="note-pt"><b>Shift &amp; Alt shortcuts.</b> A few icons do more than one thing — a normal click does one, <span class="kbd">Shift</span> or <span class="kbd">Alt</span> + click does another. Watch the tooltip; it tells you each mode.</div>
+        <div class="note-pt"><b>Reorder the bar.</b> Drag any icon up or down to rearrange the toolbar however you like. Your order is saved automatically and remembered next time Photoshop opens.</div>
+      </div>
     </div>
   </div>
 </section>
- 
+
+<div class="modal-back" id="modalBack">
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <button class="modal-x" id="modalX" aria-label="Close">&times;</button>
+    <div class="modal-head">
+      <div class="modal-ic" id="mIc"></div>
+      <div class="modal-tt"><span class="doc-kick" id="mKick"></span><span class="doc-name" id="mName"></span></div>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
 <section id="how">
   <div class="wrap">
     <div class="sec-head reveal">
@@ -348,212 +329,7 @@
     </div>
   </div>
 </section>
- 
-<section id="docs">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="kicker">Full guide</span>
-      <h2 class="stitle">Every tool, <em>explained</em></h2>
-      <p>The complete RP-Bar documentation — tap any tool to expand what it does and exactly how to use it.</p>
-    </div>
-    <div class="docs-wrap">
-      <details class="doc" open>
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Getting started</span><span class="doc-name">The basics.</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">The panel is a vertical strip of icons. Hover any icon to see its name and shortcut. Click to run. Some tools open a small floating window for extra options; others run instantly.</p>
-          <div class="d-callout"><b>Shift shortcuts.</b> A few icons do two things — a normal click does one, <span class="kbd">Shift</span> + click does another. Watch the tooltip; it tells you both.</div>
-          <div class="d-callout"><b>Reorder the bar.</b> Drag any icon up or down to rearrange the toolbar however you like. Your order is saved automatically and remembered next time Photoshop opens.</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1.5"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Create</span><span class="doc-name">Shape from Artboard</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Drops a rectangle shape filled with your foreground color, sized to the active artboard.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Click to create a full-cover shape that matches the artboard exactly.</p>
-          <div class="d-modes"><b>Click</b> — full-cover shape &nbsp;·&nbsp; <b>Shift + Click</b> — opens a window to set custom padding (an even margin on all sides)</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 15v5h-5M4 4l6 6M20 20l-6-6"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Create</span><span class="doc-name">Artboard Resize</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Resize the canvas to a preset or a custom size, with control over which edge stays anchored.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Open the tool, pick an anchor (Center, Top-Left, Top-Center), then choose a preset (1080×1080, 1080×1920, etc.) or type a custom width and height and hit Resize.</p>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M2 6h14a2 2 0 0 1 2 2v14"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Canvas</span><span class="doc-name">Trim to Content</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Crops the canvas down to your visible artwork in one click — no more manual cropping when there's empty space around your shapes or images.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Just click the icon. The canvas snaps to the bounding box of everything visible, trimming all four sides at once. This is the same as Image &gt; Trim, but instant.</p>
-          <div class="d-callout"><b>Good to know:</b> works on transparent areas, and falls back to the top-left pixel colour for flat backgrounds.</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Create</span><span class="doc-name">Duplicate &amp; Offset</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Duplicates the active layer and nudges the copy by an exact pixel offset — handy for stepped repeats.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Set the X and Y offset in pixels, then click Duplicate &amp; offset. Repeat to step more copies in the same direction.</p>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6.5A1.5 1.5 0 0 1 5.5 5h13A1.5 1.5 0 0 1 20 6.5V8"/><path d="M12 5v14M9.5 19h5"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Layers</span><span class="doc-name">Rename Layers</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Rename many selected layers at once — as a prefix, a full name, or a suffix, with optional sequential numbering.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Select multiple layers in the Layers panel, type your text, pick <b>Prefix</b>, <b>Name</b>, or <b>Suffix</b>, then Apply. Prefix adds text to the front of each existing name; Suffix adds to the end; Name replaces the whole name.</p>
-          <div class="d-callout"><b>Numbering:</b> tick <b>Number them</b> to append a running count — with <b>Name</b> mode and text "BG" you get "BG 1, BG 2, BG 3…". Set the start number if you don't want to begin at 1.</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="4"/><path d="M7.4 16.2l2.5-8.4h1.3l2.5 8.4M8.1 13.5h4.3" stroke-width="1.5"/><path d="M16.7 8.2v8" stroke-width="1.8"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Hand-off</span><span class="doc-name">Send to Illustrator</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Push selected Photoshop layers straight into Illustrator as native, editable artwork — the same idea as the Overlord plugin, built right into RP-Bar.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Open Illustrator, select one or more layers in Photoshop, then click Send. Your art lands in the active Illustrator document (a new one is created if none is open).</p>
-          <div class="d-callout"><b>What transfers, and how:</b> Text layers become editable Illustrator text (font, size, colour). Shape and image layers come across as placed PNG images (pixels). Groups stay grouped. For a fully <b>editable vector</b> shape, use the <b>Copy Vector</b> button instead, then paste in Illustrator with Ctrl+V.</div>
-          <div class="d-callout"><b>Copy Vector:</b> copies the selected shape layer as SVG to the clipboard. Switch to Illustrator and press Ctrl+V — it pastes as a native, editable vector path with all its curves intact. This is the most reliable way to move a shape across as true vector.</div>
-          <div class="d-callout"><b>Requirements:</b> Illustrator must be installed and running for Send. The first send may take a moment while Illustrator wakes up.</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 9.5h.01M9.5 9.5h.01M13 9.5h.01M16.5 9.5h.01M6 13h.01M16.5 13h.01M9 15.5h6" stroke-width="1.8"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Setup</span><span class="doc-name">Install Shortcuts</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Install a Photoshop keyboard-shortcut set (.kys) in one click — including the bundled RP-Bar set with a ready-made Copy SVG shortcut.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Click <b>Install RP-Bar shortcuts</b> to drop in the bundled set, or <b>Install a .kys file</b> to load one from your computer. Then restart Photoshop and choose the set under Edit ▸ Keyboard Shortcuts ▸ Set.</p>
-          <div class="d-callout"><b>Why it helps:</b> the bundled set assigns <b>Copy SVG</b> to <span class="kbd">Shift</span>+<span class="kbd">Ctrl</span>+<span class="kbd">C</span>, so you can copy any shape and paste it into Illustrator as an editable vector — the most reliable shape hand-off.</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Layout</span><span class="doc-name">Grids</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">A full grid and guide system — columns, rows, margins, plus quick shortcuts for centering and edge guides.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Turn on Columns and/or Rows, set count and gap, and optionally add margins (L / T / B / R). Click <b>Create guides</b> to lay them down, or <b>Clear all guides</b> to remove every guide.</p>
-          <div class="d-modes">Shortcut row (left → right): center guide vertical · center guide horizontal · center both · center layer H · center layer V · <b>guides around selected layer</b> · render grid as shapes</div>
-          <div class="d-callout"><b>Guides around a layer:</b> select any layer and click the edge-guides shortcut — four guides snap to its bounding box.</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11V6a1.5 1.5 0 0 1 3 0v5M12 11V5a1.5 1.5 0 0 1 3 0v6M15 11V7a1.5 1.5 0 0 1 3 0v7a6 6 0 0 1-6 6h-1.5a5 5 0 0 1-3.8-1.8L4 14.5a1.6 1.6 0 0 1 2.4-2L9 15"/><path d="M9 11V8a1.5 1.5 0 0 0-3 0v6"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Workflow</span><span class="doc-name">Middle-Button Pan</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Pan the Photoshop canvas by holding the middle mouse button and dragging — the same way Illustrator does it. No more reaching for the Space bar.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Photoshop has no built-in middle-button pan, so this tool generates a tiny <b>AutoHotkey</b> script that maps the middle button to Space + drag (the Hand tool). You set it up once and forget it.</p>
-          <div class="d-modes"><b>Save script to Desktop</b> — writes <b>RP-Bar_Pan.ahk</b> &nbsp;·&nbsp; <b>Copy script</b> — copies the text so you can paste it into your own file</div>
-          <div class="d-callout"><b>One-time setup (Windows):</b> 1) <a href="https://www.autohotkey.com/download/ahk-v2.exe" style="color:var(--accent)">Download AutoHotkey v2</a> and install it. 2) Double-click <b>RP-Bar_Pan.ahk</b> — a green “H” tray icon appears. 3) Hold the middle button in Photoshop and drag. To auto-run on startup, press <span class="kbd">Win</span>+<span class="kbd">R</span>, type <b>shell:startup</b>, and drop a shortcut to the file in that folder.</div>
-          <div class="d-callout"><b>macOS:</b> AutoHotkey is Windows-only. On a Mac the same effect needs a tool like BetterTouchTool — ask and a guide can be added.</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Convert</span><span class="doc-name">Convert &amp; Rasterize</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">One icon handles three conversions — wrap layers into a smart object, unpack them back, or flatten to pixels.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Select one or more layers, then:</p>
-          <div class="d-modes"><b>Click</b> — convert to smart object<br><br> <b>Shift + Click</b> — convert back to layers (unpacks a smart object)<br><br> <b>Alt + Click</b> — rasterize (flatten to pixels — works on smart objects, shapes, and type)</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 4v13M7 17l-3-3M7 17l3-3M17 20V7M17 7l-3 3M17 7l3 3"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Layers</span><span class="doc-name">Reverse Layers</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Flips the stacking order of whatever you've selected — layers, groups, or artboards.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Select two or more items in the Layers panel, then click. Their order is reversed — the top goes to the bottom and vice-versa. Other layers stay put.</p>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.4 5.2A9 9 0 0 1 21 12a9 9 0 0 1-1.6 2.6M6 6.5A9 9 0 0 0 3 12a9 9 0 0 0 9 5"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Cleanup</span><span class="doc-name">Delete Hidden Layers</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Removes every layer whose visibility is turned off, across the whole document.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Just click. Every hidden layer is deleted; visible layers are untouched.</p>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Cleanup</span><span class="doc-name">Empty Layer Cleanup</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Deletes empty pixel layers that add clutter and file size.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Click to scan and remove zero-pixel raster layers from the document.</p>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="12" rx="6"/><circle cx="9" cy="12" r="3" fill="currentColor" stroke="none"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">View</span><span class="doc-name">Toggle Guides / Rulers</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Show or hide guides and rulers without digging into the View menu.</p>
-          <div class="d-modes"><b>Click</b> — toggle guides &nbsp;·&nbsp; <b>Shift + Click</b> — toggle rulers</div>
-        </div>
-      </details>
-      <details class="doc">
-        <summary>
-          <span class="doc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12M12 15l-4-4M12 15l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span>
-          <span class="doc-tt"><span class="doc-kick">Export</span><span class="doc-name">Export Artboards</span></span>
-          <span class="doc-chev" aria-hidden="true">+</span>
-        </summary>
-        <div class="doc-body">
-          <p class="d-lead">Exports your artboards as image files with full control over naming — including a prefix, which Photoshop's own Export As can't do.</p>
-          <p class="d-how"><span class="d-howlbl">How to use</span>Open the tool. Every artboard appears in a checklist — all selected by default. Uncheck any you don't want, or use the <b>all / none</b> links. Pick a naming mode, format, and destination folder, then click Export selected.</p>
-          <div class="d-modes"><b>Prefix / Suffix</b> — names become <span class="kbd">prefix + artboard name + suffix</span> (e.g. AD_Home_final)<br><br> <b>Rename all</b> — ignores artboard names; files become <span class="kbd">base + number</span> (e.g. Ad_01, Ad_02)</div>
-          <div class="d-callout"><b>Format:</b> choose PNG or JPG. For JPG, a quality slider appears. Files save to the folder you pick, and illegal filename characters are removed automatically.</div>
-        </div>
-      </details>
-    </div>
-    <div class="docs-foot reveal">Want the always-updated version? Read the live docs at <a href="https://www.rakibpixel.com/RP-Bar.html">rakibpixel.com/RP-Bar.html</a>.</div>
-  </div>
-</section>
- 
+
 <section id="license">
   <div class="wrap">
     <div class="band reveal">
@@ -567,7 +343,7 @@
     </div>
   </div>
 </section>
- 
+
 <section id="tutorial">
   <div class="wrap">
     <div class="sec-head reveal">
@@ -580,39 +356,139 @@
     </div>
   </div>
 </section>
- 
+
 <section id="download">
   <div class="wrap">
     <div class="dl reveal">
       <h2 class="stitle">Get <em>RP-Bar</em></h2>
       <p>Bring the one-click toolbar to your Photoshop workflow.</p>
       <a class="btn btn-primary" href="#" onclick="return false;">&#8595; Download RP-Bar v4.0</a>
-      <div class="hero-meta">Photoshop CC &middot; Windows &amp; macOS &middot; Download link coming soon</div>
     </div>
   </div>
 </section>
- 
+
 <footer>
   <div class="wrap">
-    <div class="foot-in">
-      <a class="foot-brand" href="https://www.rakibpixel.com">
-        <img src="https://raw.githubusercontent.com/rakibpixel/Portfolio/d36e7f9a99fa16c2904b78fd7b972f005841f8a9/favicon.svg" alt="RP">
-        <span>RP<span class="acc">-Bar</span></span>
-      </a>
-      <div class="foot-links">
-        <a href="https://be.net/rakibpixel">Behance</a>
-        <a href="https://www.instagram.com/rakibpixel">Instagram</a>
-        <a href="#">&uarr; Top</a>
+    <div class="foot-top">
+      <div class="foot-about">
+        <a class="foot-brand" href="https://www.rakibpixel.com">
+          <img src="https://raw.githubusercontent.com/rakibpixel/Portfolio/d36e7f9a99fa16c2904b78fd7b972f005841f8a9/favicon.svg" alt="RP">
+          <span>RP<span class="acc">-Bar</span></span>
+        </a>
+        <p>A slim one-click toolbar that lives inside Photoshop — built by a designer, for designers.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Product</h4>
+        <a href="#features">Tools</a>
+        <a href="#how">How it works</a>
+        <a href="#tutorial">Tutorial</a>
+        <a href="#download">Download</a>
+      </div>
+      <div class="foot-col">
+        <h4>Connect</h4>
+        <a href="https://www.rakibpixel.com" target="_blank" rel="noopener">Portfolio</a>
+        <a href="https://be.net/rakibpixel" target="_blank" rel="noopener">Behance</a>
+        <a href="https://www.instagram.com/rakibpixel" target="_blank" rel="noopener">Instagram</a>
       </div>
     </div>
-    <div class="foot-copy">&copy; 2025 Rakibul — All rights reserved</div>
+    <div class="foot-bottom">
+      <div class="foot-copy">&copy; 2025 <a href="https://www.rakibpixel.com">Rakib Pixel</a>. All rights reserved.</div>
+      <div class="foot-social">
+        <a href="https://be.net/rakibpixel" target="_blank" rel="noopener" aria-label="Behance"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.2 7.8c.6 0 1.1.05 1.6.16.5.1.9.28 1.2.52.34.24.6.56.78.96.18.4.27.9.27 1.48 0 .63-.14 1.15-.43 1.57-.28.42-.7.76-1.27 1.02.76.22 1.33.6 1.7 1.16.38.55.57 1.22.57 2 0 .63-.12 1.18-.37 1.64a3.1 3.1 0 0 1-1 1.13c-.42.3-.9.5-1.45.65-.55.13-1.1.2-1.68.2H2V7.8h6.2zm-.36 4.85c.5 0 .9-.12 1.23-.36.32-.24.48-.62.48-1.16 0-.3-.05-.54-.16-.73a1.18 1.18 0 0 0-.44-.44 1.8 1.8 0 0 0-.63-.22 4.1 4.1 0 0 0-.74-.06H5v2.97h2.84zm.16 5.1c.28 0 .54-.03.8-.08.25-.05.47-.14.66-.27.2-.13.35-.3.47-.53.12-.22.17-.5.17-.85 0-.67-.2-1.15-.57-1.44-.38-.28-.88-.42-1.5-.42H5v3.6h3zM16.4 17.3c.4.4.98.6 1.74.6.54 0 1.02-.14 1.42-.42.4-.27.64-.56.73-.87h2.2c-.36 1.1-.9 1.88-1.62 2.36-.72.47-1.6.7-2.62.7-.72 0-1.36-.11-1.94-.34a4.1 4.1 0 0 1-1.46-.97 4.3 4.3 0 0 1-.92-1.5 5.6 5.6 0 0 1-.32-1.94c0-.68.11-1.32.34-1.9a4.4 4.4 0 0 1 .95-1.52c.4-.43.9-.76 1.46-1 .57-.24 1.2-.36 1.88-.36.76 0 1.42.15 1.98.44.56.3 1.02.69 1.38 1.18.36.5.62 1.06.78 1.7.16.62.22 1.28.17 1.97h-6.35c0 .77.21 1.38.6 1.77zM19.5 12.8c-.32-.35-.83-.53-1.5-.53-.44 0-.8.07-1.1.22-.28.15-.5.33-.68.55-.17.22-.29.45-.35.7-.07.24-.1.46-.12.65h3.94c-.06-.62-.27-1.1-.6-1.45zM15.4 8.4h4.9v1.2h-4.9V8.4z"/></svg></a>
+        <a href="https://www.instagram.com/rakibpixel" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" aria-label="Back to top" title="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V6M5 12l7-7 7 7"/></svg></a>
+      </div>
+    </div>
   </div>
 </footer>
- 
+
 <script>
+  // ===== tool data =====
+  var ICONS={
+    shape:'<rect x="3" y="5" width="18" height="14" rx="1.5"/>',
+    resize:'<path d="M4 9V4h5M20 15v5h-5M4 4l6 6M20 20l-6-6"/>',
+    trim:'<path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M2 6h14a2 2 0 0 1 2 2v14"/>',
+    dup:'<rect x="4" y="4" width="12" height="12" rx="1.5"/><rect x="8" y="8" width="12" height="12" rx="1.5"/>',
+    rename:'<path d="M4 8V6.5A1.5 1.5 0 0 1 5.5 5h13A1.5 1.5 0 0 1 20 6.5V8"/><path d="M12 5v14M9.5 19h5"/>',
+    ai:'<rect x="2.5" y="2.5" width="19" height="19" rx="4"/><path d="M7.4 16.2l2.5-8.4h1.3l2.5 8.4M8.1 13.5h4.3" stroke-width="1.5"/><path d="M16.7 8.2v8" stroke-width="1.8"/>',
+    keys:'<rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 9.5h.01M9.5 9.5h.01M13 9.5h.01M16.5 9.5h.01M6 13h.01M16.5 13h.01M9 15.5h6" stroke-width="1.8"/>',
+    grid:'<rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
+    convert:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8h8v8H8z" fill="currentColor" fill-opacity="0.25" stroke="none"/><path d="M3 9h3M18 9h3M3 15h3M18 15h3M9 3v3M9 18v3M15 3v3M15 18v3"/>',
+    reverse:'<path d="M7 4v13M7 17l-3-3M7 17l3-3M17 20V7M17 7l-3 3M17 7l3 3"/>',
+    hidden:'<path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.4 5.2A9 9 0 0 1 21 12a9 9 0 0 1-1.6 2.6M6 6.5A9 9 0 0 0 3 12a9 9 0 0 0 9 5"/>',
+    empty:'<path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/>',
+    guides:'<rect x="3" y="6" width="18" height="12" rx="6"/><circle cx="9" cy="12" r="3" fill="currentColor" stroke="none"/>',
+    export:'<path d="M12 3v12M12 15l-4-4M12 15l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>',
+    pan:'<path d="M9 11V6a1.5 1.5 0 0 1 3 0v5M12 11V5a1.5 1.5 0 0 1 3 0v6M15 11V7a1.5 1.5 0 0 1 3 0v7a6 6 0 0 1-6 6h-1.5a5 5 0 0 1-3.8-1.8L4 14.5a1.6 1.6 0 0 1 2.4-2L9 15"/><path d="M9 11V8a1.5 1.5 0 0 0-3 0v6"/>',
+    about:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'
+  };
+  var TOOLS=[
+    {ic:'shape',kick:'Create',name:'Shape from Artboard',desc:'Turn any artboard into a clean, perfectly-sized shape layer in one click.',
+      body:'<p class="d-lead">Drops a rectangle shape filled with your foreground color, sized to the active artboard.</p><p class="d-how"><span class="d-howlbl">How to use</span>Click to create a full-cover shape that matches the artboard exactly.</p><div class="d-modes"><b>Click</b> — full-cover shape &nbsp;·&nbsp; <b>Shift + Click</b> — opens a window to set custom padding (an even margin on all sides)</div>'},
+    {ic:'resize',kick:'Create',name:'Artboard Resize',desc:'Resize artboards to exact dimensions without reshuffling your layers.',
+      body:'<p class="d-lead">Resize the canvas to a preset or a custom size, with control over which edge stays anchored.</p><p class="d-how"><span class="d-howlbl">How to use</span>Open the tool, pick an anchor (Center, Top-Left, Top-Center), then choose a preset (1080×1080, 1080×1920, etc.) or type a custom width and height and hit Resize.</p>'},
+    {ic:'trim',kick:'Canvas',name:'Trim to Content',desc:'Crop the canvas tight to the visible pixels — instantly, no manual cropping.',
+      body:'<p class="d-lead">Crops the canvas down to your visible artwork in one click — no more manual cropping when there\'s empty space around your shapes or images.</p><p class="d-how"><span class="d-howlbl">How to use</span>Just click the icon. The canvas snaps to the bounding box of everything visible, trimming all four sides at once. This is the same as Image &gt; Trim, but instant.</p><div class="d-callout"><b>Good to know:</b> works on transparent areas, and falls back to the top-left pixel colour for flat backgrounds.</div>'},
+    {ic:'dup',kick:'Create',name:'Duplicate & Offset',desc:'Clone a layer and nudge it by a set distance — great for stepped repeats.',
+      body:'<p class="d-lead">Duplicates the active layer and nudges the copy by an exact pixel offset — handy for stepped repeats.</p><p class="d-how"><span class="d-howlbl">How to use</span>Set the X and Y offset in pixels, then click Duplicate &amp; offset. Repeat to step more copies in the same direction.</p>'},
+    {ic:'rename',kick:'Layers',name:'Rename Layers',desc:'Batch-rename selected layers with prefixes, names, and sequential numbers.',
+      body:'<p class="d-lead">Rename many selected layers at once — as a prefix, a full name, or a suffix, with optional sequential numbering.</p><p class="d-how"><span class="d-howlbl">How to use</span>Select multiple layers in the Layers panel, type your text, pick <b>Prefix</b>, <b>Name</b>, or <b>Suffix</b>, then Apply. Prefix adds text to the front of each existing name; Suffix adds to the end; Name replaces the whole name.</p><div class="d-callout"><b>Numbering:</b> tick <b>Number them</b> to append a running count — with <b>Name</b> mode and text "BG" you get "BG 1, BG 2, BG 3…". Set the start number if you don\'t want to begin at 1.</div>'},
+    {ic:'ai',kick:'Hand-off',name:'Send to Illustrator',desc:'Push layers into Illustrator — text stays editable, shapes come as vectors.',
+      body:'<p class="d-lead">Push selected Photoshop layers straight into Illustrator as native, editable artwork — the same idea as the Overlord plugin, built right into RP-Bar.</p><p class="d-how"><span class="d-howlbl">How to use</span>Open Illustrator, select one or more layers in Photoshop, then click Send. Your art lands in the active Illustrator document (a new one is created if none is open).</p><div class="d-callout"><b>What transfers, and how:</b> Text layers become editable Illustrator text (font, size, colour). Shape and image layers come across as placed PNG images (pixels). Groups stay grouped. For a fully <b>editable vector</b> shape, use the <b>Copy Vector</b> button instead, then paste in Illustrator with Ctrl+V.</div><div class="d-callout"><b>Copy Vector:</b> copies the selected shape layer as SVG to the clipboard. Switch to Illustrator and press Ctrl+V — it pastes as a native, editable vector path with all its curves intact. This is the most reliable way to move a shape across as true vector.</div><div class="d-callout"><b>Requirements:</b> Illustrator must be installed and running for Send. The first send may take a moment while Illustrator wakes up.</div>'},
+    {ic:'keys',kick:'Setup',name:'Install Shortcuts',desc:'Install a bundled keyboard-shortcut set into Photoshop in one click.',
+      body:'<p class="d-lead">Install a Photoshop keyboard-shortcut set (.kys) in one click — including the bundled RP-Bar set with a ready-made Copy SVG shortcut.</p><p class="d-how"><span class="d-howlbl">How to use</span>Click <b>Install RP-Bar shortcuts</b> to drop in the bundled set, or <b>Install a .kys file</b> to load one from your computer. Then restart Photoshop and choose the set under Edit ▸ Keyboard Shortcuts ▸ Set.</p><div class="d-callout"><b>Why it helps:</b> the bundled set assigns <b>Copy SVG</b> to <span class="kbd">Shift</span>+<span class="kbd">Ctrl</span>+<span class="kbd">C</span>, so you can copy any shape and paste it into Illustrator as an editable vector — the most reliable shape hand-off.</div>'},
+    {ic:'grid',kick:'Layout',name:'Grids',desc:'Drop precise columns, rows, and margins with centering shortcuts built in.',
+      body:'<p class="d-lead">A full grid and guide system — columns, rows, margins, plus quick shortcuts for centering and edge guides.</p><p class="d-how"><span class="d-howlbl">How to use</span>Turn on Columns and/or Rows, set count and gap, and optionally add margins (L / T / B / R). Click <b>Create guides</b> to lay them down, or <b>Clear all guides</b> to remove every guide.</p><div class="d-modes">Shortcut row (left → right): center guide vertical · center guide horizontal · center both · center layer H · center layer V · <b>guides around selected layer</b> · render grid as shapes</div><div class="d-callout"><b>Guides around a layer:</b> select any layer and click the edge-guides shortcut — four guides snap to its bounding box.</div>'},
+    {ic:'convert',kick:'Convert',name:'Convert & Rasterize',desc:'Wrap layers into a smart object, unpack them, or flatten to pixels.',
+      body:'<p class="d-lead">One icon handles three conversions — wrap layers into a smart object, unpack them back, or flatten to pixels.</p><p class="d-how"><span class="d-howlbl">How to use</span>Select one or more layers, then:</p><div class="d-modes"><b>Click</b> — convert to smart object<br><br> <b>Shift + Click</b> — convert back to layers (unpacks a smart object)<br><br> <b>Alt + Click</b> — rasterize (flatten to pixels — works on smart objects, shapes, and type)</div>'},
+    {ic:'reverse',kick:'Layers',name:'Reverse Layers',desc:'Flip the stacking order of selected layers, groups, or artboards.',
+      body:'<p class="d-lead">Flips the stacking order of whatever you\'ve selected — layers, groups, or artboards.</p><p class="d-how"><span class="d-howlbl">How to use</span>Select two or more items in the Layers panel, then click. Their order is reversed — the top goes to the bottom and vice-versa. Other layers stay put.</p>'},
+    {ic:'hidden',kick:'Cleanup',name:'Delete Hidden Layers',desc:'Sweep away every hidden layer across the whole document.',
+      body:'<p class="d-lead">Removes every layer whose visibility is turned off, across the whole document.</p><p class="d-how"><span class="d-howlbl">How to use</span>Just click. Every hidden layer is deleted; visible layers are untouched.</p>'},
+    {ic:'empty',kick:'Cleanup',name:'Empty Layer Cleanup',desc:'Find and remove empty pixel layers that bloat your file.',
+      body:'<p class="d-lead">Deletes empty pixel layers that add clutter and file size.</p><p class="d-how"><span class="d-howlbl">How to use</span>Click to scan and remove zero-pixel raster layers from the document.</p>'},
+    {ic:'guides',kick:'View',name:'Toggle Guides / Rulers',desc:'Toggle guides and rulers on or off without the View menu.',
+      body:'<p class="d-lead">Show or hide guides and rulers without digging into the View menu.</p><div class="d-modes"><b>Click</b> — toggle guides &nbsp;·&nbsp; <b>Shift + Click</b> — toggle rulers</div>'},
+    {ic:'export',kick:'Export',name:'Export Artboards',desc:'Export artboards with custom prefixes — something Export As can\'t do.',
+      body:'<p class="d-lead">Exports your artboards as image files with full control over naming — including a prefix, which Photoshop\'s own Export As can\'t do.</p><p class="d-how"><span class="d-howlbl">How to use</span>Open the tool. Every artboard appears in a checklist — all selected by default. Uncheck any you don\'t want, or use the <b>all / none</b> links. Pick a naming mode, format, and destination folder, then click Export selected.</p><div class="d-modes"><b>Prefix / Suffix</b> — names become <span class="kbd">prefix + artboard name + suffix</span> (e.g. AD_Home_final)<br><br> <b>Rename all</b> — ignores artboard names; files become <span class="kbd">base + number</span> (e.g. Ad_01, Ad_02)</div><div class="d-callout"><b>Format:</b> choose PNG or JPG. For JPG, a quality slider appears. Files save to the folder you pick, and illegal filename characters are removed automatically.</div>'},
+    {ic:'pan',kick:'Workflow',name:'Middle-Button Pan',desc:'Pan the canvas by dragging the middle mouse button, like Illustrator.',
+      body:'<p class="d-lead">Pan the Photoshop canvas by holding the middle mouse button and dragging — the same way Illustrator does it. No more reaching for the Space bar.</p><p class="d-how"><span class="d-howlbl">How to use</span>Photoshop has no built-in middle-button pan, so this tool generates a tiny <b>AutoHotkey</b> script that maps the middle button to Space + drag (the Hand tool). You set it up once and forget it.</p><div class="d-modes"><b>Save script to Desktop</b> — writes <b>RP-Bar_Pan.ahk</b> &nbsp;·&nbsp; <b>Copy script</b> — copies the text so you can paste it into your own file</div><div class="d-callout"><b>One-time setup (Windows):</b> 1) <a href="https://www.autohotkey.com/download/ahk-v2.exe" style="color:var(--v2)">Download AutoHotkey v2</a> and install it. 2) Double-click <b>RP-Bar_Pan.ahk</b> — a green "H" tray icon appears. 3) Hold the middle button in Photoshop and drag. To auto-run on startup, press <span class="kbd">Win</span>+<span class="kbd">R</span>, type <b>shell:startup</b>, and drop a shortcut to the file in that folder.</div><div class="d-callout"><b>macOS:</b> AutoHotkey is Windows-only. On a Mac the same effect needs a tool like BetterTouchTool — ask and a guide can be added.</div>'}
+  ];
+
+  function svg(inner){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+inner+'</svg>';}
+
+  // build cards
+  var tools=document.getElementById('tools');
+  TOOLS.forEach(function(t,i){
+    var c=document.createElement('div');
+    c.className='gcard'; c.style.setProperty('--d',(i*0.03).toFixed(2)+'s');
+    c.innerHTML='<div class="gcard-top"><span class="gcard-ic">'+svg(ICONS[t.ic])+'</span><span class="gcard-num">'+String(i+1).padStart(2,'0')+'</span></div>'
+      +'<span class="gcard-kick">'+t.kick+'</span>'
+      +'<div class="gcard-name">'+t.name+'</div>'
+      +'<p class="gcard-desc">'+t.desc+'</p>'
+      +'<span class="gcard-more">Read guide '+svg('<path d="M5 12h14M13 6l6 6-6 6"/>')+'</span>';
+    c.addEventListener('click',function(){openModal(i);});
+    tools.appendChild(c);
+  });
+
+  // modal
+  var back=document.getElementById('modalBack'), mIc=document.getElementById('mIc'),
+      mKick=document.getElementById('mKick'), mName=document.getElementById('mName'), mBody=document.getElementById('mBody');
+  function openModal(i){
+    var t=TOOLS[i];
+    mIc.innerHTML=svg(ICONS[t.ic]); mKick.textContent=t.kick; mName.textContent=t.name; mBody.innerHTML=t.body;
+    back.classList.add('show'); document.body.classList.add('locked');
+  }
+  function closeModal(){ back.classList.remove('show'); document.body.classList.remove('locked'); }
+  document.getElementById('modalX').addEventListener('click',closeModal);
+  back.addEventListener('click',function(e){ if(e.target===back) closeModal(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
+
+  // reveal observer (cards + reveals)
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
-  document.querySelectorAll('.reveal,.tk-row').forEach(function(el){io.observe(el);});
- 
+  document.querySelectorAll('.reveal,.gcard').forEach(function(el){io.observe(el);});
+
+  // hero bar animation
   var names=["Shape from Artboard","Artboard Resize","Trim to Content","Duplicate & Offset","Rename Layers","Send to Illustrator","Grids","Smart Object","Export Artboards","Middle-Button Pan"];
   var bar=document.getElementById('psbar');
   var ics=bar.querySelectorAll('.bar-ic');
