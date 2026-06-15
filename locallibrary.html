@@ -210,7 +210,7 @@
 
   /* ===== LICENSE BAND ===== */
   .band{background:linear-gradient(135deg,#15112a,#0c0a16); border:1px solid var(--ln2); border-radius:24px; padding:50px; display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center; overflow:hidden; position:relative;}
-  .band::before{content:""; position:absolute; width:400px; height:400px; right:-110px; top:-110px; background:radial-gradient(circle,var(--vg),transparent 70%); filter:blur(26px);}
+  .band::before{content:""; position:absolute; width:400px; height:400px; right:-110px; top:-110px; background:radial-gradient(circle,var(--vg),transparent 70%); filter:blur(26px); pointer-events:none;}
   .band .stitle{font-size:clamp(27px,3.4vw,40px); position:relative;}
   .band p{color:var(--mu2); margin-bottom:10px; position:relative;}
   .band .blist{list-style:none; margin-top:18px; position:relative;}
@@ -233,7 +233,7 @@
 
   /* ===== DOWNLOAD ===== */
   .dl{text-align:center; padding:76px 40px; background:linear-gradient(135deg,#15112a,#0c0a16); border:1px solid var(--ln2); border-radius:26px; position:relative; overflow:hidden;}
-  .dl::before{content:""; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%, var(--vd), transparent 60%);}
+  .dl::before{content:""; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%, var(--vd), transparent 60%); pointer-events:none;}
   .dl .stitle{position:relative;}
   .dl p{color:var(--mu2); margin-bottom:28px; position:relative; max-width:440px; margin-left:auto; margin-right:auto;}
   .dl .micro{margin-top:18px; font-size:13px; color:var(--mu); position:relative;}
@@ -550,7 +550,7 @@
     <div class="dl reveal">
       <h2 class="stitle">Get <em>Local Library</em></h2>
       <p>Bring your whole asset library inside Photoshop and Illustrator — offline, organized, and yours.</p>
-      <a class="btn btn-primary" href="https://rakibpixel.gumroad.com/l/LocalLibrary" target="_blank" rel="noopener noreferrer">&#8595; Download Local Library v13</a>
+      <a class="btn btn-primary" id="dlBtn" href="https://rakibpixel.gumroad.com/l/LocalLibrary" target="_blank" rel="noopener noreferrer">&#8595; Download Local Library v13</a>
       <div class="micro">Windows &amp; macOS &middot; Photoshop &amp; Illustrator CC+ &middot; one&ndash;time license</div>
     </div>
   </div>
