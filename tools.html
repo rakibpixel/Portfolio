@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tools &amp; Products — Rakibul Hassan | Creative Technologist</title>
+  <meta name="description" content="Dev and creative tools crafted for designers, video editors, and creators — Chrome extensions, Figma plugins, Adobe extensions, and web apps." />
+
+  <!-- Google Fonts & Iconsets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ══════════════════════════════════════
+       CSS VARIABLES & RESET (IDE LIGHT THEME)
+    ══════════════════════════════════════ */
+    :root {
+      --bg: #f8f9fb;
+      --bg-card: #ffffff;
+      --bg-card-subtle: #fcfdfe;
+      --border: #e4e7ec;
+      --border-focus: #5e43ec;
+      --border-subtle: #edf0f5;
+      
+      --text-main: #0c0a1a;
+      --text-muted: #5e6478;
+      --text-dim: #949cb0;
+      --text-code: #2e3440;
+      
+      --v: #5e43ec;
+      --v-light: rgba(94, 67, 236, 0.08);
+      --v-border: rgba(94, 67, 236, 0.25);
+      
+      /* Syntax Accent Colors */
+      --syn-keyword: #d73a49;
+      --syn-func: #6f42c1;
+      --syn-string: #22863a;
+      --syn-comment: #8c95a6;
+      --syn-variable: #005cc5;
+      --syn-cmd: #1f2328;
+      
+      --sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+      --dp: 'Plus Jakarta Sans', sans-serif;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 18px;
+      --radius-full: 9999px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg);
+    }
+
+    body {
+      font-family: var(--sans);
+      color: var(--text-main);
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(rgba(12, 10, 26, 0.045) 1px, transparent 1px),
+        linear-gradient(to right, rgba(12, 10, 26, 0.018) 1px, transparent 1px);
+      background-size: 28px 28px, 112px 112px;
+      background-position: 0 0, 0 0;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    ::selection {
+      background: rgba(94, 67, 236, 0.18);
+      color: #0c0a1a;
+    }
+
+    /* ══════════════════════════════════════
+       CUSTOM FOLLOWER CURSOR (INVERTED BLEND MODE)
+    ══════════════════════════════════════ */
+    .custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ffffff;
+      mix-blend-mode: difference;
+      pointer-events: none;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate3d(-50%, -50%, 0);
+      transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  height 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-radius 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.25s ease;
+      will-change: transform, width, height;
+      opacity: 0;
+    }
+
+    .custom-cursor-text {
+      font-family: var(--sans);
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #000000;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      white-space: nowrap;
+      user-select: none;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    /* Hovering over tool card */
+    .custom-cursor.is-hovering {
+      width: 76px;
+      height: 32px;
+      border-radius: 100px;
+      background: #ffffff;
+    }
+    .custom-cursor.is-hovering .custom-cursor-text {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Hovering over links / buttons */
+    .custom-cursor.is-link {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      .custom-cursor {
+        display: none !important;
+      }
+    }
+
+    /* ══════════════════════════════════════
+       GLOBAL FLOATING GLASSMORPHIC NAVBAR
+    ══════════════════════════════════════ */
+    .nav-wrapper {
+      position: fixed;
+      top: 20px;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+      padding: 0 16px;
+    }
+
+    .floating-nav {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      padding: 8px 10px 8px 22px;
+      background: rgb(255 255 255 / 21%);
+      backdrop-filter: blur(5px) saturate(180%);
+      -webkit-backdrop-filter: blur(5px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 100px;
+      box-shadow: 0 12px 36px -6px rgba(12, 10, 26, 0.08), 0 2px 8px -2px rgba(12, 10, 26, 0.04);
+      transition: all 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: width, padding, gap, transform;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-brand-logo {
+      height: 22px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-collapsible-content {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      transition: max-width 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                  gap 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: rgba(12, 10, 26, 0.72);
+      text-decoration: none;
+      transition: color 0.25s ease;
+      letter-spacing: -0.2px;
+      position: relative;
+      padding: 4px 0;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #0c0a1a;
+      font-weight: 700;
+    }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--v);
+      border-radius: 2px;
+    }
+
+    .nav-contact-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 18px;
+      border-radius: 100px;
+      background: #0c0a1a;
+      color: #ffffff !important;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.1px;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s, box-shadow 0.3s;
+    }
+    .nav-contact-pill:hover {
+      background: var(--v);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(94, 67, 236, 0.3);
+    }
+
+    /* 3-Dots Wave Indicator */
+    .nav-dots-pill {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: transparent;
+      padding: 4px 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+      width: auto;
+      height: auto;
+    }
+    .nav-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #0c0a1a;
+      animation: dotWave 1.4s infinite ease-in-out;
+      will-change: transform, opacity;
+    }
+    .nav-dot:nth-child(1) { animation-delay: 0s; }
+    .nav-dot:nth-child(2) { animation-delay: 0.22s; }
+    .nav-dot:nth-child(3) { animation-delay: 0.44s; }
+
+    @keyframes dotWave {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.35;
+      }
+      30% {
+        transform: translateY(-4.5px);
+        opacity: 1;
+      }
+    }
+
+    /* Compact Shrunk State */
+    .floating-nav.is-compact {
+      gap: 14px;
+      padding: 8px 14px 8px 18px;
+      background: rgb(255 255 255 / 35%);
+      box-shadow: 0 10px 28px -4px rgba(12, 10, 26, 0.1);
+    }
+    .floating-nav.is-compact .nav-collapsible-content {
+      max-width: 0;
+      opacity: 0;
+      transform: scale(0.92);
+      pointer-events: none;
+      margin: 0;
+      gap: 0;
+    }
+    .floating-nav.is-compact .nav-dots-pill {
+      display: flex;
+    }
+    .floating-nav.is-compact:hover {
+      gap: 32px;
+      padding: 8px 10px 8px 22px;
+      background: rgb(255 255 255 / 55%);
+    }
+    .floating-nav.is-compact:hover .nav-collapsible-content {
+      max-width: 800px;
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+      gap: 32px;
+    }
+    .floating-nav.is-compact:hover .nav-dots-pill {
+      display: none;
+    }
+
+    /* ══════════════════════════════════════
+       IDE MAIN WRAPPER & LINE NUMBERS GUTTER
+    ══════════════════════════════════════ */
+    .ide-page-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 130px 24px 100px;
+      position: relative;
+      display: flex;
+      gap: 32px;
+    }
+
+    /* Code Editor Left Line Number Gutter */
+    .ide-line-gutter {
+      width: 38px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0;
+      user-select: none;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #9aa2b5;
+      border-right: 1px dashed rgba(12, 10, 26, 0.14);
+      padding-right: 14px;
+      flex-shrink: 0;
+      line-height: 26px;
+    }
+    .ide-line-gutter span {
+      display: block;
+      height: 26px;
+      opacity: 0.65;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+    .ide-line-gutter span:hover {
+      opacity: 1;
+      color: var(--v);
+    }
+
+    .ide-main-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ══════════════════════════════════════
+       HEADER SECTION (IDE INSPIRED)
+    ══════════════════════════════════════ */
+    .ide-header {
+      margin-bottom: 36px;
+    }
+
+    .ide-breadcrumb-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--v);
+      letter-spacing: 0.4px;
+      box-shadow: 0 2px 6px rgba(12, 10, 26, 0.03);
+      margin-bottom: 18px;
+    }
+    .ide-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+      display: inline-block;
+    }
+
+    .ide-title {
+      font-family: var(--dp);
+      font-size: clamp(32px, 4.5vw, 54px);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      line-height: 1.12;
+      color: var(--text-main);
+      margin-bottom: 14px;
+    }
+    .ide-title-accent {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--v);
+      letter-spacing: normal;
+    }
+
+    .ide-subtitle {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 680px;
+      font-weight: 400;
+    }
+
+    /* ══════════════════════════════════════
+       TOP STICKY MASK SHIELD & CONTROLS BAR
+    ══════════════════════════════════════ */
+    .ide-sticky-mask-shield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 94px;
+      background: var(--bg);
+      z-index: 895;
+      pointer-events: none;
+      box-shadow: 0 4px 16px var(--bg);
+    }
+
+    .ide-controls-bar {
+      position: sticky;
+      top: 84px;
+      z-index: 900;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      background: rgb(255 255 255 / 21%);
+      backdrop-filter: blur(5px) saturate(180%);
+      -webkit-backdrop-filter: blur(5px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: var(--radius-md);
+      box-shadow: 0 6px 24px -4px rgba(12, 10, 26, 0.06);
+      margin-bottom: 30px;
+      transition: top 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    }
+
+    /* Live Search Input */
+    .ide-search-box {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 380px;
+      display: flex;
+      align-items: center;
+    }
+    .ide-search-icon {
+      position: absolute;
+      left: 12px;
+      color: var(--text-dim);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+    .ide-search-input {
+      width: 100%;
+      height: 40px;
+      padding: 8px 42px 8px 36px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-main);
+      background: rgba(248, 249, 251, 0.95);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: all 0.25s ease;
+    }
+    .ide-search-input:focus {
+      background: #ffffff;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(94, 67, 236, 0.12);
+    }
+    .ide-search-input::placeholder {
+      color: var(--text-dim);
+      font-family: var(--mono);
+      transition: opacity 0.2s ease;
+    }
+    .ide-search-kbd {
+      position: absolute;
+      right: 10px;
+      padding: 2px 6px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-dim);
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    /* Filter Tabs */
+    .ide-filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .ide-filter-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .ide-filter-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 15px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-full);
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      user-select: none;
+    }
+    .ide-filter-tab:hover {
+      color: var(--text-main);
+      background: rgba(12, 10, 26, 0.05);
+    }
+    .ide-filter-tab.active {
+      background: #0c0a1a;
+      color: #ffffff;
+      border-color: #0c0a1a;
+      box-shadow: 0 2px 8px rgba(12, 10, 26, 0.15);
+    }
+    .ide-tab-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      opacity: 0.65;
+    }
+
+    /* Live Counter / Feedback Bar */
+    .ide-status-feedback {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      padding: 0 4px;
+    }
+    .ide-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ══════════════════════════════════════
+       TOOLS GRID ARCHITECTURE
+    ══════════════════════════════════════ */
+    .ide-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 24px;
+      position: relative;
+    }
+
+    /* ══════════════════════════════════════
+       TERMINAL WINDOW TOOL CARD (MINIMAL CALM HOVER)
+    ══════════════════════════════════════ */
+    .tool-window-card {
+      position: relative;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px -2px rgba(12, 10, 26, 0.04);
+      cursor: pointer;
+      user-select: none;
+      animation: cardFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      /* Reset hover: NO lift, NO scale, NO tilt, NO glow */
+    }
+
+    .tool-window-card:hover {
+      border-color: #cbd2df;
+      box-shadow: 0 4px 14px -2px rgba(12, 10, 26, 0.06);
+    }
+
+    /* Top Window Chrome Bar */
+    .tool-window-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #fafbfc;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .tool-window-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tool-mac-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      will-change: transform;
+    }
+    .tool-mac-dot.red { background: #ff5f56; }
+    .tool-mac-dot.yellow { background: #ffbd2e; }
+    .tool-mac-dot.green { background: #27c93f; }
+
+    /* macOS Traffic Lights Staggered Wave Bounce on Card Hover */
+    .tool-window-card:hover .tool-mac-dot {
+      animation: macDotStaggerWave 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+    }
+    .tool-window-card:hover .tool-mac-dot.red { animation-delay: 0s; }
+    .tool-window-card:hover .tool-mac-dot.yellow { animation-delay: 0.1s; }
+    .tool-window-card:hover .tool-mac-dot.green { animation-delay: 0.2s; }
+
+    @keyframes macDotStaggerWave {
+      0%, 100% { transform: translateY(0); }
+      35% { transform: translateY(-3.5px); }
+      70% { transform: translateY(0); }
+    }
+
+    .tool-file-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-dim);
+      letter-spacing: 0.2px;
+    }
+
+    /* Card Content Area */
+    .tool-window-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Command Prompt Line */
+    .tool-cmd-prompt {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--syn-cmd);
+      background: #f4f5f8;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: all 0.25s ease;
+    }
+    .tool-window-card:hover .tool-cmd-prompt {
+      background: rgba(94, 67, 236, 0.06);
+      border-color: rgba(94, 67, 236, 0.18);
+      color: var(--v);
+    }
+    .tool-cmd-symbol {
+      color: var(--syn-keyword);
+      font-weight: 700;
+    }
+
+    /* Meta Badges */
+    .tool-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .tool-category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: #f0f2f6;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .tool-version-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* Titles & Code Description */
+    .tool-card-title {
+      font-family: var(--dp);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .tool-card-desc {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: var(--syn-comment);
+      margin-bottom: 22px;
+      flex: 1;
+    }
+
+    /* Action Footer Button (Rolling Text on Hover - Aligned Left) */
+    .tool-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .tool-action-btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 18px;
+      height: 32px;
+      box-sizing: border-box;
+      border-radius: 100px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(12, 10, 26, 0.03);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      line-height: 1;
+    }
+    .tool-action-btn:hover {
+      background: #0c0a1a;
+      border-color: #0c0a1a;
+      box-shadow: 0 4px 14px rgba(12, 10, 26, 0.18);
+    }
+
+    /* Dual-Row Rolling Text - Vertically Centered 16px Viewport */
+    .tool-btn-roll {
+      position: relative;
+      display: block;
+      height: 16px;
+      line-height: 16px;
+      overflow: hidden;
+    }
+    .tool-btn-roll span {
+      display: block;
+      height: 16px;
+      line-height: 16px;
+      white-space: nowrap;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .tool-btn-text-hover {
+      color: #ffffff;
+    }
+    .tool-action-btn:hover .tool-btn-text-default {
+      transform: translateY(-16px);
+    }
+    .tool-action-btn:hover .tool-btn-text-hover {
+      transform: translateY(-16px);
+    }
+
+    .tool-card-inspect-hint {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .tool-window-card:hover .tool-card-inspect-hint {
+      opacity: 1;
+      color: var(--v);
+    }
+
+    /* ══════════════════════════════════════
+       SLIDE-OVER DRAWER ARCHITECTURE
+    ══════════════════════════════════════ */
+    .ide-drawer-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(12, 10, 26, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ide-drawer-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .ide-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(500px, 100vw);
+      height: 100vh;
+      background: #ffffff;
+      border-left: 1px solid var(--border);
+      box-shadow: -16px 0 48px rgba(12, 10, 26, 0.14);
+      z-index: 2010;
+      transform: translateX(100%);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .ide-drawer.is-open {
+      transform: translateX(0);
+    }
+
+    .ide-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: #fafbfc;
+      border-bottom: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+    .ide-drawer-path {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+    .ide-drawer-close-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .ide-drawer-close-btn:hover {
+      background: #0c0a1a;
+      color: #ffffff;
+      border-color: #0c0a1a;
+    }
+    .ide-drawer-kbd {
+      padding: 1px 4px;
+      font-size: 9.5px;
+      background: rgba(12, 10, 26, 0.06);
+      border-radius: 3px;
+    }
+    .ide-drawer-close-btn:hover .ide-drawer-kbd {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .ide-drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 24px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .ide-drawer-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ide-drawer-title {
+      font-family: var(--dp);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+    }
+
+    .ide-drawer-desc {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--syn-comment);
+    }
+
+    .ide-drawer-section-heading {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--v);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .ide-drawer-code-box {
+      background: #f6f8fa;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .ide-drawer-code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #edf0f5;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .ide-drawer-code-lang {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+    .ide-drawer-copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .ide-drawer-copy-btn:hover {
+      background: var(--v);
+      color: #ffffff;
+      border-color: var(--v);
+    }
+    .ide-drawer-code-pre {
+      padding: 12px 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--syn-cmd);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .ide-drawer-features-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ide-drawer-features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+    .ide-drawer-features-list li::before {
+      content: '✓';
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(94, 67, 236, 0.1);
+      color: var(--v);
+      font-weight: 800;
+      font-size: 10px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .ide-drawer-notes-box {
+      background: rgba(248, 249, 251, 0.8);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+
+    .ide-drawer-footer {
+      padding: 16px 24px;
+      background: #fafbfc;
+      border-top: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+    .ide-drawer-cta-btn {
+      width: 100%;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 100px;
+      background: #0c0a1a;
+      color: #ffffff !important;
+      font-family: var(--sans);
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .ide-drawer-cta-btn:hover {
+      background: var(--v);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(94, 67, 236, 0.28);
+    }
+
+    /* ══════════════════════════════════════
+       EMPTY SEARCH STATE
+    ══════════════════════════════════════ */
+    .ide-empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      background: #ffffff;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-md);
+      display: none;
+    }
+    .ide-empty-icon {
+      font-family: var(--mono);
+      font-size: 28px;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+    .ide-empty-title {
+      font-family: var(--dp);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .ide-empty-desc {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    /* ══════════════════════════════════════
+       PROGRESSIVE GRADIENT BLUR OVERLAY
+    ══════════════════════════════════════ */
+    .bottom-blur-gradient-overlay {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 110px;
+      pointer-events: none;
+      z-index: 850;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
+      -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
+      will-change: backdrop-filter, transform;
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    .ide-footer {
+      max-width: 1240px;
+      margin: 40px auto 0;
+      padding: 30px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .ide-footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .ide-footer a:hover {
+      color: var(--v);
+    }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ══════════════════════════════════════ */
+    @media (max-width: 860px) {
+      .ide-line-gutter {
+        display: none;
+      }
+      .ide-page-container {
+        padding: 100px 16px 80px;
+      }
+      .ide-controls-bar {
+        top: 76px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .ide-search-box {
+        max-width: 100%;
+      }
+      .ide-tools-grid {
+        grid-template-columns: 1fr;
+      }
+      .ide-drawer {
+        width: 100vw;
+      }
+      .ide-footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ════ CUSTOM FOLLOWER CURSOR (INVERTED DIFFERENCE MODE) ════ -->
+  <div class="custom-cursor" id="customCursor">
+    <span class="custom-cursor-text" id="customCursorText">Inspect</span>
+  </div>
+
+  <!-- ════ TOP BACKGROUND MASK SHIELD (HIDES SCROLLED CONTENT ABOVE STICKY BAR) ════ -->
+  <div class="ide-sticky-mask-shield" aria-hidden="true"></div>
+
+  <!-- ════ GLOBAL FLOATING NAVIGATION BAR ════ -->
+  <div class="nav-wrapper">
+    <nav id="nav" class="floating-nav">
+      <a href="index.html" class="nav-brand">
+        <img src="Asset/Logo File/Logo With Text Black.svg" alt="Rakibul" class="nav-brand-logo" />
+      </a>
+      <div class="nav-collapsible-content">
+        <ul class="nav-links">
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#dev-tools">Tools</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="index.html#experience">Experience</a></li>
+        </ul>
+        <a href="https://drive.google.com/file/d/1V-Ful4u5xza3Cz98Q-Ppt5y1OjROQio7/view?usp=sharing" target="_blank" class="nav-contact-pill">Resume</a>
+      </div>
+      <!-- 3-Dots Compact Trigger Pill -->
+      <div class="nav-dots-pill" id="navDotsBtn" aria-label="Menu">
+        <span class="nav-dot"></span>
+        <span class="nav-dot"></span>
+        <span class="nav-dot"></span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ════ MAIN PAGE SHELL (WITH IDE GUTTER) ════ -->
+  <div class="ide-page-container">
+    
+    <!-- Code Editor Left Line Number Gutter (Auto-Calculated) -->
+    <aside class="ide-line-gutter" id="ideLineGutter" aria-hidden="true">
+      <!-- Generated dynamically by JS -->
+    </aside>
+
+    <main class="ide-main-content" id="ideMainContent">
+      
+      <!-- ════ HEADER SECTION ════ -->
+      <header class="ide-header">
+        <div class="ide-breadcrumb-badge">
+          <span class="ide-badge-dot"></span>
+          <span>DEV &amp; CREATIVE TOOLS // v2.6</span>
+        </div>
+        <h1 class="ide-title">
+          Crafted Tools. <span class="ide-title-accent">Seamless Workflows.</span>
+        </h1>
+        <p class="ide-subtitle">
+          A dedicated suite of custom Chrome extensions, Figma plugins, Adobe scripts, and web applications built to automate repetitive design tasks and accelerate creative production.
+        </p>
+      </header>
+
+      <!-- ════ STICKY SEARCH & FILTER CONTROLS BAR ════ -->
+      <section class="ide-controls-bar" id="controlsBar">
+        <!-- Live Search Input -->
+        <div class="ide-search-box">
+          <span class="ide-search-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <input type="text" id="toolSearchInput" class="ide-search-input" placeholder="Search by name, command, tag..." autocomplete="off" />
+          <span class="ide-search-kbd">/</span>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="ide-filter-tabs" id="filterTabs">
+          <button class="ide-filter-tab active" data-category="all">
+            <span>All</span>
+            <span class="ide-tab-count" id="countAll">(13)</span>
+          </button>
+          <button class="ide-filter-tab" data-category="chrome">
+            <span>Chrome Extensions</span>
+            <span class="ide-tab-count" id="countChrome">(2)</span>
+          </button>
+          <button class="ide-filter-tab" data-category="figma">
+            <span>Figma Plugins</span>
+            <span class="ide-tab-count" id="countFigma">(4)</span>
+          </button>
+          <button class="ide-filter-tab" data-category="adobe">
+            <span>Adobe Plugins</span>
+            <span class="ide-tab-count" id="countAdobe">(4)</span>
+          </button>
+          <button class="ide-filter-tab" data-category="web">
+            <span>Web Apps</span>
+            <span class="ide-tab-count" id="countWeb">(3)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Live Count & Status Line -->
+      <div class="ide-status-feedback">
+        <span class="ide-status-pill">
+          <span style="color: var(--v); font-weight:700;">//</span>
+          <span id="resultCountText">Showing 13 tools &amp; products</span>
+        </span>
+        <span class="ide-status-pill" style="opacity: 0.7;">
+          <span>STATUS: READY</span>
+        </span>
+      </div>
+
+      <!-- ════ TOOLS CARDS GRID ════ -->
+      <div class="ide-tools-grid" id="toolsGrid">
+        <!-- Cards dynamically injected from JavaScript dataset below -->
+      </div>
+
+      <!-- Empty Search State -->
+      <div class="ide-empty-state" id="emptyState">
+        <div class="ide-empty-icon">// 404: NO_MATCH_FOUND</div>
+        <h3 class="ide-empty-title">No matching tools found</h3>
+        <p class="ide-empty-desc">Try searching for a different keyword or select another category filter above.</p>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ════ INTERACTIVE SLIDE-OVER DRAWER & BACKDROP ════ -->
+  <div class="ide-drawer-backdrop" id="drawerBackdrop" aria-hidden="true" onclick="closeToolDrawer()"></div>
+
+  <aside class="ide-drawer" id="toolDrawer" aria-hidden="true" role="dialog" aria-labelledby="drawerTitle">
+    <!-- Drawer Header -->
+    <div class="ide-drawer-header">
+      <div class="tool-window-dots">
+        <span class="tool-mac-dot red" onclick="closeToolDrawer()" title="Close"></span>
+        <span class="tool-mac-dot yellow"></span>
+        <span class="tool-mac-dot green"></span>
+      </div>
+      <span class="ide-drawer-path" id="drawerPath">tools / info.json</span>
+      <button class="ide-drawer-close-btn" onclick="closeToolDrawer()" aria-label="Close drawer">
+        <span>✕</span>
+        <kbd class="ide-drawer-kbd">ESC</kbd>
+      </button>
+    </div>
+
+    <!-- Drawer Scrollable Body -->
+    <div class="ide-drawer-body">
+      <!-- Badges & Version Meta -->
+      <div class="ide-drawer-meta">
+        <span class="tool-category-badge" id="drawerCategoryBadge">Figma Plugin</span>
+        <span class="tool-version-tag" id="drawerVersion">v1.0.0</span>
+        <span class="tool-version-tag" id="drawerDate">2025</span>
+      </div>
+
+      <!-- Title & Summary -->
+      <h2 class="ide-drawer-title" id="drawerTitle">Section Export</h2>
+      <p class="ide-drawer-desc" id="drawerDesc">// Detailed description...</p>
+
+      <!-- Code / Command Install Box with Copy Button -->
+      <div class="ide-drawer-section-heading">// INSTALLATION &amp; EXECUTION</div>
+      <div class="ide-drawer-code-box">
+        <div class="ide-drawer-code-header">
+          <span class="ide-drawer-code-lang">terminal</span>
+          <button class="ide-drawer-copy-btn" id="drawerCopyBtn" onclick="copyDrawerCommand()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="drawerCopyText">Copy</span>
+          </button>
+        </div>
+        <pre class="ide-drawer-code-pre"><code id="drawerCodeSnippet">$ figma.export("sections")</code></pre>
+      </div>
+
+      <!-- Key Features List -->
+      <div class="ide-drawer-section-heading">// KEY FEATURES &amp; CAPABILITIES</div>
+      <ul class="ide-drawer-features-list" id="drawerFeaturesList">
+        <!-- Injected list items -->
+      </ul>
+
+      <!-- Architecture & Compatibility Notes -->
+      <div class="ide-drawer-section-heading">// COMPATIBILITY &amp; SYSTEM NOTES</div>
+      <div class="ide-drawer-notes-box" id="drawerNotes">
+        Supports macOS &amp; Windows. Lightweight build with zero background telemetry and full offline privacy.
+      </div>
+    </div>
+
+    <!-- Drawer Sticky Action Footer -->
+    <div class="ide-drawer-footer">
+      <a href="#" target="_blank" rel="noopener" class="ide-drawer-cta-btn" id="drawerCtaBtn">
+        <span id="drawerCtaText">Open in Figma Community</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ════ PROGRESSIVE GRADIENT BLUR OVERLAY ════ -->
+  <div class="bottom-blur-gradient-overlay" aria-hidden="true"></div>
+
+  <!-- ════ FOOTER ════ -->
+  <footer class="ide-footer">
+    <span>© 2025 Rakibul Hassan — Crafted with code &amp; design intent.</span>
+    <div>
+      <a href="index.html">← Back to Portfolio</a>
+    </div>
+  </footer>
+
+  <!-- ════ JAVASCRIPT: DATASET, LIVE ENGINE & ANIMATIONS ════ -->
+  <script>
+    // ══════════════════════════════════════
+    // COMPLETE STRUCTURED TOOLS DATASET (13 TOOLS)
+    // ══════════════════════════════════════
+    const TOOLS_DATA = [
+      {
+        id: 'designer-toolkit',
+        title: 'Designer Toolkit',
+        category: 'chrome',
+        categoryLabel: 'Chrome Extension',
+        fileName: 'toolkit.crx',
+        command: '$ chrome.install("designer-toolkit")',
+        version: 'v2.1.0',
+        releaseDate: '2024',
+        description: '// Color picker, screen rulers, pixel grids & live font inspector — directly in your browser.',
+        features: [
+          'Live pixel-perfect screen ruler and dimension inspector',
+          'Instant eyedropper color sampling with HEX, RGB, and HSL copy',
+          'Overlay custom 8pt and 12-column responsive layout grids',
+          'Inspect computed CSS typography, font-weights, and line-heights'
+        ],
+        notes: 'Google Chrome, Microsoft Edge, Brave, and Chromium browsers compatible.',
+        link: 'https://chromewebstore.google.com/detail/designer-toolkit-creative/mfbdgagoiolnpkofpokcfpnimgjfhoha',
+        cta: 'Chrome Store',
+        drawerCta: 'Install from Chrome Web Store'
+      },
+      {
+        id: 'high-impact-copier',
+        title: 'High-impact Copier',
+        category: 'chrome',
+        categoryLabel: 'Chrome Extension',
+        fileName: 'copier.crx',
+        command: '$ copy --high-impact --precision',
+        version: 'v1.4.2',
+        releaseDate: '2024',
+        description: '// Copy web layout content, text hierarchies, and assets with surgical precision. Built for designers.',
+        features: [
+          'Surgically extract structured web copywriting and heading stacks',
+          'Strip bloated formatting and preserve hierarchy for Figma pasting',
+          'One-click image and SVG graphic asset extraction',
+          'Custom shortcut key bindings for rapid production workflow'
+        ],
+        notes: 'Chrome Web Store certified. Zero third-party data tracking.',
+        link: 'https://chromewebstore.google.com/detail/high-impact-copier/gmdbipccbhbheinhgiihfnmfopcffgle',
+        cta: 'Chrome Store',
+        drawerCta: 'Install from Chrome Web Store'
+      },
+      {
+        id: 'fn-news-builder',
+        title: 'FN Weekly News Builder',
+        category: 'figma',
+        categoryLabel: 'Figma Plugin',
+        fileName: 'NewsBuilder.figma',
+        command: '$ figma.run("news-builder")',
+        version: 'v1.0.8',
+        releaseDate: '2024',
+        description: '// Eliminates the repetitive manual work of formatting weekly financial & market news creatives in Figma.',
+        features: [
+          'Automated data ingestion from financial news feeds',
+          'Smart card layout generation with dynamic typographic scaling',
+          'Multi-channel export presets (LinkedIn, Twitter/X, Instagram)',
+          'Pre-configured dark/light financial theme palettes'
+        ],
+        notes: 'Runs natively in Figma Desktop and Figma Web with zero API dependencies.',
+        link: 'https://www.figma.com/community/plugin/1648843105498726134',
+        cta: 'Figma Plugin',
+        drawerCta: 'Open in Figma Community'
+      },
+      {
+        id: 'text-sync',
+        title: 'TextSync',
+        category: 'figma',
+        categoryLabel: 'Figma Plugin',
+        fileName: 'TextSync.figma',
+        command: '$ figma.sync("TextSync")',
+        version: 'v1.2.0',
+        releaseDate: '2024',
+        description: '// Batch rewrite, update, and harmonize repeated copy and headers across your entire Figma file in seconds.',
+        features: [
+          'Global find & replace across components, variants, and locked frames',
+          'CSV / JSON localization copy import and export',
+          'Preserves character styling, links, and auto-layout bounds',
+          'Real-time match preview before committing batch edits'
+        ],
+        notes: 'Figma Community favorite. Optimized for enterprise design systems.',
+        link: 'https://www.figma.com/community/plugin/1654952605870529052',
+        cta: 'Figma Plugin',
+        drawerCta: 'Open in Figma Community'
+      },
+      {
+        id: 'section-export',
+        title: 'Section Export',
+        category: 'figma',
+        categoryLabel: 'Figma Plugin',
+        fileName: 'SectionExport.figma',
+        command: '$ figma.export("sections")',
+        version: 'v1.0.0',
+        releaseDate: '2025',
+        description: '// Export multiple sections, frames, or nested groups with customizable scale, presets and structured naming.',
+        features: [
+          'Bulk section and frame batch export with custom prefix rules',
+          'Support for 1x, 2x, 3x, PNG, WebP, SVG, and clean PDF output',
+          'Custom folder directory structuring based on Figma page/section hierarchy',
+          'Instant ZIP packaging directly in client memory'
+        ],
+        notes: 'Compatible with all Figma versions and Figma Organization workspaces.',
+        link: 'https://www.figma.com/community/plugin/1662566818472361556/section-export',
+        cta: 'Figma Plugin',
+        drawerCta: 'Open in Figma Community'
+      },
+      {
+        id: 'fn-ads-builder',
+        title: 'FN Ads Builder',
+        category: 'figma',
+        categoryLabel: 'Figma Plugin',
+        fileName: 'AdsBuilder.figma',
+        command: '$ figma.generate("ad-campaign")',
+        version: 'v1.1.2',
+        releaseDate: '2025',
+        description: '// Automated ad banner & marketing creative generation in multiple responsive aspect ratios in Figma.',
+        features: [
+          'Generate 10+ standard IAB banner formats from a single master layout',
+          'Auto-adaptive copy resizing and image focal point framing',
+          'Brand token sync for consistent colors, CTA styles, and typography',
+          'One-click multi-format PNG/WebP bundle export'
+        ],
+        notes: 'Designed specifically for high-velocity performance marketing teams.',
+        link: 'https://www.figma.com/community/plugin/1669450272906570398/fn-ads-builder',
+        cta: 'Figma Plugin',
+        drawerCta: 'Open in Figma Community'
+      },
+      {
+        id: 'rp-bar',
+        title: 'RP-Bar',
+        category: 'adobe',
+        categoryLabel: 'Photoshop Plugin',
+        fileName: 'rp-bar.ps',
+        command: '$ launch ps.plugin("RP-Bar")',
+        version: 'v3.0.0',
+        releaseDate: '2023',
+        description: '// Photoshop quick-action floating dock with 16+ essential production automation macros built in.',
+        features: [
+          'Floating dock interface with customizable macro buttons',
+          'One-click canvas trimming, clean alignment, and smart centering',
+          'Automated layer color tagging and name sanitization',
+          'Batch smart object convert and rasterize shortcuts'
+        ],
+        notes: 'Supports Adobe Photoshop CC 2020 through CC 2025 on macOS and Windows.',
+        link: 'https://www.rakibpixel.com/RPBar.html',
+        cta: 'Open App',
+        drawerCta: 'View Plugin Overview'
+      },
+      {
+        id: 'ae-bridge',
+        title: 'AE Bridge',
+        category: 'adobe',
+        categoryLabel: 'AE / PS Plugin',
+        fileName: 'AEBridge.ae',
+        command: '$ bridge.transfer(PS_Layers, AE)',
+        version: 'v2.0.4',
+        releaseDate: '2023',
+        description: '// Instantly transfers layer stacks from Photoshop and Illustrator straight into After Effects composition timelines.',
+        features: [
+          'Zero-render direct PSD/AI layer timeline transfer into After Effects',
+          'Maintains blending modes, layer masks, and opacity values',
+          'Auto-generates shape layers from Illustrator vectors',
+          'Configurable framerate, duration, and composition sizing'
+        ],
+        notes: 'Works seamlessly across After Effects, Photoshop, and Illustrator CC.',
+        link: 'https://www.rakibpixel.com/AEBridge.html',
+        cta: 'Download Free',
+        drawerCta: 'Download Free Plugin'
+      },
+      {
+        id: 'case-changer',
+        title: 'Case Changer',
+        category: 'adobe',
+        categoryLabel: 'Adobe CC Plugin',
+        fileName: 'CaseChanger.ccx',
+        command: '$ text.transform("case-changer")',
+        version: 'v1.0.4',
+        releaseDate: '2024',
+        description: '// Fast text case transformation (UPPER, lower, Title Case, camelCase) right within Photoshop, Illustrator & InDesign.',
+        features: [
+          'Instant case transformations: UPPERCASE, lowercase, Title Case, Sentence case',
+          'Developer modes: camelCase, kebab-case, snake_case, PascalCase',
+          'Transforms selected text range or entire text frames in one click',
+          'Zero impact on existing kerning, leading, and tracking styles'
+        ],
+        notes: 'Adobe Creative Cloud Exchange certified plugin for CC 2021+.',
+        link: 'https://exchange.adobe.com/apps/cc/205713/case-changer',
+        cta: 'Adobe Exchange',
+        drawerCta: 'Get on Adobe Exchange'
+      },
+      {
+        id: 'local-library',
+        title: 'Local Library',
+        category: 'adobe',
+        categoryLabel: 'PS / AI Plugin',
+        fileName: 'local-library.ps',
+        command: '$ assetLib.mountLocal()',
+        version: 'v1.6.0',
+        releaseDate: '2023',
+        description: '// Centralize, search, and insert offline design resources directly inside Photoshop and Illustrator panels.',
+        features: [
+          'Mount any local directory as a live asset panel inside Photoshop',
+          'Instant fuzzy keyword search for PNGs, SVGs, PSDs, and brushes',
+          'Drag-and-drop straight onto your active canvas',
+          'Auto-generates fast thumbnail previews with zero lag'
+        ],
+        notes: 'Available as a lightweight UXP plugin for Adobe CC.',
+        link: 'https://www.rakibpixel.com/locallibrary.html',
+        cta: 'Get on Gumroad',
+        drawerCta: 'Get Plugin on Gumroad'
+      },
+      {
+        id: 'trip-expense',
+        title: 'Trip Expense',
+        category: 'web',
+        categoryLabel: 'Web App',
+        fileName: 'trip-expense.app',
+        command: '$ node run trip-expense',
+        version: 'v2.2.1',
+        releaseDate: '2024',
+        description: '// Seamless shared expense tracking and instant split calculations for group trips and travel squads.',
+        features: [
+          'Real-time multi-user expense ledger with multi-currency support',
+          'Automated debt simplification to minimize total transaction count',
+          'Offline-first PWA caching with auto cloud synchronization',
+          'Export PDF settlement reports and receipt attachments'
+        ],
+        notes: 'Progressive Web App. Fast, responsive on mobile and desktop.',
+        link: 'https://tripexpense.pro.bd',
+        cta: 'Open App',
+        drawerCta: 'Launch Web Application'
+      },
+      {
+        id: 'rp-type',
+        title: 'RP-Type',
+        category: 'web',
+        categoryLabel: 'Web App',
+        fileName: 'rp-type.app',
+        command: '$ launch web("RP-Type")',
+        version: 'v1.5.0',
+        releaseDate: '2023',
+        description: '// Native Bangla typing tool utilizing the standard Bijoy layout on macOS with zero setup or learning curve.',
+        features: [
+          'Standard Bijoy keyboard layout typing engine right in the browser',
+          'Zero-installation solution for macOS and Linux creators',
+          'Unicode to ANSI conversion with instant one-click copy',
+          'Integrated spelling helper and conjunct character preview'
+        ],
+        notes: 'High-speed client-side typing engine. Zero telemetry.',
+        link: 'https://www.rakibpixel.com/RPType.html',
+        cta: 'Open App',
+        drawerCta: 'Launch Web Application'
+      },
+      {
+        id: 'breakfast-order',
+        title: 'Breakfast Order',
+        category: 'web',
+        categoryLabel: 'Web App',
+        fileName: 'breakfast.app',
+        command: '$ order.start("team-breakfast")',
+        version: 'v1.1.0',
+        releaseDate: '2024',
+        description: '// Clean, collaborative daily breakfast and catering order aggregation system tailored for creative studios.',
+        features: [
+          'Team catering menu polling and custom item aggregation',
+          'Live countdown timer for order cutoff and instant tally calculations',
+          'Automated individual expense split and accounting summary',
+          'Instant WhatsApp/Slack message generator for restaurant dispatch'
+        ],
+        notes: 'Lightweight web utility built with clean, reactive front-end code.',
+        link: 'https://breakfast.bro.bd',
+        cta: 'Open App',
+        drawerCta: 'Launch Web Application'
+      }
+    ];
+
+    // ══════════════════════════════════════
+    // DYNAMIC IDE LINE NUMBER GUTTER
+    // ══════════════════════════════════════
+    function updateLineGutter() {
+      const main = document.getElementById('ideMainContent');
+      const gutter = document.getElementById('ideLineGutter');
+      if (!main || !gutter) return;
+
+      const mainHeight = main.offsetHeight;
+      const lineHeight = 26;
+      const totalLines = Math.max(32, Math.ceil(mainHeight / lineHeight));
+
+      let linesHTML = '';
+      for (let i = 1; i <= totalLines; i++) {
+        const numStr = i < 10 ? '0' + i : String(i);
+        linesHTML += `<span>${numStr}</span>`;
+      }
+      gutter.innerHTML = linesHTML;
+    }
+
+    // ══════════════════════════════════════
+    // SEARCH BAR ANIMATED PLACEHOLDER TYPING EFFECT
+    // ══════════════════════════════════════
+    (function(){
+      const input = document.getElementById('toolSearchInput');
+      if (!input) return;
+
+      const phrases = [
+        'Search by name, command, tag...',
+        'Try typing "figma"...',
+        'Search "Section Export" or "Case Changer"...',
+        'Search "chrome" extensions...',
+        'Search "RP-Bar" or "AE Bridge"...',
+        'Type "adobe" for Photoshop & AE tools...'
+      ];
+
+      let phraseIdx = 0;
+      let charIdx = 0;
+      let isDeleting = false;
+      let isFocused = false;
+
+      input.addEventListener('focus', () => {
+        isFocused = true;
+        input.setAttribute('placeholder', 'Type to search tools...');
+      });
+
+      input.addEventListener('blur', () => {
+        isFocused = false;
+        if (!input.value) {
+          typeLoop();
+        }
+      });
+
+      function typeLoop() {
+        if (isFocused || input.value) return;
+
+        const currentPhrase = phrases[phraseIdx];
+        if (isDeleting) {
+          charIdx--;
+          input.setAttribute('placeholder', currentPhrase.substring(0, charIdx));
+          if (charIdx <= 0) {
+            isDeleting = false;
+            phraseIdx = (phraseIdx + 1) % phrases.length;
+            setTimeout(typeLoop, 450);
+            return;
+          }
+          setTimeout(typeLoop, 30);
+        } else {
+          charIdx++;
+          input.setAttribute('placeholder', currentPhrase.substring(0, charIdx));
+          if (charIdx === currentPhrase.length) {
+            isDeleting = true;
+            setTimeout(typeLoop, 2200);
+            return;
+          }
+          setTimeout(typeLoop, 60);
+        }
+      }
+
+      setTimeout(typeLoop, 1000);
+    })();
+
+    // ══════════════════════════════════════
+    // RENDERING & INTERACTIVE FILTER ENGINE
+    // ══════════════════════════════════════
+    const grid = document.getElementById('toolsGrid');
+    const emptyState = document.getElementById('emptyState');
+    const searchInput = document.getElementById('toolSearchInput');
+    const filterTabs = document.querySelectorAll('.ide-filter-tab');
+    const resultCountText = document.getElementById('resultCountText');
+
+    let activeCategory = 'all';
+    let searchQuery = '';
+
+    function renderTools() {
+      const filtered = TOOLS_DATA.filter(tool => {
+        const matchesCat = (activeCategory === 'all') || (tool.category === activeCategory);
+        const query = searchQuery.toLowerCase().trim();
+        const matchesSearch = !query || 
+          tool.title.toLowerCase().includes(query) ||
+          tool.description.toLowerCase().includes(query) ||
+          tool.categoryLabel.toLowerCase().includes(query) ||
+          tool.fileName.toLowerCase().includes(query) ||
+          tool.command.toLowerCase().includes(query);
+        return matchesCat && matchesSearch;
+      });
+
+      // Update Feedback Count
+      resultCountText.textContent = `Showing ${filtered.length} of ${TOOLS_DATA.length} tools & products`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.style.display = 'block';
+        setTimeout(updateLineGutter, 50);
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      grid.innerHTML = filtered.map((tool) => `
+        <div class="tool-window-card" data-id="${tool.id}" onclick="openToolDrawer('${tool.id}')">
+          
+          <!-- Terminal Window Top Bar -->
+          <div class="tool-window-header">
+            <div class="tool-window-dots">
+              <span class="tool-mac-dot red"></span>
+              <span class="tool-mac-dot yellow"></span>
+              <span class="tool-mac-dot green"></span>
+            </div>
+            <span class="tool-file-tag">${tool.fileName}</span>
+          </div>
+
+          <!-- Card Content Body -->
+          <div class="tool-window-body">
+            
+            <!-- Terminal Command Prompt Line -->
+            <div class="tool-cmd-prompt">
+              <span class="tool-cmd-symbol">&gt;</span>
+              <span>${tool.command}</span>
+            </div>
+
+            <!-- Metadata Badges -->
+            <div class="tool-card-meta">
+              <span class="tool-category-badge">${tool.categoryLabel}</span>
+              <span class="tool-version-tag">${tool.version}</span>
+            </div>
+
+            <!-- Title & Code-Style Description -->
+            <h3 class="tool-card-title">${tool.title}</h3>
+            <p class="tool-card-desc">${tool.description}</p>
+
+            <!-- Action Button Footer (Rolling Text on Hover) -->
+            <div class="tool-card-footer">
+              <a href="${tool.link}" target="_blank" rel="noopener" class="tool-action-btn" onclick="event.stopPropagation();">
+                <span class="tool-btn-roll">
+                  <span class="tool-btn-text-default">${tool.cta}</span>
+                  <span class="tool-btn-text-hover">${tool.cta}</span>
+                </span>
+              </a>
+              <span class="tool-card-inspect-hint">inspect &gt;</span>
+            </div>
+
+          </div>
+        </div>
+      `).join('');
+
+      // Auto recalculate notepad line numbers
+      setTimeout(updateLineGutter, 50);
+    }
+
+    // ══════════════════════════════════════
+    // SLIDE-OVER DRAWER ENGINE
+    // ══════════════════════════════════════
+    const drawerBackdrop = document.getElementById('drawerBackdrop');
+    const toolDrawer = document.getElementById('toolDrawer');
+    const drawerPath = document.getElementById('drawerPath');
+    const drawerCategoryBadge = document.getElementById('drawerCategoryBadge');
+    const drawerVersion = document.getElementById('drawerVersion');
+    const drawerDate = document.getElementById('drawerDate');
+    const drawerTitle = document.getElementById('drawerTitle');
+    const drawerDesc = document.getElementById('drawerDesc');
+    const drawerCodeSnippet = document.getElementById('drawerCodeSnippet');
+    const drawerFeaturesList = document.getElementById('drawerFeaturesList');
+    const drawerNotes = document.getElementById('drawerNotes');
+    const drawerCtaBtn = document.getElementById('drawerCtaBtn');
+    const drawerCtaText = document.getElementById('drawerCtaText');
+    const drawerCopyText = document.getElementById('drawerCopyText');
+
+    let activeDrawerTool = null;
+
+    function openToolDrawer(toolId) {
+      const tool = TOOLS_DATA.find(t => t.id === toolId);
+      if (!tool) return;
+
+      activeDrawerTool = tool;
+
+      // Populate content
+      drawerPath.textContent = `tools / ${tool.id}.json`;
+      drawerCategoryBadge.textContent = tool.categoryLabel;
+      drawerVersion.textContent = tool.version;
+      drawerDate.textContent = tool.releaseDate || '2025';
+      drawerTitle.textContent = tool.title;
+      drawerDesc.textContent = tool.description;
+      drawerCodeSnippet.textContent = tool.command;
+      
+      // Features list
+      drawerFeaturesList.innerHTML = (tool.features || [
+        'High-performance lightweight architecture',
+        'Streamlined workflow integration with zero setup',
+        'Production tested across modern creative pipelines'
+      ]).map(feat => `<li>${feat}</li>`).join('');
+
+      drawerNotes.textContent = tool.notes || 'Supports macOS & Windows. Lightweight build with zero telemetry.';
+      
+      drawerCtaBtn.href = tool.link;
+      drawerCtaText.textContent = tool.drawerCta || `Open ${tool.title}`;
+
+      // Open drawer & backdrop
+      toolDrawer.classList.add('is-open');
+      drawerBackdrop.classList.add('is-open');
+      toolDrawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeToolDrawer() {
+      toolDrawer.classList.remove('is-open');
+      drawerBackdrop.classList.remove('is-open');
+      toolDrawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      activeDrawerTool = null;
+    }
+
+    // Copy command from drawer
+    function copyDrawerCommand() {
+      if (!activeDrawerTool) return;
+      navigator.clipboard.writeText(activeDrawerTool.command).then(() => {
+        drawerCopyText.textContent = 'Copied!';
+        setTimeout(() => {
+          drawerCopyText.textContent = 'Copy';
+        }, 1800);
+      });
+    }
+
+    // Keyboard ESC to close drawer
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toolDrawer.classList.contains('is-open')) {
+        closeToolDrawer();
+      }
+    });
+
+    // Category Tabs Click
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeCategory = tab.dataset.category;
+        renderTools();
+      });
+    });
+
+    // Live Search Input Listener
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderTools();
+    });
+
+    // Quick Keyboard Shortcut [ / ] to Focus Search
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchInput && !toolDrawer.classList.contains('is-open')) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+    });
+
+    // Window Resize -> Re-calc line numbers
+    window.addEventListener('resize', updateLineGutter, { passive: true });
+
+    // Initial Render & Line Gutter Calculation
+    renderTools();
+    window.addEventListener('load', updateLineGutter);
+
+    // ══════════════════════════════════════
+    // NAVBAR SMART COMPACT ON SCROLL
+    // ══════════════════════════════════════
+    (function(){
+      const nav = document.getElementById('nav');
+      const dotsBtn = document.getElementById('navDotsBtn');
+      let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+      function updateNav() {
+        const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+        if (!nav) return;
+        
+        if (currentScrollY > 120 && currentScrollY > lastScrollY) {
+          nav.classList.add('is-compact');
+        } else if (currentScrollY < lastScrollY || currentScrollY <= 50) {
+          nav.classList.remove('is-compact');
+        }
+        lastScrollY = Math.max(0, currentScrollY);
+      }
+
+      window.addEventListener('scroll', updateNav, { passive: true });
+
+      if (dotsBtn) {
+        dotsBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          nav.classList.toggle('is-compact');
+        });
+      }
+    })();
+
+    // ══════════════════════════════════════
+    // CUSTOM FOLLOWER CURSOR (INVERTED BLEND MODE)
+    // ══════════════════════════════════════
+    (function initCustomCursor(){
+      const cursorEl = document.getElementById('customCursor');
+      const cursorText = document.getElementById('customCursorText');
+      if (!cursorEl) return;
+      
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let cursorX = mouseX;
+      let cursorY = mouseY;
+      let isCursorVisible = false;
+
+      window.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!isCursorVisible) {
+          isCursorVisible = true;
+          cursorEl.style.opacity = '1';
+        }
+      }, { passive: true });
+
+      document.addEventListener('mouseleave', function() {
+        cursorEl.style.opacity = '0';
+        isCursorVisible = false;
+      });
+
+      document.addEventListener('mouseover', function(e) {
+        const toolCard = e.target.closest('.tool-card');
+        const interactive = e.target.closest('a, button, .nav-contact-pill, .filter-chip, .ide-search-box, .ide-drawer-close-btn');
+
+        if (toolCard && !e.target.closest('a, button')) {
+          if (cursorText) cursorText.textContent = 'Inspect';
+          cursorEl.classList.add('is-hovering');
+          cursorEl.classList.remove('is-link');
+        } else if (interactive) {
+          cursorEl.classList.add('is-link');
+          cursorEl.classList.remove('is-hovering');
+        } else {
+          cursorEl.classList.remove('is-hovering');
+          cursorEl.classList.remove('is-link');
+        }
+      });
+
+      function cursorLoop() {
+        cursorX += (mouseX - cursorX) * 0.18;
+        cursorY += (mouseY - cursorY) * 0.18;
+        cursorEl.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+        requestAnimationFrame(cursorLoop);
+      }
+      requestAnimationFrame(cursorLoop);
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Gallery — Rakibul Hassan | Creative Technologist &amp; Visualizer</title>
+  
+  <!-- Fonts & Meta -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Syne:wght@600;700;800&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #0c0a1a;
+      --card-bg: #ffffff;
+      --border: rgba(12, 10, 26, 0.08);
+      --v: #5e43ec;
+      --dp: 'Syne', sans-serif;
+      --sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif: 'Newsreader', serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      position: fixed;
+      inset: 0;
+    }
+
+    /* Desktop cursor none */
+    @media (hover: hover) and (pointer: fine) {
+      *, body, .gallery-container, .gallery-card, .gallery-grid, .gallery-col {
+        cursor: none !important;
+      }
+      a, button, .nav-contact-pill, .lightbox-close-btn {
+        cursor: none !important;
+      }
+    }
+
+    /* ══════════════════════════════════════
+       CUSTOM FOLLOWER CURSOR (INVERTED BLEND MODE)
+    ══════════════════════════════════════ */
+    .custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ffffff;
+      mix-blend-mode: difference;
+      pointer-events: none;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate3d(-50%, -50%, 0);
+      transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  height 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-radius 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.25s ease;
+      will-change: transform, width, height;
+      opacity: 0;
+    }
+
+    .custom-cursor-text {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #000000;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      white-space: nowrap;
+      user-select: none;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    /* Hovering over .gallery-card */
+    .custom-cursor.is-hovering {
+      width: 74px;
+      height: 32px;
+      border-radius: 100px;
+      background: #ffffff;
+    }
+    .custom-cursor.is-hovering .custom-cursor-text {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Hovering over links / buttons */
+    .custom-cursor.is-link {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    /* Hide custom cursor on touchscreen devices */
+    @media (hover: none) and (pointer: coarse) {
+      .custom-cursor {
+        display: none !important;
+      }
+    }
+
+    /* ══════════════════════════════════════
+       FLOATING PILL NAV (EXACT FROM INDEX.HTML)
+    ══════════════════════════════════════ */
+    .nav-wrapper {
+      position: fixed;
+      top: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 1000;
+      pointer-events: none;
+      padding: 0 20px;
+    }
+    .floating-nav {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      padding: 8px 10px 8px 22px;
+      background: rgb(255 255 255 / 21%);
+      backdrop-filter: blur(5px) saturate(180%);
+      -webkit-backdrop-filter: blur(5px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 100px;
+      box-shadow: 0 12px 36px -6px rgba(12, 10, 26, 0.08), 0 2px 8px -2px rgba(12, 10, 26, 0.04);
+      transition: all 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: width, padding, gap, transform;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-brand-logo {
+      height: 22px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-collapsible-content {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      transition: max-width 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                  gap 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: rgba(12, 10, 26, 0.72);
+      text-decoration: none;
+      transition: color 0.25s ease;
+      letter-spacing: -0.2px;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #0c0a1a;
+    }
+    .nav-links a.active {
+      font-weight: 700;
+    }
+
+    .nav-contact-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 18px;
+      border-radius: 100px;
+      background: #0c0a1a;
+      color: #ffffff !important;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.1px;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s, box-shadow 0.3s;
+    }
+    .nav-contact-pill:hover {
+      background: var(--v);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(94, 67, 236, 0.3);
+    }
+
+    /* 3-Dots Wave Indicator */
+    .nav-dots-pill {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: transparent;
+      padding: 4px 6px;
+      flex-shrink: 0;
+      width: auto;
+      height: auto;
+    }
+    .nav-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #0c0a1a;
+      display: inline-block;
+      flex-shrink: 0;
+      aspect-ratio: 1 / 1;
+      animation: dotWave 1.3s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+      will-change: transform, opacity;
+    }
+    .nav-dot:nth-child(1) { animation-delay: 0s; }
+    .nav-dot:nth-child(2) { animation-delay: 0.22s; }
+    .nav-dot:nth-child(3) { animation-delay: 0.44s; }
+
+    @keyframes dotWave {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.35;
+      }
+      30% {
+        transform: translateY(-4.5px);
+        opacity: 1;
+      }
+    }
+
+    /* ── COMPACT / SHRUNK STATE ON SCROLL DOWN ── */
+    .floating-nav.is-compact {
+      gap: 14px;
+      padding: 8px 14px 8px 18px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 10px 28px -4px rgba(12, 10, 26, 0.1);
+    }
+    .floating-nav.is-compact .nav-collapsible-content {
+      max-width: 0;
+      opacity: 0;
+      transform: scale(0.92);
+      pointer-events: none;
+      margin: 0;
+      gap: 0;
+    }
+    .floating-nav.is-compact .nav-dots-pill {
+      display: flex;
+    }
+
+    /* ── HOVER ON COMPACT NAV ── */
+    .floating-nav.is-compact:hover {
+      gap: 32px;
+      padding: 8px 10px 8px 22px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 14px 40px -6px rgba(12, 10, 26, 0.14);
+    }
+    .floating-nav.is-compact:hover .nav-collapsible-content {
+      max-width: 500px;
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+      gap: 32px;
+    }
+    .floating-nav.is-compact:hover .nav-dots-pill {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .floating-nav { gap: 14px; padding: 6px 10px 6px 16px; }
+      .floating-nav.is-compact:hover .nav-links { display: none; }
+    }
+
+    /* ══════════════════════════════════════
+       OPPOSING SCROLL GALLERY CANVAS
+    ══════════════════════════════════════ */
+    .gallery-container {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 24px;
+      background: #ffffff;
+    }
+
+    /* Gradient Top & Bottom Edge Masks */
+    .gallery-container::before,
+    .gallery-container::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 150px;
+      z-index: 100;
+      pointer-events: none;
+    }
+    .gallery-container::before {
+      top: 0;
+      background: linear-gradient(to bottom, #ffffff 15%, rgba(255, 255, 255, 0) 100%);
+    }
+    .gallery-container::after {
+      bottom: 0;
+      background: linear-gradient(to top, #ffffff 15%, rgba(255, 255, 255, 0) 100%);
+    }
+
+    /* 4 Columns Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      width: 100%;
+      max-width: 1540px;
+      height: 100%;
+    }
+
+    .gallery-col {
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+    }
+
+    .gallery-col-track {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      will-change: transform;
+    }
+
+    /* ── INDIVIDUAL IMAGE CARD WITH PRESERVED ROUNDNESS ON ZOOM ── */
+    .gallery-card {
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: #ffffff;
+      border: 1px solid rgba(12, 10, 26, 0.08);
+      box-shadow: 0 8px 24px -4px rgba(12, 10, 26, 0.06);
+      transform: translate3d(0, 0, 0) scale(1);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), 
+                  box-shadow 0.45s ease, 
+                  border-color 0.45s ease;
+      will-change: transform;
+      flex-shrink: 0;
+      isolation: isolate;
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      mask-image: radial-gradient(white, black);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+    }
+    .gallery-card:hover {
+      transform: translate3d(0, 0, 0) scale(1.028);
+      border-color: rgba(12, 10, 26, 0.16);
+      box-shadow: 0 24px 50px -8px rgba(12, 10, 26, 0.18);
+      z-index: 10;
+    }
+
+    .gallery-card-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      border-radius: 15px;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+      -webkit-user-drag: none;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    /* ══════════════════════════════════════
+       INTERACTIVE LIGHTBOX MODAL WITH ZOOM & PAN
+    ══════════════════════════════════════ */
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(12, 10, 26, 0.88);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lightbox-modal.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Close Button */
+    .lightbox-close-btn {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2050;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .lightbox-close-btn:hover {
+      background: #ffffff;
+      color: #0c0a1a;
+      transform: scale(1.08) rotate(90deg);
+    }
+
+    /* Zoom Indicator Pill */
+    .lightbox-zoom-hint {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 20px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 12px;
+      font-weight: 500;
+      backdrop-filter: blur(12px);
+      pointer-events: none;
+      z-index: 2050;
+    }
+    .lightbox-zoom-hint span strong {
+      color: #ffffff;
+    }
+
+    /* Lightbox Image Container */
+    .lightbox-viewport {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .lightbox-img-wrap {
+      max-width: 88vw;
+      max-height: 84vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+      transition: transform 0.12s ease-out;
+      will-change: transform;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 84vh;
+      border-radius: 14px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12);
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    /* ══════════════════════════════════════
+       RESPONSIVENESS (MOBILE / TABLET)
+    ══════════════════════════════════════ */
+    @media (max-width: 899px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .gallery-col:nth-child(3),
+      .gallery-col:nth-child(4) {
+        display: none;
+      }
+      .gallery-container {
+        padding: 0 14px;
+      }
+      .lightbox-zoom-hint {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ CUSTOM FOLLOWER CURSOR (INVERTED DIFFERENCE MODE) ════ -->
+  <div class="custom-cursor" id="customCursor">
+    <span class="custom-cursor-text">View</span>
+  </div>
+
+  <!-- ════ FLOATING PILL NAV (EXACT MATCH WITH INDEX.HTML) ════ -->
+  <div class="nav-wrapper">
+    <nav id="nav" class="floating-nav">
+      <a href="index.html" class="nav-brand">
+        <img src="Asset/Logo File/Logo With Text Black.svg" alt="Rakibul" class="nav-brand-logo" />
+      </a>
+      <div class="nav-collapsible-content">
+        <ul class="nav-links">
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#dev-tools">Tools</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="gallery.html" class="active">Gallery</a></li>
+          <li><a href="index.html#experience">Experience</a></li>
+        </ul>
+        <a href="https://drive.google.com/file/d/1V-Ful4u5xza3Cz98Q-Ppt5y1OjROQio7/view?usp=sharing" target="_blank" class="nav-contact-pill">Resume</a>
+      </div>
+      <!-- 3-Dots Compact Trigger Pill -->
+      <div class="nav-dots-pill" aria-label="Menu">
+        <span class="nav-dot"></span>
+        <span class="nav-dot"></span>
+        <span class="nav-dot"></span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ════ OPPOSING INFINITE SCROLL CANVAS ════ -->
+  <main class="gallery-container" id="galleryContainer">
+    <div class="gallery-grid" id="galleryGrid">
+      
+      <!-- Column 1 (Direction: Down / +Y) -->
+      <div class="gallery-col" data-dir="1">
+        <div class="gallery-col-track" id="colTrack1"></div>
+      </div>
+
+      <!-- Column 2 (Direction: Up / -Y) -->
+      <div class="gallery-col" data-dir="-1">
+        <div class="gallery-col-track" id="colTrack2"></div>
+      </div>
+
+      <!-- Column 3 (Direction: Down / +Y) -->
+      <div class="gallery-col" data-dir="1">
+        <div class="gallery-col-track" id="colTrack3"></div>
+      </div>
+
+      <!-- Column 4 (Direction: Up / -Y) -->
+      <div class="gallery-col" data-dir="-1">
+        <div class="gallery-col-track" id="colTrack4"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ════ INTERACTIVE LIGHTBOX MODAL ════ -->
+  <div class="lightbox-modal" id="lightboxModal">
+    <button class="lightbox-close-btn" id="lightboxCloseBtn" title="Close (Esc)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+
+    <div class="lightbox-zoom-hint">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+      <span>Scroll wheel to <strong>Zoom</strong> • Click &amp; Drag to <strong>Pan</strong></span>
+    </div>
+
+    <div class="lightbox-viewport" id="lightboxViewport">
+      <div class="lightbox-img-wrap" id="lightboxImgWrap">
+        <img src="" alt="Gallery Preview" class="lightbox-img" id="lightboxImg" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ INTERACTIVE ENGINE & OPPOSING SCROLL LOGIC ════ -->
+  <script>
+  (function() {
+    // Custom Follower Cursor
+    const cursorEl = document.getElementById('customCursor');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let cursorX = mouseX;
+    let cursorY = mouseY;
+    let isCursorVisible = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isCursorVisible) {
+        isCursorVisible = true;
+        cursorEl.style.opacity = '1';
+      }
+    });
+
+    document.addEventListener('mouseleave', () => {
+      cursorEl.style.opacity = '0';
+      isCursorVisible = false;
+    });
+
+    // 38 Image Assets from Asset/Gallery
+    const galleryImages = [
+      "Asset/Gallery/Brand Promise Creative for CPM.webp",
+      "Asset/Gallery/Creative - Asia v1.webp",
+      "Asset/Gallery/Creative USP- Asia 01.webp",
+      "Asset/Gallery/Creative- Asia 01.webp",
+      "Asset/Gallery/Creative-Italy.webp",
+      "Asset/Gallery/Creative.webp",
+      "Asset/Gallery/Educational- Germany 11.webp",
+      "Asset/Gallery/FN Fomo- Germany.webp",
+      "Asset/Gallery/Giveaway announcement-Germany.webp",
+      "Asset/Gallery/Giveaway-Germany - v2.webp",
+      "Asset/Gallery/Interactive - Asia 02.webp",
+      "Asset/Gallery/Interactive-Germany 07.webp",
+      "Asset/Gallery/Interactive-Germany 08.webp",
+      "Asset/Gallery/Interactive-Germany 09.webp",
+      "Asset/Gallery/Interactive-Germany 10 v1.webp",
+      "Asset/Gallery/Interactive-Germany 10 v2.webp",
+      "Asset/Gallery/Interactive-Germany 11.webp",
+      "Asset/Gallery/Interactive-GermanyInteractive-Germany 16.webp",
+      "Asset/Gallery/Interactive-GermanyInteractive-Germany 17.webp",
+      "Asset/Gallery/Motivational-Germany 8.webp",
+      "Asset/Gallery/Promotional- Italy.webp",
+      "Asset/Gallery/Promotional-Germany - 03 - v2.webp",
+      "Asset/Gallery/Promotional-Germany - 14.webp",
+      "Asset/Gallery/Promotional-Germany - 17.webp",
+      "Asset/Gallery/Promotional-Germany - 19.webp",
+      "Asset/Gallery/Promotional-Germany - 20.webp",
+      "Asset/Gallery/Promotional-Germany - 22.webp",
+      "Asset/Gallery/Promotional-Germany - 23 v2.webp",
+      "Asset/Gallery/Promotional-Germany - 24.webp",
+      "Asset/Gallery/Promotional-Germany - 25.webp",
+      "Asset/Gallery/Promotional-Germany - 26.webp",
+      "Asset/Gallery/Quote-Germany 02.webp",
+      "Asset/Gallery/Quote-Germany 10.webp",
+      "Asset/Gallery/Quote-Germany 13.webp",
+      "Asset/Gallery/Quote-Germany 15.webp",
+      "Asset/Gallery/Quote-Germany 16.webp",
+      "Asset/Gallery/Quote-Germany 17.webp",
+      "Asset/Gallery/Quote-Germany.webp"
+    ];
+
+    // Shuffle array for organic distribution
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    const shuffled = shuffle(galleryImages);
+    const colCount = 4;
+    const colImages = [[], [], [], []];
+
+    // Distribute images among 4 columns
+    shuffled.forEach((img, idx) => {
+      colImages[idx % colCount].push(img);
+    });
+
+    // Populate columns (with 2x duplicate set in each track for infinite wrap)
+    for (let c = 0; c < colCount; c++) {
+      const track = document.getElementById(`colTrack${c + 1}`);
+      const list = colImages[c];
+      
+      // Duplicate list twice to ensure seamless continuity
+      const fullList = [...list, ...list];
+      
+      fullList.forEach(src => {
+        const card = document.createElement('div');
+        card.className = 'gallery-card gallery-item';
+        card.innerHTML = `
+          <img src="${src}" alt="Visual Art" class="gallery-card-img" loading="lazy" />
+        `;
+        card.addEventListener('click', () => openModal(src));
+        
+        // Custom cursor expand on hover
+        card.addEventListener('mouseenter', () => {
+          if (!isModalOpen) cursorEl.classList.add('is-hovering');
+        });
+        card.addEventListener('mouseleave', () => {
+          cursorEl.classList.remove('is-hovering');
+        });
+
+        track.appendChild(card);
+      });
+    }
+
+    // Interactive hover for links / buttons
+    document.querySelectorAll('a, button, .nav-contact-pill, .lightbox-close-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursorEl.classList.add('is-link');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorEl.classList.remove('is-link');
+      });
+    });
+
+    // ══════════════════════════════════════
+    // MULTI-COLUMN OPPOSING INFINITE SCROLL PHYSICS
+    // ══════════════════════════════════════
+    const columns = [
+      { el: document.getElementById('colTrack1'), dir: 1, pos: 0, height: 0 },
+      { el: document.getElementById('colTrack2'), dir: -1, pos: 0, height: 0 },
+      { el: document.getElementById('colTrack3'), dir: 1, pos: 0, height: 0 },
+      { el: document.getElementById('colTrack4'), dir: -1, pos: 0, height: 0 }
+    ];
+
+    let isModalOpen = false;
+    let scrollPos = 0;
+    let targetScrollPos = 0;
+    let autoSpeed = 0.55; // Ambient subtle float speed
+    let isDragging = false;
+    let startY = 0;
+
+    const nav = document.getElementById('nav');
+
+    function measureHeights() {
+      columns.forEach(col => {
+        if (col.el) {
+          // Half track height is one full cycle
+          col.height = col.el.scrollHeight / 2;
+        }
+      });
+    }
+
+    // Initial measurement after images load
+    window.addEventListener('load', measureHeights);
+    setTimeout(measureHeights, 600);
+    window.addEventListener('resize', measureHeights);
+
+    // Mouse Wheel Scroll Momentum
+    window.addEventListener('wheel', (e) => {
+      if (isModalOpen) return;
+      targetScrollPos += e.deltaY * 0.9;
+      
+      // Compact navbar on scroll down, expand on scroll up
+      if (e.deltaY > 10) {
+        nav.classList.add('is-compact');
+      } else if (e.deltaY < -10) {
+        nav.classList.remove('is-compact');
+      }
+    }, { passive: true });
+
+    // Touch & Pointer Drag
+    const container = document.getElementById('galleryContainer');
+    container.addEventListener('pointerdown', (e) => {
+      if (isModalOpen) return;
+      isDragging = true;
+      startY = e.clientY;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!isDragging || isModalOpen) return;
+      const deltaY = (startY - e.clientY) * 1.5;
+      targetScrollPos += deltaY;
+      startY = e.clientY;
+
+      if (deltaY > 5) {
+        nav.classList.add('is-compact');
+      } else if (deltaY < -5) {
+        nav.classList.remove('is-compact');
+      }
+    });
+
+    window.addEventListener('pointerup', () => { isDragging = false; });
+    window.addEventListener('pointercancel', () => { isDragging = false; });
+
+    // Render Animation Loop (60fps lerp)
+    function render() {
+      // 1. Cursor smooth interpolation
+      cursorX += (mouseX - cursorX) * 0.18;
+      cursorY += (mouseY - cursorY) * 0.18;
+      cursorEl.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+
+      // 2. Opposing column scroll interpolation
+      if (!isModalOpen) {
+        targetScrollPos += autoSpeed;
+      }
+
+      scrollPos += (targetScrollPos - scrollPos) * 0.08;
+
+      columns.forEach((col) => {
+        if (col.height > 0) {
+          const offset = scrollPos * col.dir;
+          const wrapped = ((offset % col.height) + col.height) % col.height;
+          col.pos = -wrapped;
+          col.el.style.transform = `translate3d(0, ${col.pos}px, 0)`;
+        }
+      });
+
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+
+    // ══════════════════════════════════════
+    // LIGHTBOX / MODAL WITH ZOOM & PAN
+    // ══════════════════════════════════════
+    const modal = document.getElementById('lightboxModal');
+    const closeBtn = document.getElementById('lightboxCloseBtn');
+    const imgWrap = document.getElementById('lightboxImgWrap');
+    const img = document.getElementById('lightboxImg');
+    const viewport = document.getElementById('lightboxViewport');
+
+    let zoomScale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isPanning = false;
+    let panStartX = 0;
+    let panStartY = 0;
+
+    function openModal(src) {
+      isModalOpen = true;
+      cursorEl.classList.remove('is-hovering');
+      img.src = src;
+      zoomScale = 1;
+      panX = 0;
+      panY = 0;
+      updateTransform();
+      modal.classList.add('is-open');
+    }
+
+    function closeModal() {
+      isModalOpen = false;
+      modal.classList.remove('is-open');
+      setTimeout(() => {
+        zoomScale = 1;
+        panX = 0;
+        panY = 0;
+        updateTransform();
+      }, 350);
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+
+    // Close on Escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        closeModal();
+      }
+    });
+
+    // Close when clicking on backdrop outside the image
+    viewport.addEventListener('click', (e) => {
+      if (e.target === viewport || e.target === imgWrap) {
+        closeModal();
+      }
+    });
+
+    // Wheel Zoom on Popup (1x to 2.8x)
+    viewport.addEventListener('wheel', (e) => {
+      if (!isModalOpen) return;
+      e.preventDefault();
+      
+      const zoomFactor = e.deltaY < 0 ? 0.22 : -0.22;
+      zoomScale = Math.min(Math.max(1, zoomScale + zoomFactor), 2.8);
+      
+      if (zoomScale <= 1) {
+        panX = 0;
+        panY = 0;
+      }
+      
+      updateTransform();
+    }, { passive: false });
+
+    // Drag / Pan when Zoomed
+    imgWrap.addEventListener('pointerdown', (e) => {
+      if (!isModalOpen || zoomScale <= 1) return;
+      isPanning = true;
+      panStartX = e.clientX - panX;
+      panStartY = e.clientY - panY;
+      e.stopPropagation();
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!isPanning || !isModalOpen) return;
+      panX = e.clientX - panStartX;
+      panY = e.clientY - panStartY;
+      updateTransform();
+    });
+
+    window.addEventListener('pointerup', () => {
+      isPanning = false;
+    });
+
+    function updateTransform() {
+      imgWrap.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${zoomScale})`;
+    }
+
+  })();
+  </script>
+</body>
+</html>

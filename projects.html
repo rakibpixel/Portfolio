@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Projects — Rakibul Hassan | Creative Designer</title>
+  <meta name="description" content="Explore the full portfolio of creative design works, branding, UI/UX case studies, motion design, and advertising campaigns by Rakibul Hassan." />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fbfbfe;
+      --fg: #0c0a1a;
+      --v: #5e43ec;
+      --mu: rgba(12, 10, 26, 0.62);
+      --border: rgba(12, 10, 26, 0.08);
+      --dp: 'Plus Jakarta Sans', sans-serif;
+      --serif: 'Playfair Display', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--dp);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+    }
+
+    /* HEADER / NAV */
+    .header-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(251, 251, 254, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-brand img { height: 26px; width: auto; }
+
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 100px;
+      background: var(--fg);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .btn-back-home:hover {
+      background: var(--v);
+      transform: translateY(-1px);
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* PAGE INTRO */
+    .page-head {
+      margin-bottom: 48px;
+      text-align: center;
+    }
+    .chip {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(94, 67, 236, 0.08);
+      color: var(--v);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .page-title {
+      font-family: var(--dp);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .page-title em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--v);
+    }
+    .page-sub {
+      font-size: 17px;
+      color: var(--mu);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* FILTER TABS */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .filter-btn {
+      padding: 10px 22px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--mu);
+      font-family: var(--dp);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--fg);
+      color: #fff;
+      border-color: var(--fg);
+    }
+
+    /* PROJECTS GRID */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+    .project-img-wrap {
+      width: 100%;
+      height: 340px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f0f0f5;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 30px -6px rgba(12, 10, 26, 0.08);
+      position: relative;
+    }
+    .project-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .project-card:hover .project-img-wrap img {
+      transform: scale(1.05);
+    }
+
+    .project-info {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 16px 4px 0;
+    }
+    .project-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .project-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .project-card:hover .project-title {
+      color: var(--v);
+    }
+
+    /* ══════════════════════════════════════
+       RECTANGULAR FOLLOWER BADGE CURSOR
+    ══════════════════════════════════════ */
+    .project-badge-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 100000;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #0b0b0b;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 3px;
+      padding: 7px 13px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transform: translate3d(-50%, -50%, 0) scale(0);
+      opacity: 0;
+      will-change: transform, opacity;
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+      transform-origin: center center;
+    }
+    .project-badge-cursor.is-active {
+      transform: translate3d(-50%, -50%, 0) scale(1);
+      opacity: 1;
+    }
+    .project-badge-cursor .badge-text {
+      font-family: var(--dp);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .project-badge-cursor .badge-arrow {
+      width: 13px;
+      height: 13px;
+      stroke: #a3e635;
+      flex-shrink: 0;
+      display: block;
+      transition: transform 0.2s ease;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .project-badge-cursor {
+        display: none !important;
+      }
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--mu);
+    }
+
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .project-img-wrap {
+        height: 240px;
+      }
+      .header-nav { padding: 14px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════ RECTANGULAR FOLLOWER BADGE CURSOR ════ -->
+  <div class="project-badge-cursor" id="projectBadgeCursor">
+    <span class="badge-text">VIEW PROJECT</span>
+    <svg class="badge-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="7" y1="17" x2="17" y2="7"></line>
+      <polyline points="7 7 17 7 17 17"></polyline>
+    </svg>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header-nav">
+    <a href="index.html" class="nav-brand">
+      <img src="Asset/Logo File/Logo With Text Black.svg" alt="Rakibul Hassan" />
+    </a>
+    <a href="index.html" class="btn-back-home">← Back to Home</a>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <div class="page-head">
+      <span class="chip">Selected Works</span>
+      <h1 class="page-title">All Creative <em>Projects</em></h1>
+      <p class="page-sub">A curated showcase of brand identities, UI/UX case studies, motion design, and marketing campaign creatives.</p>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
+      <button class="filter-btn" data-filter="uiux">UI/UX</button>
+      <button class="filter-btn" data-filter="advertising">Advertising</button>
+      <button class="filter-btn" data-filter="motion">Motion &amp; Social</button>
+    </div>
+
+    <!-- GRID -->
+    <div class="projects-grid">
+      
+      <!-- Project 1 -->
+      <a href="https://www.behance.net/gallery/244548443/Portfolio-2025-Creative-Design-Works" target="_blank" class="project-card" data-cat="branding">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/aea3e7244548443.Y3JvcCwzMDAwLDIzNDYsMCww.png" alt="Creative Design Works 2025" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">Creative Design Works 2025</h3>
+            <span class="project-cat">Branding &amp; Visual Identity</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 2 -->
+      <a href="https://www.behance.net/gallery/239347273/CASE-STUDY-ID-Card-Automation-System" target="_blank" class="project-card" data-cat="uiux">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/690abd239347273.Y3JvcCw4MDgsNjMyLDAsMA.jpg" alt="ID Card Automation System" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">ID Card Automation System</h3>
+            <span class="project-cat">UI/UX Case Study</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 3 -->
+      <a href="https://www.behance.net/gallery/201488859/Creative-ADS-for-Nike-Shoes" target="_blank" class="project-card" data-cat="advertising">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/612f4f201488859.Y3JvcCwzOTk5LDMxMjgsMCww.jpg" alt="Nike Creative ADS" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">Creative ADS — Nike Shoes</h3>
+            <span class="project-cat">Advertising &amp; Campaigns</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 4 -->
+      <a href="https://www.behance.net/gallery/188268843/Social-Media-ADS" target="_blank" class="project-card" data-cat="motion">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/dd7780188268843.Y3JvcCwzMDAwLDIzNDYsMCww.jpg" alt="Social Media Campaigns" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">Social Media ADS &amp; Motion</h3>
+            <span class="project-cat">Motion &amp; Social Content</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 5 -->
+      <a href="https://www.behance.net/gallery/217720957/Youtube-Thumbnail" target="_blank" class="project-card" data-cat="advertising">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/9937b9217720957.Y3JvcCwzMDAwLDIzNDYsMCww.png" alt="YouTube Thumbnail Design" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">YouTube Thumbnail Design</h3>
+            <span class="project-cat">Content &amp; Advertising</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 6 -->
+      <a href="https://www.behance.net/gallery/182336311/Ecommerce-Shop-Gadget-Banner-Design-Portfolio" target="_blank" class="project-card" data-cat="branding">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/87b1f8182336311.Y3JvcCwxOTk5LDE1NjQsMCww.jpg" alt="Ecommerce Gadget Banner" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">Ecommerce Shop Gadget Banner</h3>
+            <span class="project-cat">Social Media &amp; E-commerce</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Rakibul Hassan — All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Filter tabs logic
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter');
+
+        projectCards.forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-cat') === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // ══════════════════════════════════════
+    // RECTANGULAR FOLLOWER BADGE CURSOR
+    // ══════════════════════════════════════
+    (function initBadgeCursor() {
+      const badge = document.getElementById('projectBadgeCursor');
+      if (!badge) return;
+
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let badgeX = mouseX;
+      let badgeY = mouseY;
+      let isHoveringProject = false;
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }, { passive: true });
+
+      // Target elements: .project-card, .project-item, .project-preview
+      document.addEventListener('mouseover', (e) => {
+        const projectItem = e.target.closest('.project-card, .project-item, .project-preview');
+        if (projectItem) {
+          isHoveringProject = true;
+          badge.classList.add('is-active');
+        } else {
+          isHoveringProject = false;
+          badge.classList.remove('is-active');
+        }
+      });
+
+      document.addEventListener('mouseleave', () => {
+        isHoveringProject = false;
+        badge.classList.remove('is-active');
+      });
+
+      // Smooth lerp loop
+      function loop() {
+        badgeX += (mouseX - badgeX) * 0.18;
+        badgeY += (mouseY - badgeY) * 0.18;
+        badge.style.transform = `translate3d(${badgeX}px, ${badgeY}px, 0) translate(-50%, -50%) scale(${isHoveringProject ? 1 : 0})`;
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+    })();
+  </script>
+</body>
+</html>
