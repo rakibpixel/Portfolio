@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tools &amp; Products — Rakibul Hassan | Creative Technologist</title>
   <meta name="description" content="Dev and creative tools crafted for designers, video editors, and creators — Chrome extensions, Figma plugins, Adobe extensions, and web apps." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
   <!-- Google Fonts & Iconsets -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1127,37 +1128,543 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
-      -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
-      will-change: backdrop-filter, transform;
+      will-change: backdrop-filter, opacity, transform;
+      transition: opacity 0.35s ease;
+    }
+    .bottom-blur-gradient-overlay.is-hidden {
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
 
     /* ══════════════════════════════════════
-       FOOTER
+       FULL-WIDTH STICKY 3-COLUMN FOOTER WITH EMBEDDED FAQ
+       (Sticky Bottom Underneath Site Main Flow)
     ══════════════════════════════════════ */
-    .ide-footer {
-      max-width: 1240px;
-      margin: 40px auto 0;
-      padding: 30px 24px;
-      border-top: 1px solid var(--border);
+    footer.fullwidth-sticky-footer {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-top: -40px;
+      min-height: 540px;
+      position: relative;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      background: #09090b;
+      color: #ffffff;
+      padding: 150px 0 36px 0;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      footer.fullwidth-sticky-footer {
+        padding: 90px 0 30px 0;
+      }
+    }
+
+    .sticky-footer-wrapper {
+      margin: 0 auto;
+      padding: 0 90px;
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. Main 3-Column Grid (Balanced Symmetry) */
+    .footer-3col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr 1fr;
+      gap: 70px;
+      align-items: start;
+      width: 100%;
+    }
+
+    /* Scroll Reveal Animations for Footer Columns */
+    .footer-reveal-col {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .footer-reveal-col.is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .footer-3col-grid > .footer-reveal-col:nth-child(1) {
+      transition-delay: 0.04s;
+    }
+    .footer-3col-grid > .footer-reveal-col:nth-child(2) {
+      transition-delay: 0.16s;
+    }
+    .footer-3col-grid > .footer-reveal-col:nth-child(3) {
+      transition-delay: 0.28s;
+    }
+
+    .footer-bottom-meta.footer-reveal-col {
+      transition-delay: 0.38s;
+    }
+
+    /* Glass Card Containers for Left & Right Columns */
+    .footer-col-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 24px;
+      padding: 28px 26px;
+      box-sizing: border-box;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Left Column: Brand & Direct Contact */
+    .footer-col-brand {
+      align-items: flex-start;
+    }
+
+    .footer-brand-logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      margin-bottom: 2px;
+    }
+
+    .footer-brand-logo-img {
+      height: 28px;
+      width: auto;
+      display: block;
+    }
+
+    .footer-avail-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: #34d399;
+    }
+
+    .footer-avail-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      position: relative;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+      animation: footerLivePulse 2.2s infinite;
+      flex-shrink: 0;
+    }
+
+    .footer-role-summary {
+      font-family: var(--dp);
+      font-size: 15px;
+      font-weight: 700;
+      color: #f4f4f5;
+      letter-spacing: -0.01em;
+      margin: 0;
+      line-height: 1.35;
+    }
+
+    .footer-brand-bio {
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.55;
+      color: #a1a1aa;
+      margin: 0;
+    }
+
+    .footer-email-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 100px;
+      background: #18181b;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #f4f4f5;
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 4px;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .footer-email-btn:hover {
+      background: #27272a;
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .footer-email-btn svg {
+      color: #a1a1aa;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .footer-email-btn:hover svg {
+      transform: translate(2px, -2px);
+      color: #ffffff;
+    }
+
+    /* Center Column: Compact FAQ Chat Bubble Module */
+    .footer-col-faq {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .footer-faq-header {
+      width: 100%;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-    .ide-footer a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .ide-footer a:hover {
-      color: var(--v);
+      gap: 12px;
+      padding: 0 4px;
+      box-sizing: border-box;
     }
 
-    /* ══════════════════════════════════════
-       RESPONSIVE BREAKPOINTS
-    ══════════════════════════════════════ */
+    .footer-faq-title {
+      font-family: var(--dp);
+      font-size: clamp(16px, 1.4vw, 19px);
+      font-weight: 700;
+      color: #f4f4f5;
+      letter-spacing: -0.02em;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    /* Dynamic Live Time Badge in FAQ Header */
+    .footer-faq-time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: #a1a1aa;
+      white-space: nowrap;
+    }
+
+    .footer-faq-time-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #60a5fa;
+      box-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+    }
+
+    .footer-faq-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    /* Question Pill (Left Aligned Dark Badge) */
+    .footer-faq-item {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .footer-faq-q {
+      background: #141416;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-family: var(--sans);
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #f4f4f5;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: left;
+      outline: none;
+    }
+
+    .footer-faq-q:hover {
+      background: #1f1f23;
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .footer-faq-q-text {
+      line-height: 1.35;
+      color: #f4f4f5;
+      font-family: var(--sans);
+      flex-grow: 1;
+    }
+
+    .footer-faq-toggle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    .footer-faq-item.is-open .footer-faq-toggle {
+      background: rgba(255, 255, 255, 0.22);
+      transform: rotate(180deg);
+    }
+
+    .footer-faq-icon-v {
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      transform-origin: center;
+    }
+
+    .footer-faq-item.is-open .footer-faq-icon-v {
+      transform: scaleY(0);
+      opacity: 0;
+    }
+
+    /* Answer Bubble (Right Aligned / Chat Style) */
+    .footer-faq-a-wrap {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1), margin 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+      will-change: grid-template-rows;
+    }
+
+    .footer-faq-item.is-open .footer-faq-a-wrap {
+      grid-template-rows: 1fr;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .footer-faq-a-inner {
+      overflow: hidden;
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+
+    .footer-faq-a {
+      background: #0084ff;
+      color: #ffffff;
+      border-radius: 18px 18px 4px 18px;
+      padding: 12px 18px;
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 3px 0 5px auto;
+      max-width: 90%;
+      box-sizing: border-box;
+      box-shadow: 0 6px 20px rgba(0, 132, 255, 0.28);
+      transform: translateY(-6px) scale(0.96);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    }
+
+    .footer-faq-item.is-open .footer-faq-a {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .footer-faq-a p {
+      margin: 0;
+      color: #ffffff;
+    }
+
+    /* Right Column Card: Structured 2-Subcolumn Layout (Right Aligned) */
+    .footer-col-nav-card {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 22px;
+      padding: 26px 22px;
+    }
+
+    .footer-nav-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+      gap: 4px;
+    }
+
+    .footer-nav-heading {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #71717a;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      text-align: right;
+      width: 100%;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+      width: 100%;
+    }
+
+    .footer-link-item {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .footer-link-item a {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: #a1a1aa;
+      line-height: 1.7;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      text-align: right;
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .footer-link-item a:hover {
+      color: #ffffff;
+    }
+
+    .footer-link-arrow {
+      color: #a1a1aa;
+      transition: transform 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .footer-link-item a:hover .footer-link-arrow {
+      transform: translate(2px, -2px);
+      color: #ffffff;
+    }
+
+    .btn-roll {
+      display: inline-flex;
+      flex-direction: column;
+      height: 1.25em;
+      overflow: hidden;
+      position: relative;
+      vertical-align: middle;
+    }
+
+    .btn-text-default,
+    .btn-text-hover {
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      line-height: 1.25em;
+    }
+
+    .btn-text-hover {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      color: inherit;
+    }
+
+    .footer-email-btn:hover .btn-text-default,
+    .footer-link-item a:hover .btn-text-default {
+      transform: translateY(-100%);
+    }
+
+    .footer-email-btn:hover .btn-text-hover,
+    .footer-link-item a:hover .btn-text-hover {
+      transform: translateY(-100%);
+    }
+
+    @keyframes footerLivePulse {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* Bottom Meta Bar */
+    .footer-bottom-meta {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 40px;
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--sans);
+      font-size: 13px;
+      color: #71717a;
+      width: 100%;
+    }
+
+    .footer-meta-left {
+      color: #71717a;
+    }
+
+    .footer-meta-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-meta-tz {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #71717a;
+    }
+
+    /* Responsive Adaptation */
+    @media (max-width: 1024px) {
+      footer.fullwidth-sticky-footer {
+        position: relative;
+        padding: 56px 0 30px 0;
+      }
+      .footer-3col-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .footer-col-card {
+        padding: 24px 20px;
+      }
+      .footer-col-nav-card {
+        grid-template-columns: 1fr 1fr;
+      }
+      .footer-bottom-meta {
+        flex-direction: column-reverse;
+        gap: 16px;
+        align-items: flex-start;
+        margin-top: 32px;
+        padding-top: 20px;
+      }
+    }
+
     @media (max-width: 860px) {
       .ide-line-gutter {
         display: none;
@@ -1178,11 +1685,6 @@
       }
       .ide-drawer {
         width: 100vw;
-      }
-      .ide-footer {
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
       }
     }
   </style>
@@ -1376,13 +1878,348 @@
   </aside>
 
   <!-- ════ PROGRESSIVE GRADIENT BLUR OVERLAY ════ -->
-  <div class="bottom-blur-gradient-overlay" aria-hidden="true"></div>
+  <div class="bottom-blur-gradient-overlay" id="bottomBlurOverlay" aria-hidden="true"></div>
 
-  <!-- ════ FOOTER ════ -->
-  <footer class="ide-footer">
-    <span>© 2025 Rakibul Hassan — Crafted with code &amp; design intent.</span>
-    <div>
-      <a href="index.html">← Back to Portfolio</a>
+  <!-- ════ FULL-WIDTH 3-COLUMN GLOBAL FOOTER WITH EMBEDDED FAQ ════ -->
+  <footer class="fullwidth-sticky-footer" id="contact">
+    <div class="sticky-footer-wrapper">
+      
+      <!-- 3-Column Main Grid -->
+      <div class="footer-3col-grid">
+        
+        <!-- 1. Left Column: Brand & Direct Contact Card -->
+        <div class="footer-col-card footer-col-brand footer-reveal-col">
+          <a href="index.html" class="footer-brand-logo-wrap" aria-label="Rakib Pixel">
+            <img src="Asset/Logo File/Logo With Text White.svg" alt="Rakib Pixel" class="footer-brand-logo-img" />
+          </a>
+          
+          <div class="footer-avail-badge">
+            <span class="footer-avail-pulse"></span>
+            <span>Available for freelance &amp; select roles</span>
+          </div>
+
+          <h3 class="footer-role-summary">Visual Designer &amp; Creative Technologist</h3>
+
+          <p class="footer-brand-bio">
+            Blending strategic visual systems, motion design, and high-performance digital aesthetics for ambitious creators and forward-thinking brands.
+          </p>
+
+          <a href="mailto:rakibpixel.chat@gmail.com" class="footer-email-btn" title="Email Rakibul">
+            <span class="btn-roll">
+              <span class="btn-text-default">rakibpixel.chat@gmail.com</span>
+              <span class="btn-text-hover">rakibpixel.chat@gmail.com</span>
+            </span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </a>
+        </div>
+
+        <!-- 2. Center Column: Compact FAQ Chat Bubble Module -->
+        <div class="footer-col-faq footer-reveal-col" id="faq">
+          <div class="footer-faq-header">
+            <h4 class="footer-faq-title">
+              <span>Frequently Asked</span>
+            </h4>
+            <div class="footer-faq-time-badge">
+              <span class="footer-faq-time-dot"></span>
+              <span id="footerFaqTime">Click to open, 3:30 AM</span>
+            </div>
+          </div>
+
+          <div class="footer-faq-container">
+            
+            <!-- FAQ 1 (Open by Default) -->
+            <div class="footer-faq-item is-open">
+              <button type="button" class="footer-faq-q" aria-expanded="true">
+                <span class="footer-faq-q-text">Are you open for freelance branding, UI, or design systems?</span>
+                <span class="footer-faq-toggle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </span>
+              </button>
+              <div class="footer-faq-a-wrap">
+                <div class="footer-faq-a-inner">
+                  <div class="footer-faq-a">
+                    <p>Yes, absolutely! I'm currently open for select freelance contracts, brand identity systems, high-converting motion design, and full-stack digital product design with ambitious teams worldwide.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="footer-faq-item">
+              <button type="button" class="footer-faq-q" aria-expanded="false">
+                <span class="footer-faq-q-text">What exactly does your design &amp; visualization process look like?</span>
+                <span class="footer-faq-toggle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </span>
+              </button>
+              <div class="footer-faq-a-wrap">
+                <div class="footer-faq-a-inner">
+                  <div class="footer-faq-a">
+                    <p>I combine strategic visual storytelling with engineering precision. From moodboards, art direction, and Figma tokens to keyframe animations and production-ready web interfaces, I ensure your product looks premium and converts seamlessly.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="footer-faq-item">
+              <button type="button" class="footer-faq-q" aria-expanded="false">
+                <span class="footer-faq-q-text">How fast can you deliver a project?</span>
+                <span class="footer-faq-toggle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </span>
+              </button>
+              <div class="footer-faq-a-wrap">
+                <div class="footer-faq-a-inner">
+                  <div class="footer-faq-a">
+                    <p>Turnaround depends on project scope, but typical brand sprints take 1–2 weeks, while full UI/UX or interactive landing pages take 2–3 weeks. I work in transparent async sprints with regular interactive prototypes.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="footer-faq-item">
+              <button type="button" class="footer-faq-q" aria-expanded="false">
+                <span class="footer-faq-q-text">Do you handle both design and front-end development?</span>
+                <span class="footer-faq-toggle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </span>
+              </button>
+              <div class="footer-faq-a-wrap">
+                <div class="footer-faq-a-inner">
+                  <div class="footer-faq-a">
+                    <p>Yes! I design high-fidelity interfaces in Figma and translate them directly into clean, responsive, high-performance HTML/CSS and JavaScript—eliminating handoff gaps and ensuring keyframes match 1:1 with the design vision.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 5 -->
+            <div class="footer-faq-item">
+              <button type="button" class="footer-faq-q" aria-expanded="false">
+                <span class="footer-faq-q-text">What tools and software do you specialize in?</span>
+                <span class="footer-faq-toggle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </span>
+              </button>
+              <div class="footer-faq-a-wrap">
+                <div class="footer-faq-a-inner">
+                  <div class="footer-faq-a">
+                    <p>My daily stack includes Figma, Adobe Illustrator, Photoshop, After Effects, Premiere Pro, DaVinci Resolve, and modern web technologies. I also develop custom Figma plugins and internal workflow scripts to speed up production.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 6 -->
+            <div class="footer-faq-item">
+              <button type="button" class="footer-faq-q" aria-expanded="false">
+                <span class="footer-faq-q-text">How do we get started on a project together?</span>
+                <span class="footer-faq-toggle" aria-hidden="true">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </span>
+              </button>
+              <div class="footer-faq-a-wrap">
+                <div class="footer-faq-a-inner">
+                  <div class="footer-faq-a">
+                    <p>Simply drop me an email at rakibpixel.chat@gmail.com or book a quick 30-minute discovery call using the button below. Let’s talk about your vision, timeline, and deliverables!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 3. Right Column: Navigation & Social Links Card (2 Subcolumns) -->
+        <div class="footer-col-card footer-col-nav-card footer-reveal-col">
+          
+          <!-- Pages Navigation Subcolumn (Right-Aligned) -->
+          <div class="footer-nav-block">
+            <span class="footer-nav-heading">[ Pages ]</span>
+            <ul class="footer-links-list">
+              <li class="footer-link-item">
+                <a href="index.html#about">
+                  <span class="btn-roll"><span class="btn-text-default">About</span><span class="btn-text-hover">About</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="tools.html">
+                  <span class="btn-roll"><span class="btn-text-default">Tools</span><span class="btn-text-hover">Tools</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="index.html#services">
+                  <span class="btn-roll"><span class="btn-text-default">Services</span><span class="btn-text-hover">Services</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="index.html#process">
+                  <span class="btn-roll"><span class="btn-text-default">How I Work</span><span class="btn-text-hover">How I Work</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="index.html#skills">
+                  <span class="btn-roll"><span class="btn-text-default">Skills &amp; Specialties</span><span class="btn-text-hover">Skills &amp; Specialties</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="gallery.html">
+                  <span class="btn-roll"><span class="btn-text-default">Gallery</span><span class="btn-text-hover">Gallery</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="index.html#experience">
+                  <span class="btn-roll"><span class="btn-text-default">Experience</span><span class="btn-text-hover">Experience</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="https://drive.google.com/file/d/1V-Ful4u5xza3Cz98Q-Ppt5y1OjROQio7/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">Resume</span><span class="btn-text-hover">Resume</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="index.html#blog">
+                  <span class="btn-roll"><span class="btn-text-default">Blog</span><span class="btn-text-hover">Blog</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="index.html#awards">
+                  <span class="btn-roll"><span class="btn-text-default">Awards</span><span class="btn-text-hover">Awards</span></span>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="index.html#networking">
+                  <span class="btn-roll"><span class="btn-text-default">Networking</span><span class="btn-text-hover">Networking</span></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Connect Links Subcolumn (Right-Aligned with Clean SVG Arrow) -->
+          <div class="footer-nav-block">
+            <span class="footer-nav-heading">[ Connect ]</span>
+            <ul class="footer-links-list">
+              <li class="footer-link-item">
+                <a href="https://www.linkedin.com/in/rakibpixel/" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">LinkedIn</span><span class="btn-text-hover">LinkedIn</span></span>
+                  <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="https://www.behance.net/rakibpixel" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">Behance</span><span class="btn-text-hover">Behance</span></span>
+                  <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="https://dribbble.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">Dribbble</span><span class="btn-text-hover">Dribbble</span></span>
+                  <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="https://www.instagram.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">Instagram</span><span class="btn-text-hover">Instagram</span></span>
+                  <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="https://web.facebook.com/fb.rakibpixel" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">Facebook</span><span class="btn-text-hover">Facebook</span></span>
+                  <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="https://pinterest.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">Pinterest</span><span class="btn-text-hover">Pinterest</span></span>
+                  <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="https://x.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">X / Twitter</span><span class="btn-text-hover">X / Twitter</span></span>
+                  <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="https://www.artstation.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">ArtStation</span><span class="btn-text-hover">ArtStation</span></span>
+                  <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </li>
+              <li class="footer-link-item">
+                <a href="https://github.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                  <span class="btn-roll"><span class="btn-text-default">GitHub</span><span class="btn-text-hover">GitHub</span></span>
+                  <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Bottom Meta Bar -->
+      <div class="footer-bottom-meta footer-reveal-col">
+        <div class="footer-meta-left">
+          &copy; 2026 Rakib Pixel. All rights reserved.
+        </div>
+        <div class="footer-meta-right">
+          <span class="footer-meta-tz">Dhaka, BD / GMT+6</span>
+        </div>
+      </div>
+
     </div>
   </footer>
 
@@ -2031,6 +2868,71 @@
         requestAnimationFrame(cursorLoop);
       }
       requestAnimationFrame(cursorLoop);
+    })();
+
+    // ══════════════════════════════════════
+    // FOOTER FAQ ACCORDION & DYNAMIC LIVE TIME
+    // ══════════════════════════════════════
+    (function initFooterFaq(){
+      function updateFaqClock() {
+        var timeEl = document.getElementById('footerFaqTime');
+        if (timeEl) {
+          var now = new Date();
+          var timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+          timeEl.textContent = 'Click to open, ' + timeStr;
+        }
+      }
+      updateFaqClock();
+      setInterval(updateFaqClock, 20000);
+
+      // FAQ Accordion Toggle
+      document.querySelectorAll('.footer-faq-q').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.preventDefault();
+          var item = this.closest('.footer-faq-item');
+          if (!item) return;
+          var isOpen = item.classList.toggle('is-open');
+          this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+      });
+
+      // Footer Column Reveal Observer
+      var footerEl = document.querySelector('footer.fullwidth-sticky-footer');
+      if (window.IntersectionObserver && footerEl) {
+        var footerObserver = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if (entry.isIntersecting) {
+              footerEl.querySelectorAll('.footer-reveal-col').forEach(function(col){
+                col.classList.add('is-revealed');
+              });
+              if (blurOverlay) blurOverlay.classList.add('is-hidden');
+            }
+          });
+        }, { rootMargin: '40px 0px 0px 0px', threshold: 0.01 });
+        footerObserver.observe(footerEl);
+      } else if (footerEl) {
+        footerEl.querySelectorAll('.footer-reveal-col').forEach(function(col){
+          col.classList.add('is-revealed');
+        });
+      }
+
+      // Auto-hide Bottom Blur Overlay when Footer is visible
+      var blurOverlay = document.getElementById('bottomBlurOverlay') || document.querySelector('.bottom-blur-gradient-overlay');
+      if (blurOverlay && footerEl) {
+        function checkBlurVisibility() {
+          var footerRect = footerEl.getBoundingClientRect();
+          var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+          if (footerRect.top <= windowHeight + 10) {
+            blurOverlay.classList.add('is-hidden');
+          } else {
+            blurOverlay.classList.remove('is-hidden');
+          }
+        }
+        window.addEventListener('scroll', checkBlurVisibility, { passive: true });
+        window.addEventListener('resize', checkBlurVisibility, { passive: true });
+        window.addEventListener('load', checkBlurVisibility);
+        setTimeout(checkBlurVisibility, 200);
+      }
     })();
   </script>
 

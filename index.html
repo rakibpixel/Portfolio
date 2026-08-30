@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="custom.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 <style>
 /* ══════════════════════════════════════
    TOKENS
@@ -25,10 +26,9 @@
   --e:cubic-bezier(.22,1,.36,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{overflow-x:hidden}
+html{scroll-behavior:smooth;overflow-x:clip}
 body{background:var(--bg);color:var(--fg);font-family:var(--sans);
-  line-height:1.6;overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+  line-height:1.6;overflow-x:clip;cursor:none;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit}
 img{display:block;max-width:100%}
 button{cursor:none;border:none;background:none;font:inherit;color:inherit}
@@ -1044,6 +1044,15 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
   -webkit-backdrop-filter: blur(2px);
   mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
   -webkit-mask-image: linear-gradient(to top, rgb(255 255 255) 0%, rgb(255 255 255) 50%, rgb(255 255 255 / 15%) 100%);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bottom-blur-gradient-overlay.is-hidden {
+  opacity: 0;
+  transform: translateY(30px);
+  pointer-events: none;
 }
 
 /* ══════════════════════════════════════
@@ -1224,73 +1233,397 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
 }
 
 /* ══════════════════════════════════════
-   SERVICES — list + horizontal ticker
+   SERVICES — BRIGHTEDGE EDITORIAL ACCORDION (1240PX)
 ══════════════════════════════════════ */
-.services{background:var(--s1)}
-.svc-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:60px}
-.svc-sub{max-width:260px;font-size:14px;color:var(--mu);line-height:1.75;text-align:right}
+.bright-services-section {
+  width: 100%;
+  background: var(--bg);
+  border-top: 1px solid var(--ln);
+  border-bottom: 1px solid var(--ln);
+  padding: 96px 0 !important;
+  box-sizing: border-box;
+  position: relative;
+}
 
-/* service accordion rows */
-.svc-list{border:1px solid var(--ln);margin-bottom:0}
-.sr{
-  display:grid;grid-template-columns:58px 1fr auto 50px;
-  gap:24px;align-items:center;padding:32px 32px 32px 24px;
-  border-bottom:1px solid var(--ln);
-  position:relative;overflow:hidden;
+.bright-services-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
-.sr:last-child{border-bottom:none}
-.sr::before{
-  content:'';position:absolute;inset:0;background:var(--v);
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .6s var(--e);z-index:0;
-}
-.sr:hover::before{transform:scaleX(1)}
-.sr>*{position:relative;z-index:1}
-.sr-n{font-family:var(--dp);font-size:11px;font-weight:700;letter-spacing:2px;color:var(--mu);transition:color .4s}
-.sr:hover .sr-n{color:rgba(255,255,255,.45)}
-.sr-t{font-family:var(--dp);font-size:clamp(18px,2.4vw,30px);font-weight:800;letter-spacing:-.8px}
-.sr-tags{display:flex;gap:7px;flex-wrap:wrap}
-.stag{
-  padding:4px 11px;border-radius:100px;
-  border:1px solid var(--ln);font-size:10px;font-weight:700;
-  letter-spacing:1.5px;text-transform:uppercase;color:var(--mu);
-  transition:border-color .4s,color .4s;
-}
-.sr:hover .stag{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
-.sr-arr{
-  width:42px;height:42px;border-radius:50%;border:1px solid var(--ln);
-  display:flex;align-items:center;justify-content:center;
-  transition:all .45s var(--e);
-}
-.sr:hover .sr-arr{background:#fff;border-color:#fff;color:var(--v);transform:rotate(45deg)}
 
-/* ── Services horizontal ticker ── */
-.svc-ticker{
-  overflow:hidden;
-  border-top:1px solid var(--ln);
-  border-bottom:1px solid var(--ln);
-  padding:18px 0;margin-top:0;
-  background:var(--s2);
+/* 1. Header */
+.bright-services-header {
+  margin-bottom: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
 }
-.svc-ticker-track{
-  display:flex;flex-shrink:0;gap:0;
-  animation:svcTick 25s linear infinite;
-  white-space:nowrap;
+
+.bright-tagline {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--v);
+  text-transform: uppercase;
 }
-.svc-ticker-item{
-  display:inline-flex;align-items:center;gap:20px;
-  padding:0 40px;border-right:1px solid var(--ln);
-  font-family:var(--dp);font-size:clamp(13px,1.4vw,16px);
-  font-weight:700;letter-spacing:-.2px;color:var(--mu);
-  flex-shrink:0;
-  transition:color .4s;
+
+.bright-headline {
+  font-family: var(--dp);
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #0c0a1a;
+  text-transform: uppercase;
+  margin: 0;
+  max-width: 860px;
 }
-.svc-ticker-item:hover{color:var(--fg)}
-.svc-ticker-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--v);flex-shrink:0;
+
+.bright-services-sub {
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #71717a;
+  margin: 4px 0 0 0;
+  max-width: 620px;
 }
-@keyframes svcTick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* 2. Service Rows List */
+.bright-services-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--ln);
+}
+
+.bright-service-row {
+  width: 100%;
+  border-bottom: 1px solid var(--ln);
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+/* Trigger Button */
+.bright-row-trigger {
+  width: 100%;
+  padding: 32px 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  gap: 20px;
+  user-select: none;
+}
+
+.bright-row-title-wrap {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+.bright-super-num {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--v);
+  letter-spacing: 0.05em;
+  transform: translateY(-8px);
+}
+
+.bright-row-title {
+  font-family: var(--dp);
+  font-size: clamp(2.4rem, 4.8vw, 4.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #0c0a1a;
+  text-transform: uppercase;
+  margin: 0;
+  transition: color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bright-service-row:hover:not(.is-open) .bright-row-title {
+  transform: translateX(6px);
+}
+
+.bright-service-row.is-open .bright-row-title {
+  color: var(--v);
+}
+
+.bright-sub-label {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: #71717a;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* Right Plus / Close Icon */
+.bright-toggle-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #d4d4d8;
+  background: transparent;
+  color: #0c0a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.28, 1.05),
+              background 0.25s ease,
+              color 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.bright-service-row:hover .bright-toggle-icon {
+  border-color: #0c0a1a;
+}
+
+.bright-service-row.is-open .bright-toggle-icon {
+  transform: rotate(45deg);
+  background: #0c0a1a;
+  color: #ffffff;
+  border-color: #0c0a1a;
+}
+
+/* 3. Expanded Panel (Auto-Height Spring Physics) */
+.bright-row-panel-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.2, 0.9, 0.28, 1.05);
+  width: 100%;
+  will-change: grid-template-rows;
+}
+
+.bright-service-row.is-open .bright-row-panel-wrap {
+  grid-template-rows: 1fr;
+}
+
+.bright-row-panel-inner {
+  overflow: hidden;
+}
+
+.bright-panel-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 2fr 1fr;
+  gap: 40px;
+  padding: 10px 0 44px 0;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease 0.08s,
+              transform 0.38s cubic-bezier(0.2, 0.9, 0.28, 1.05) 0.08s;
+  will-change: opacity, transform;
+}
+
+.bright-service-row.is-open .bright-panel-grid {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bright-col-heading {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* Column 1: Description */
+.bright-col-desc {
+  max-width: 380px;
+}
+
+.bright-desc-text {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: #52525b;
+  margin: 0;
+}
+
+/* Column 2 & 3: Capabilities */
+.bright-caps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+}
+
+.bright-caps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bright-caps-list li {
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #18181b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bright-bullet {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--v);
+  flex-shrink: 0;
+}
+
+/* Column 4: Embedded Visual Card */
+.bright-col-visual {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.bright-visual-card {
+  width: 220px;
+  aspect-ratio: 16/10;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(12, 10, 26, 0.1);
+  transform: rotate(4deg);
+  background: #f4f4f5;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bright-visual-card:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 0 18px 36px rgba(94, 67, 236, 0.18);
+}
+
+.bright-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 4. Floating Cursor Follower (Compact 200x125, Anchor: Top-Right of Cursor, Bottom-Left Origin, Vertical Reel) */
+.bright-cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 125px;
+  border-radius: 12px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 999;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transform-origin: bottom left;
+  will-change: transform, opacity;
+  background: #18181b;
+  opacity: 0;
+  transform: translate3d(-9999px, -9999px, 0) translate(20px, -115%) rotate(4deg) scale(0);
+}
+
+.bright-cursor-reel {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.52s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.bright-cursor-slide {
+  width: 100%;
+  height: 125px;
+  flex: 0 0 125px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0.4;
+  transition: opacity 0.52s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.bright-cursor-slide.is-current {
+  opacity: 1;
+}
+
+.bright-cursor-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Touch & Mobile disable */
+@media (hover: none), (pointer: coarse) {
+  .bright-cursor-follower {
+    display: none !important;
+  }
+}
+
+@media (max-width: 960px) {
+  .bright-panel-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .bright-col-desc {
+    max-width: 100%;
+  }
+  .bright-col-visual {
+    justify-content: flex-start;
+  }
+  .bright-visual-card {
+    transform: rotate(0deg);
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bright-services-section {
+    padding: 70px 0 !important;
+  }
+  .bright-services-container {
+    padding: 0 20px;
+  }
+  .bright-row-trigger {
+    padding: 24px 0;
+  }
+  .bright-super-num {
+    font-size: 12px;
+    transform: translateY(-4px);
+  }
+  .bright-row-title {
+    font-size: 26px;
+  }
+  .bright-sub-label {
+    font-size: 13px;
+  }
+  .bright-toggle-icon {
+    width: 38px;
+    height: 38px;
+  }
+  .bright-caps-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
 
 /* ══════════════════════════════════════
    WORK
@@ -1362,95 +1695,609 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
 }
 
 /* ══════════════════════════════════════
-   PROCESS — light
+   PROCESS — 4-STEP INTERACTIVE GROWTH CURVE (1240PX)
 ══════════════════════════════════════ */
-.process{background:var(--lbg);color:var(--lt)}
-.process .chip{color:var(--v)}
-.process .stitle{color:var(--lt);margin-bottom:56px}
-.pg{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden}
-.ps{
-  background:var(--lbg);padding:44px 34px;
-  border-right:1px solid rgba(0,0,0,.07);
-  transition:background .4s var(--e),box-shadow .4s var(--e);
+.process-growth-section {
+  width: 100%;
+  background: var(--bg);
+  border-top: 1px solid var(--ln);
+  border-bottom: 1px solid var(--ln);
+  padding: 96px 0 !important;
+  box-sizing: border-box;
+  position: relative;
 }
-.ps:last-child{border-right:none}
-.ps:hover{background:#fff}
-.ps-n{
-  font-family:var(--dp);font-size:46px;font-weight:800;
-  color:var(--v);opacity:.1;letter-spacing:-2px;line-height:1;margin-bottom:22px;
-  transition:opacity .4s;
+
+.process-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
-.ps:hover .ps-n{opacity:.18}
-.ps-ico{margin-bottom:14px}
-.ps h3{font-family:var(--dp);font-size:17px;font-weight:700;color:var(--lt);margin-bottom:8px;letter-spacing:-.2px}
-.ps p{font-size:13px;color:var(--lmu);line-height:1.75}
+
+/* Clean Canvas Stage (No redundant outer card boxes or double borders) */
+.process-canvas {
+  width: 100%;
+  height: 500px;
+  min-height: 500px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+}
+
+/* 1. Left Column (Personal Process Header) */
+.process-left-col {
+  width: 330px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.process-tagline {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--v);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.process-headline {
+  font-family: var(--dp);
+  font-size: clamp(1.85rem, 2.6vw, 2.35rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #0a0a0a;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 0 0 14px 0;
+}
+
+.process-subtext {
+  font-family: var(--sans);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #71717a;
+  margin: 0 0 26px 0;
+  max-width: 290px;
+}
+
+.process-cta-btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  color: #ffffff !important;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 10px 24px;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1px solid #0a0a0a;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(10, 10, 10, 0.12);
+  line-height: 1;
+}
+
+.process-cta-btn:hover {
+  background: var(--v);
+  border-color: var(--v);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(94, 67, 236, 0.25);
+  color: #ffffff !important;
+}
+
+.process-cta-btn .btn-roll {
+  position: relative;
+  display: block;
+  height: 16px;
+  line-height: 16px;
+  overflow: hidden;
+}
+
+.process-cta-btn .btn-roll span {
+  display: block;
+  height: 16px;
+  line-height: 16px;
+  white-space: nowrap;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.process-cta-btn .btn-text-hover {
+  color: #ffffff;
+}
+
+.process-cta-btn:hover .btn-text-default {
+  transform: translateY(-16px);
+}
+
+.process-cta-btn:hover .btn-text-hover {
+  transform: translateY(-16px);
+}
+
+/* 2. Top Center Controller (Segmented Switcher) */
+.process-top-controller {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.process-switcher {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: #f4f4f5;
+  border: 1px solid #e5e7eb;
+}
+
+.process-tab-btn {
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #71717a;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.process-tab-btn:hover {
+  color: #0a0a0a;
+}
+
+.process-tab-btn.is-active {
+  background: #0a0a0a;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 3. Interactive Stepper & Curve Stage (Center to Right) */
+.process-stage-area {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* SVG Ramp & 4 Partition Slices */
+.process-curve-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+.process-slice {
+  transition: fill 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  fill: #f4f4f5;
+  cursor: pointer;
+}
+
+.process-slice:hover {
+  fill: #e4e4e7;
+}
+
+.process-slice.is-active {
+  fill: #0a0a0a;
+}
+
+/* 4. 4 Compact Rising Step Badges & Vertical Dashed Lines */
+.process-badges-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.process-step-unit {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Precise Right-Edge Alignment via CSS `right` */
+.process-unit-0 { right: 52.5%; top: 56%; }
+.process-unit-1 { right: 35.0%; top: 43%; }
+.process-unit-2 { right: 17.5%; top: 30%; }
+.process-unit-3 { right: 0%;  top: 17%; }
+
+/* Minimal Outline Badge Box */
+.process-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 0px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 14px rgba(12, 10, 26, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.process-step-unit:hover .process-badge {
+  border-color: #a1a1aa;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(12, 10, 26, 0.08);
+}
+
+.process-step-unit.is-active .process-badge {
+  border-color: #0a0a0a;
+  background: #0a0a0a;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(10, 10, 10, 0.18);
+}
+
+.process-badge-ico {
+  width: 16px;
+  height: 16px;
+  color: #71717a;
+  transition: color 0.25s ease;
+  flex-shrink: 0;
+}
+
+.process-step-unit.is-active .process-badge-ico {
+  color: #ffffff;
+}
+
+.process-badge-label {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: #3f3f46;
+  transition: color 0.25s ease;
+}
+
+.process-step-unit.is-active .process-badge-label {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Vertical Dashed Drop Line dropping from top-right corner to bottom base */
+.process-dashed-line {
+  position: absolute;
+  right: 0;
+  top: 52;
+  width: 0;
+  border-right: 1px dashed #d4d4d8;
+  transition: border-color 0.3s ease;
+  pointer-events: none;
+}
+
+.process-unit-0 .process-dashed-line { height: 220px; }
+.process-unit-1 .process-dashed-line { height: 285px; }
+.process-unit-2 .process-dashed-line { height: 350px; }
+.process-unit-3 .process-dashed-line { height: 415px; }
+
+.process-step-unit.is-active .process-dashed-line {
+  border-right: 1.5px dashed #0a0a0a;
+}
+
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 1024px) {
+  .process-canvas {
+    height: auto;
+    min-height: 520px;
+  }
+  .process-top-controller {
+    top: 0;
+    left: auto;
+    right: 0;
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .process-growth-section {
+    padding: 60px 0 !important;
+  }
+  .process-wrapper {
+    padding: 0 16px;
+    border-left: none;
+    border-right: none;
+  }
+  .process-canvas {
+    height: auto;
+    min-height: auto;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .process-left-col {
+    width: 100%;
+  }
+  .process-top-controller {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  .process-switcher {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px;
+    box-sizing: border-box;
+  }
+  .process-tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  .process-stage-area {
+    position: relative;
+    height: auto;
+  }
+  .process-badges-layer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .process-step-unit {
+    position: relative;
+    right: auto !important;
+    top: auto !important;
+    width: 100%;
+  }
+  .process-badge {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+  }
+  .process-dashed-line {
+    display: none;
+  }
+  .process-curve-svg {
+    display: none;
+  }
+}
 
 /* ══════════════════════════════════════
-   EXPERIENCE &amp; SKILLS &#8212; redesigned
+   CAPABILITIES & STACK — DRAGGABLE SKILLS PLAYGROUND (1240PX)
 ══════════════════════════════════════ */
-.experience{background:var(--s1)}
-.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:60px}
-
-/* timeline */
-.exp-lbl{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
-  color:var(--mu);margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--ln)}
-.tl{position:relative;display:flex;flex-direction:column;gap:0}
-.tl-item{
-  position:relative;padding:26px 0 26px 26px;
-  border-bottom:1px solid var(--ln);
-  transition:padding-left .4s var(--e);
-}
-.tl-item:last-child{border-bottom:none}
-.tl-item:hover{padding-left:34px}
-.tl-item::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;
-  width:1.5px;background:var(--ln);
-  transition:background .4s var(--e);
-}
-.tl-item:hover::before{background:var(--v)}
-.tl-item::after{
-  content:'';position:absolute;left:-4px;top:30px;
-  width:9px;height:9px;border-radius:50%;
-  background:var(--bg);border:2px solid var(--v);
-  transition:background .4s var(--e);
-}
-.tl-item:hover::after{background:var(--v)}
-.tl-co{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--v);margin-bottom:4px}
-.tl-role{font-family:var(--dp);font-size:18px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
-.tl-date{font-size:11px;color:var(--mu);margin-bottom:8px}
-.tl-chips{display:flex;gap:6px;flex-wrap:wrap}
-.tl-chip{
-  padding:3px 10px;border-radius:100px;
-  background:var(--vd);color:var(--v);
-  font-size:10px;font-weight:700;letter-spacing:1px;
+.skills-playground-section {
+  width: 100%;
+  background: var(--bg);
+  border-top: 1px solid var(--ln);
+  border-bottom: 1px solid var(--ln);
+  padding: 96px 0 !important;
+  box-sizing: border-box;
+  position: relative;
 }
 
-/* skill buttons — minimal pill grid */
-.sk-lbl{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
-  color:var(--mu);margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--ln)}
-.sk-pills{display:flex;flex-wrap:wrap;gap:10px}
-.sk-pill{
-  display:inline-flex;align-items:center;gap:7px;
-  padding:10px 18px;border-radius:100px;
-  border:1px solid var(--ln);
-  font-size:22px;
-  font-weight:500;
-  color:var(--mu);
-  background:transparent;
-  transition:border-color .4s var(--e),color .4s var(--e),background .4s var(--e),transform .35s var(--e);
+.skills-playground-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 32px;
+  box-sizing: border-box;
+  position: relative;
 }
-.sk-pill:hover{border-color:var(--v);color:var(--fg);background:var(--vd)}
-.sk-pill svg{opacity:.5;transition:opacity .4s}
-.sk-pill:hover svg{opacity:1}
+
+/* Overlapping Top Center Badge / Heading */
+.skills-top-badge-wrap {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 35;
+  pointer-events: none;
+}
+
+.skills-top-badge {
+  background: #fefefe;
+  color: #09090b;
+  font-family: var(--sans);
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 10px 45px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* Dark Theme Grid-Patterned Playground Canvas */
+.skills-playground-canvas {
+  width: 100%;
+  height: 540px;
+  min-height: 540px;
+  background-color: #09090b;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 36px 36px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  cursor: grab;
+}
+
+.skills-playground-canvas.is-grabbing {
+  cursor: grabbing;
+}
+
+/* Standard White Pills with Gradient Border */
+.draggable-skill-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: 
+    linear-gradient(180deg, #FFFFFF 0%, #F5F6F9 100%) padding-box,
+    linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(200, 205, 220, 0.5) 50%, rgba(120, 130, 155, 0.3) 100%) border-box;
+  color: #0A0A0A;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  padding: 7px 20px;
+  padding-left: 7px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 10px 24px -4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  cursor: grab;
+  touch-action: none;
+  z-index: 15;
+  will-change: transform;
+  transform-origin: center center;
+  pointer-events: auto;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.draggable-skill-pill:hover {
+  background: 
+    linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%) padding-box,
+    linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(160, 180, 220, 0.75) 50%, rgba(90, 110, 160, 0.45) 100%) border-box;
+  box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15), 0 14px 28px -4px rgba(0, 0, 0, 0.3), inset 0 1px 0 #FFFFFF;
+}
+
+.draggable-skill-pill .pill-ico {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 2px;
+  flex-shrink: 0;
+}
+
+.draggable-skill-pill .pill-ico svg {
+  width: 25px;
+  height: 25px;
+  display: block;
+}
+
+.draggable-skill-pill .pill-ico img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Special Dark Pill: "✦ Vibe Coding" with Cosmic Gradient Border */
+.draggable-skill-pill[data-skill="vibe"] {
+  background: 
+    linear-gradient(195deg, #ff3c87 0%, #3c3cc7 100%) padding-box,
+    linear-gradient(135deg, #FF6EA7 0%, #A78BFA 50%, #60A5FA 100%) border-box;
+  color: #FFFFFF;
+  border: 1.5px solid transparent;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 12px 28px -4px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.draggable-skill-pill[data-skill="vibe"]:hover {
+  background: 
+    linear-gradient(195deg, #ff3c87 0%, #3c3cc7 100%) padding-box,
+    linear-gradient(135deg, #FFFFFF 0%, #FF80BF 50%, #93C5FD 100%) border-box;
+  box-shadow: 0 6px 14px -2px rgba(0, 0, 0, 0.5), 0 16px 32px -4px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.draggable-skill-pill[data-skill="vibe"] .pill-ico {
+  background: #27272a;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.draggable-skill-pill.is-held {
+  cursor: grabbing;
+  z-index: 100 !important;
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .skills-playground-canvas {
+    height: 560px;
+  }
+}
+
+@media (max-width: 768px) {
+  .skills-playground-section {
+    padding: 60px 0 !important;
+  }
+  .skills-playground-wrapper {
+    padding: 0 16px;
+  }
+  .skills-top-badge {
+    font-size: 13px;
+    padding: 8px 20px;
+  }
+  .skills-playground-canvas {
+    height: 640px;
+    min-height: 640px;
+    border-radius: 20px;
+  }
+  .draggable-skill-pill {
+    padding: 6px 16px;
+    padding-left: 6px;
+    font-size: 14px;
+    gap: 4px;
+  }
+  .draggable-skill-pill .pill-ico {
+    width: 30px;
+    height: 30px;
+  }
+  .draggable-skill-pill .pill-ico svg {
+    width: 20px;
+    height: 20px;
+  }
+}
 
 /* ══════════════════════════════════════
    CLIENT REVIEWS — Minimal Vertical Infinite Timeline Marquee
+   (Rounded Bottom Corners with Elevation Drop Shadow)
 ══════════════════════════════════════ */
 .bd-reviews-section {
+  width: 100%;
   background: var(--bg);
   position: relative;
+  z-index: 10;
   overflow: hidden;
-  padding: 100px 24px !important;
+  padding: 100px 24px 110px !important;
+  box-sizing: border-box;
 }
 
 .bd-reviews-header {
@@ -1641,120 +2488,613 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
 }
 
 /* ══════════════════════════════════════
-   CTA BAND
+   SCROLL-DRIVEN DUAL-ROW KINETIC MARQUEE (1240PX)
 ══════════════════════════════════════ */
-.cta{
-  padding:120px 60px;background:var(--v);
-  text-align:center;position:relative;overflow:hidden;
+.kinetic-marquee-section {
+  width: 100%;
+  background: var(--bg);
+  border-top: 1px solid var(--ln);
+  border-bottom: 1px solid var(--ln);
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 }
-.cta::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 65% 80% at 50% 50%,rgba(255,255,255,.12) 0%,transparent 70%);
+
+.kinetic-marquee-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  border-left: 1px solid var(--ln);
+  border-right: 1px solid var(--ln);
+  padding: 30px 0px;
 }
-.cta-ghost{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  font-family:var(--dp);font-size:min(22vw,240px);font-weight:800;
-  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.05);
-  white-space:nowrap;pointer-events:none;letter-spacing:-7px;user-select:none;
+
+.kinetic-row {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  pointer-events: none;
 }
-.cta-title{
-  font-family:var(--dp);font-size:clamp(36px,6.5vw,90px);
-  font-weight:800;letter-spacing:-3px;line-height:.93;color:#fff;
-  margin-bottom:40px;position:relative;
+
+.kinetic-row-1 {
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(12, 10, 26, 0.08);
 }
-.cta-title em{font-family:var(--serif);font-weight:400;font-style:italic;opacity:.72}
-.cta-btns{display:flex;gap:14px;justify-content:center;position:relative;flex-wrap:wrap}
-/* CTA Buttons with Dual-Row Roll */
-.btn-wh{
-  position:relative;overflow:hidden;
-  display:inline-flex;align-items:center;justify-content:center;
-  padding:12px 34px;height:46px;box-sizing:border-box;
-  border-radius:100px;background:#fff;color:var(--v) !important;
-  font-family:var(--sans);font-weight:700;font-size:14px;
-  text-decoration:none;cursor:pointer;
-  box-shadow:0 4px 14px rgba(0,0,0,0.1);
-  transition:all .3s ease;line-height:1;
+
+.kinetic-row-2 {
+  padding-top: 18px;
 }
-.btn-wh:hover{
-  background:#fff;color:#0c0a1a !important;
-  transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.18);
+
+.kinetic-track {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
 }
-.btn-ow{
-  position:relative;overflow:hidden;
-  display:inline-flex;align-items:center;justify-content:center;
-  padding:11px 34px;height:46px;box-sizing:border-box;
-  border-radius:100px;border:1.5px solid rgba(255,255,255,.35);
-  background:transparent;color:#fff !important;
-  font-family:var(--sans);font-weight:600;font-size:14px;
-  text-decoration:none;cursor:pointer;
-  transition:all .3s ease;line-height:1;
+
+.kinetic-track-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 36px;
+  padding-right: 36px;
+  flex-shrink: 0;
 }
-.btn-ow:hover{border-color:#fff;background:rgba(255,255,255,.12);transform:translateY(-2px);}
+
+.kinetic-item {
+  font-family: var(--dp);
+  font-size: clamp(2rem, 4.5vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #0c0a1a;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.kinetic-sep {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.kinetic-arrow-img {
+  height: clamp(26px, 3.4vw, 42px);
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .kinetic-marquee-section {
+    padding: 24px 0;
+  }
+  .kinetic-row-1 {
+    padding-bottom: 12px;
+  }
+  .kinetic-row-2 {
+    padding-top: 12px;
+  }
+  .kinetic-track-inner {
+    gap: 20px;
+    padding-right: 20px;
+  }
+}
 
 /* ══════════════════════════════════════
-   CONTACT
+   SITE MAIN FLOW WRAPPER
+   (100% Solid Viewport Surface with Rounded Bottom Peel Corners)
 ══════════════════════════════════════ */
-.contact{display:grid;grid-template-columns:1fr 1fr;gap:80px}
-.cl-links{margin-top:36px;display:flex;flex-direction:column}
-.clr{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:21px 0;border-bottom:1px solid var(--ln);
-  transition:padding-left .4s var(--e);
-}
-.clr:hover{padding-left:8px}
-.clr-in{display:flex;align-items:center;gap:13px}
-.clr-ico{
-  width:38px;height:38px;border-radius:10px;
-  background:var(--s1);border:1px solid var(--ln);
-  display:flex;align-items:center;justify-content:center;
-  transition:background .4s var(--e),border-color .4s var(--e);
-}
-.clr:hover .clr-ico{background:var(--v);border-color:var(--v)}
-.clr-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin-bottom:2px}
-.clr-val{font-size:14px;font-weight:600}
-.clr-arr{font-size:16px;color:var(--mu);transition:color .35s var(--e),transform .35s var(--e)}
-.clr:hover .clr-arr{color:var(--v);transform:translate(3px,-3px)}
-
-/* form */
-.cf{display:flex;flex-direction:column;gap:15px}
-.cfr{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.fg{display:flex;flex-direction:column;gap:6px}
-.fg label{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--mu)}
-.fg input,.fg textarea{
-  background:var(--s2);border:1px solid var(--ln);
-  border-radius:11px;padding:14px 16px;
-  color:var(--fg);font-family:var(--sans);font-size:14px;
-  outline:none;transition:border-color .4s var(--e);resize:none;
-}
-.fg input:focus,.fg textarea:focus{border-color:var(--v)}
-.fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,.16)}
-/* submit with Dual-Row Roll */
-.cf-sub{
-  position:relative;overflow:hidden;
-  display:inline-flex;align-items:center;justify-content:center;
-  padding:12px 34px;height:46px;box-sizing:border-box;
-  border-radius:100px;background:var(--v);color:#fff !important;
-  font-family:var(--sans);font-weight:700;font-size:14px;
-  cursor:pointer;width:fit-content;border:none;
-  box-shadow:0 4px 14px rgba(94,67,236,0.25);
-  transition:all .3s ease;line-height:1;
-}
-.cf-sub:hover{
-  background:#4930d6;transform:translateY(-2px);
-  box-shadow:0 8px 24px rgba(94,67,236,0.35);
+.site-main-flow {
+  width: 100%;
+  background: var(--bg);
+  position: relative;
+  z-index: 10;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
 }
 
 /* ══════════════════════════════════════
-   FOOTER
+   FULL-WIDTH STICKY 3-COLUMN FOOTER WITH EMBEDDED FAQ
+   (Sticky Bottom Underneath Site Main Flow)
 ══════════════════════════════════════ */
-footer{
-  padding:32px 60px;display:flex;justify-content:space-between;align-items:center;
-  border-top:1px solid var(--ln);font-size:11px;color:var(--mu);
+footer.fullwidth-sticky-footer {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-top: -40px;
+  min-height: 540px;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background: #09090b;
+  color: #ffffff;
+  padding: 150px 0 36px 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
-.foot-svg{height:22px;width:auto;display:block}
-footer a{color:var(--mu);transition:color .35s var(--e)}
-footer a:hover{color:var(--v)}
-.foot-links{display:flex;gap:22px}
+
+@media (max-width: 768px) {
+  footer.fullwidth-sticky-footer {
+    padding: 90px 0 30px 0;
+  }
+}
+
+.sticky-footer-wrapper {
+  margin: 0 auto;
+  padding: 0 90px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. Main 3-Column Grid (Balanced Symmetry) */
+.footer-3col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1fr;
+  gap: 70px;
+  align-items: start;
+  width: 100%;
+}
+
+/* Scroll Reveal Animations for Footer Columns */
+.footer-reveal-col {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.footer-reveal-col.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-3col-grid > .footer-reveal-col:nth-child(1) {
+  transition-delay: 0.04s;
+}
+.footer-3col-grid > .footer-reveal-col:nth-child(2) {
+  transition-delay: 0.16s;
+}
+.footer-3col-grid > .footer-reveal-col:nth-child(3) {
+  transition-delay: 0.28s;
+}
+
+.footer-bottom-meta.footer-reveal-col {
+  transition-delay: 0.38s;
+}
+
+/* Glass Card Containers for Left & Right Columns */
+.footer-col-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 24px;
+  padding: 28px 26px;
+  box-sizing: border-box;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Left Column: Brand & Direct Contact */
+.footer-col-brand {
+  align-items: flex-start;
+}
+
+.footer-brand-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  margin-bottom: 2px;
+}
+
+.footer-brand-logo-img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+.footer-avail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: #34d399;
+}
+
+.footer-avail-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+  animation: footerLivePulse 2.2s infinite;
+  flex-shrink: 0;
+}
+
+.footer-role-summary {
+  font-family: var(--dp);
+  font-size: 15px;
+  font-weight: 700;
+  color: #f4f4f5;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.footer-brand-bio {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: #a1a1aa;
+  margin: 0;
+}
+
+.footer-email-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 100px;
+  background: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f4f4f5;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 4px;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.footer-email-btn:hover {
+  background: #27272a;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.footer-email-btn svg {
+  color: #a1a1aa;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.footer-email-btn:hover svg {
+  transform: translate(2px, -2px);
+  color: #ffffff;
+}
+
+/* Center Column: Compact FAQ Chat Bubble Module */
+.footer-col-faq {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-faq-header {
+  width: 100%;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.footer-faq-title {
+  font-family: var(--dp);
+  font-size: clamp(16px, 1.4vw, 19px);
+  font-weight: 700;
+  color: #f4f4f5;
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Dynamic Live Time Badge in FAQ Header */
+.footer-faq-time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: #a1a1aa;
+  white-space: nowrap;
+}
+
+.footer-faq-time-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+}
+
+.footer-faq-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* Question Pill (Left Aligned Dark Badge) */
+.footer-faq-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-faq-q {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #f4f4f5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  outline: none;
+}
+
+.footer-faq-q:hover {
+  background: #1f1f23;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.footer-faq-q-text {
+  line-height: 1.35;
+  color: #f4f4f5;
+  font-family: var(--sans);
+  flex-grow: 1;
+}
+
+.footer-faq-toggle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.footer-faq-item.is-open .footer-faq-toggle {
+  background: rgba(255, 255, 255, 0.22);
+  transform: rotate(180deg);
+}
+
+.footer-faq-icon-v {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+.footer-faq-item.is-open .footer-faq-icon-v {
+  transform: scaleY(0);
+  opacity: 0;
+}
+
+/* Answer Bubble (Right Aligned / Chat Style) */
+.footer-faq-a-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1), margin 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  will-change: grid-template-rows;
+}
+
+.footer-faq-item.is-open .footer-faq-a-wrap {
+  grid-template-rows: 1fr;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.footer-faq-a-inner {
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.footer-faq-a {
+  background: #0084ff;
+  color: #ffffff;
+  border-radius: 18px 18px 4px 18px;
+  padding: 12px 18px;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 3px 0 5px auto;
+  max-width: 90%;
+  box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(0, 132, 255, 0.28);
+  transform: translateY(-6px) scale(0.96);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+.footer-faq-item.is-open .footer-faq-a {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.footer-faq-a p {
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Right Column Card: Structured 2-Subcolumn Layout (Right Aligned) */
+.footer-col-nav-card {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 22px;
+  padding: 26px 22px;
+}
+
+.footer-nav-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 4px;
+}
+
+.footer-nav-heading {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #71717a;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  text-align: right;
+  width: 100%;
+}
+
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  width: 100%;
+}
+
+.footer-link-item {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer-link-item a {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #a1a1aa;
+  line-height: 1.7;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  text-align: right;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.footer-link-item a:hover {
+  color: #ffffff;
+}
+
+.footer-link-arrow {
+  color: #a1a1aa;
+  transition: transform 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.footer-link-item a:hover .footer-link-arrow {
+  transform: translate(2px, -2px);
+  color: #ffffff;
+}
+
+/* Bottom Meta Bar */
+.footer-bottom-meta {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 40px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #71717a;
+  width: 100%;
+}
+
+.footer-meta-left {
+  color: #71717a;
+}
+
+.footer-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-meta-tz {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #71717a;
+}
+
+/* Responsive Adaptation */
+@media (max-width: 1024px) {
+  footer.fullwidth-sticky-footer {
+    position: relative;
+    padding: 56px 0 30px 0;
+  }
+  .footer-3col-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .footer-col-card {
+    padding: 24px 20px;
+  }
+  .footer-col-nav-card {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-bottom-meta {
+    flex-direction: column-reverse;
+    gap: 16px;
+    align-items: flex-start;
+    margin-top: 32px;
+    padding-top: 20px;
+  }
+}
 
 /* ══════════════════════════════════════
    REVEAL
@@ -2049,6 +3389,10 @@ footer a:hover{color:var(--v)}
    100% FULL-WIDTH WRAPPERS & 1240PX CONTINUOUS VERTICAL BORDERS
 ══════════════════════════════════════ */
 
+/* ══════════════════════════════════════
+   100% FULL-WIDTH WRAPPERS & 1240PX CONTINUOUS VERTICAL BORDERS
+══════════════════════════════════════ */
+
 /* Outer Wrappers: 100% Full-bleed screen width with 100% horizontal borders */
 .hero-section,
 .sec,
@@ -2058,6 +3402,11 @@ footer a:hover{color:var(--v)}
 .experience,
 .tools-sec,
 .cta-sec,
+.dev-tools-section,
+.skills-playground-section,
+.process-growth-section,
+.kinetic-marquee-section,
+.bd-reviews-section,
 footer {
   width: 100%;
   border-bottom: 1px solid var(--ln) !important;
@@ -2285,17 +3634,23 @@ footer {
   height: 1.25em;
   line-height: 1.25em;
   white-space: nowrap;
-  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 .btn-roll .btn-text-hover {
   color: inherit;
 }
 
+/* Hover Roll Trigger for all parent links / buttons */
 .btn-hero-primary:hover .btn-roll .btn-text-default,
 .btn-view-all-projects:hover .btn-roll .btn-text-default,
 .btn-wh:hover .btn-roll .btn-text-default,
 .btn-ow:hover .btn-roll .btn-text-default,
-.cf-sub:hover .btn-roll .btn-text-default {
+.cf-sub:hover .btn-roll .btn-text-default,
+.footer-email-btn:hover .btn-roll .btn-text-default,
+.footer-link-item a:hover .btn-roll .btn-text-default,
+.footer-top-btn:hover .btn-roll .btn-text-default,
+.btn-roll:hover .btn-text-default {
   transform: translateY(-1.25em);
 }
 
@@ -2303,7 +3658,11 @@ footer {
 .btn-view-all-projects:hover .btn-roll .btn-text-hover,
 .btn-wh:hover .btn-roll .btn-text-hover,
 .btn-ow:hover .btn-roll .btn-text-hover,
-.cf-sub:hover .btn-roll .btn-text-hover {
+.cf-sub:hover .btn-roll .btn-text-hover,
+.footer-email-btn:hover .btn-roll .btn-text-hover,
+.footer-link-item a:hover .btn-roll .btn-text-hover,
+.footer-top-btn:hover .btn-roll .btn-text-hover,
+.btn-roll:hover .btn-text-hover {
   transform: translateY(-1.25em);
 }
 
@@ -3107,6 +4466,8 @@ footer {
   </nav>
 </div>
 
+<div class="site-main-flow" id="siteMainFlow">
+
 <!-- ════ HERO SECTION — Bureau Dimanche Fanned Stack & Unfold ════ -->
 <section class="hero-section" id="home">
   
@@ -3481,122 +4842,639 @@ footer {
   </div>
 </section>
 
-<!-- ════ SERVICES ════ -->
-<section class="sec services" id="services">
-  <div class="svc-top">
-    <div>
-      <div class="chip r">What I Do</div>
-      <h2 class="stitle r d1">Services I <em>Offer</em></h2>
+<!-- ════ SCROLL-DRIVEN DUAL-ROW KINETIC MARQUEE (1240PX) ════ -->
+<section class="kinetic-marquee-section" id="kinetic-marquee">
+  <div class="kinetic-marquee-container">
+    
+    <!-- Row 1: Top Track (Right to Left on Scroll) -->
+    <div class="kinetic-row kinetic-row-1">
+      <div class="kinetic-track" id="kineticTrack1">
+        <div class="kinetic-track-inner">
+          <span class="kinetic-item">INNOVATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">INNOVATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">INNOVATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">INNOVATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+        </div>
+        <!-- Duplicated for continuous wrap -->
+        <div class="kinetic-track-inner" aria-hidden="true">
+          <span class="kinetic-item">INNOVATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">INNOVATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">INNOVATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">INNOVATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+        </div>
+      </div>
     </div>
-    <p class="svc-sub r">End-to-end creative solutions built for brands that refuse to be ordinary.</p>
-  </div>
-  <!-- accordion list -->
-  <div class="svc-list r d2">
-    <div class="sr">
-      <span class="sr-n">01</span><span class="sr-t">Social Media Design</span>
-      <div class="sr-tags"><span class="stag">Instagram</span><span class="stag">Facebook</span><span class="stag">Content</span></div>
-      <div class="sr-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H4M12 2v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    </div>
-    <div class="sr">
-      <span class="sr-n">02</span><span class="sr-t">Motion Design</span>
-      <div class="sr-tags"><span class="stag">After Effects</span><span class="stag">Animation</span><span class="stag">Video</span></div>
-      <div class="sr-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H4M12 2v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    </div>
-    <div class="sr">
-      <span class="sr-n">03</span><span class="sr-t">Marketing &amp; Creative Design</span>
-      <div class="sr-tags"><span class="stag">Ad Creatives</span><span class="stag">Campaigns</span><span class="stag">Branding</span></div>
-      <div class="sr-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H4M12 2v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    </div>
-    <div class="sr">
-      <span class="sr-n">04</span><span class="sr-t">UI Design &amp; Prototyping</span>
-      <div class="sr-tags"><span class="stag">Figma</span><span class="stag">Web UI</span><span class="stag">App UI</span></div>
-      <div class="sr-arr"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H4M12 2v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    </div>
-  </div>
 
-  <!-- horizontal services ticker -->
-  <div class="svc-ticker r d3">
-    <div class="svc-ticker-track">
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Social Media Design</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Motion Design</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Brand Identity</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>UI/UX Design</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Ad Creatives</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Video Editing</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Figma Prototyping</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Marketing Design</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Thumbnail Design</span>
-      <!-- dupe -->
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Social Media Design</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Motion Design</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Brand Identity</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>UI/UX Design</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Ad Creatives</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Video Editing</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Figma Prototyping</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Marketing Design</span>
-      <span class="svc-ticker-item"><span class="svc-ticker-dot"></span>Thumbnail Design</span>
+    <!-- Row 2: Bottom Track (Left to Right on Scroll) -->
+    <div class="kinetic-row kinetic-row-2">
+      <div class="kinetic-track" id="kineticTrack2">
+        <div class="kinetic-track-inner">
+          <span class="kinetic-item">VISIONARY</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">PRECISION</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">CREATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">VISIONARY</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+        </div>
+        <!-- Duplicated for continuous wrap -->
+        <div class="kinetic-track-inner" aria-hidden="true">
+          <span class="kinetic-item">VISIONARY</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">PRECISION</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">CREATIVE</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+          <span class="kinetic-item">VISIONARY</span>
+          <span class="kinetic-sep"><img src="Asset/dot-arrow.png" alt="→" class="kinetic-arrow-img" /></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════ SERVICES — BRIGHTEDGE EDITORIAL ACCORDION (1240PX) ════ -->
+<section class="sec bright-services-section" id="services">
+  <div class="bright-services-container">
+    
+    <!-- Section Header -->
+    <div class="bright-services-header r">
+      <span class="bright-tagline">{ What I Do }</span>
+      <h2 class="bright-headline">EXPLORE WHAT I CAN BUILD FOR YOU</h2>
+      <p class="bright-services-sub">End-to-end visual craft, motion, and bespoke tooling engineered to help brands stand out.</p>
+    </div>
+
+    <!-- Service Rows List -->
+    <div class="bright-services-list r d1">
+
+      <!-- 01. BRANDING -->
+      <div class="bright-service-row" data-service="01" data-image="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80">
+        <button type="button" class="bright-row-trigger" aria-expanded="false">
+          <div class="bright-row-title-wrap">
+            <span class="bright-super-num">01</span>
+            <h3 class="bright-row-title">BRANDING</h3>
+            <span class="bright-sub-label">Visual Systems</span>
+          </div>
+          <div class="bright-toggle-icon" aria-hidden="true">
+            <svg class="bright-plus-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" class="bright-icon-v"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </div>
+        </button>
+        <div class="bright-row-panel-wrap">
+          <div class="bright-row-panel-inner">
+            <div class="bright-panel-grid">
+              <div class="bright-panel-col bright-col-desc">
+                <span class="bright-col-heading">Overview</span>
+                <p class="bright-desc-text">I build bold visual identities and cohesive brand systems that give companies clarity, strong market presence, and long-term recognition.</p>
+              </div>
+              <div class="bright-panel-col bright-col-caps">
+                <span class="bright-col-heading">Capabilities</span>
+                <div class="bright-caps-grid">
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Visual Identity &amp; Guidelines</li>
+                    <li><span class="bright-bullet"></span>Design System Architecture</li>
+                    <li><span class="bright-bullet"></span>Brand Positioning</li>
+                  </ul>
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Marketing &amp; Social Assets</li>
+                    <li><span class="bright-bullet"></span>Art Direction &amp; Typography</li>
+                    <li><span class="bright-bullet"></span>Brand Collateral</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="bright-panel-col bright-col-visual">
+                <div class="bright-visual-card">
+                  <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80" alt="Branding Systems" class="bright-card-img" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02. MOTION DESIGN -->
+      <div class="bright-service-row" data-service="02" data-image="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=80">
+        <button type="button" class="bright-row-trigger" aria-expanded="false">
+          <div class="bright-row-title-wrap">
+            <span class="bright-super-num">02</span>
+            <h3 class="bright-row-title">MOTION DESIGN</h3>
+            <span class="bright-sub-label">Kinetic Visuals</span>
+          </div>
+          <div class="bright-toggle-icon" aria-hidden="true">
+            <svg class="bright-plus-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" class="bright-icon-v"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </div>
+        </button>
+        <div class="bright-row-panel-wrap">
+          <div class="bright-row-panel-inner">
+            <div class="bright-panel-grid">
+              <div class="bright-panel-col bright-col-desc">
+                <span class="bright-col-heading">Overview</span>
+                <p class="bright-desc-text">I craft high-impact motion graphics and kinetic typography designed for product reveals, social campaigns, and memorable brand storytelling.</p>
+              </div>
+              <div class="bright-panel-col bright-col-caps">
+                <span class="bright-col-heading">Capabilities</span>
+                <div class="bright-caps-grid">
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Product Feature Promos</li>
+                    <li><span class="bright-bullet"></span>Kinetic Typography &amp; Titles</li>
+                    <li><span class="bright-bullet"></span>Logo Stings &amp; Identity Motion</li>
+                  </ul>
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Social &amp; Ad Campaign Motion</li>
+                    <li><span class="bright-bullet"></span>UI &amp; Interaction Choreography</li>
+                    <li><span class="bright-bullet"></span>3D Motion Assets</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="bright-panel-col bright-col-visual">
+                <div class="bright-visual-card">
+                  <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=80" alt="Motion Design" class="bright-card-img" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03. CINEMATOGRAPHY -->
+      <div class="bright-service-row" data-service="03" data-image="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&auto=format&fit=crop&q=80">
+        <button type="button" class="bright-row-trigger" aria-expanded="false">
+          <div class="bright-row-title-wrap">
+            <span class="bright-super-num">03</span>
+            <h3 class="bright-row-title">CINEMATOGRAPHY</h3>
+            <span class="bright-sub-label">Video Post &amp; Grade</span>
+          </div>
+          <div class="bright-toggle-icon" aria-hidden="true">
+            <svg class="bright-plus-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" class="bright-icon-v"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </div>
+        </button>
+        <div class="bright-row-panel-wrap">
+          <div class="bright-row-panel-inner">
+            <div class="bright-panel-grid">
+              <div class="bright-panel-col bright-col-desc">
+                <span class="bright-col-heading">Overview</span>
+                <p class="bright-desc-text">I direct and edit cinematic video pieces, blending deliberate pacing, sharp cutting rhythm, and atmospheric color grading for impactful visuals.</p>
+              </div>
+              <div class="bright-panel-col bright-col-caps">
+                <span class="bright-col-heading">Capabilities</span>
+                <div class="bright-caps-grid">
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Cinematic Video Assembly</li>
+                    <li><span class="bright-bullet"></span>Color Grading &amp; Custom LUTs</li>
+                    <li><span class="bright-bullet"></span>Narrative Pacing &amp; Rhythm</li>
+                  </ul>
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Sound Design &amp; Audio Polish</li>
+                    <li><span class="bright-bullet"></span>Visual Effects &amp; Compositing</li>
+                    <li><span class="bright-bullet"></span>Multi-Format Social Delivery</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="bright-panel-col bright-col-visual">
+                <div class="bright-visual-card">
+                  <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&auto=format&fit=crop&q=80" alt="Cinematography" class="bright-card-img" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04. DESIGN TOOLING -->
+      <div class="bright-service-row" data-service="04" data-image="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80">
+        <button type="button" class="bright-row-trigger" aria-expanded="false">
+          <div class="bright-row-title-wrap">
+            <span class="bright-super-num">04</span>
+            <h3 class="bright-row-title">DESIGN TOOLING</h3>
+            <span class="bright-sub-label">Automation &amp; Scripts</span>
+          </div>
+          <div class="bright-toggle-icon" aria-hidden="true">
+            <svg class="bright-plus-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" class="bright-icon-v"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </div>
+        </button>
+        <div class="bright-row-panel-wrap">
+          <div class="bright-row-panel-inner">
+            <div class="bright-panel-grid">
+              <div class="bright-panel-col bright-col-desc">
+                <span class="bright-col-heading">Overview</span>
+                <p class="bright-desc-text">I develop custom Figma plugins, Adobe extensions, and workflow scripts that eliminate repetitive tasks and help creative teams move faster.</p>
+              </div>
+              <div class="bright-panel-col bright-col-caps">
+                <span class="bright-col-heading">Capabilities</span>
+                <div class="bright-caps-grid">
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Custom Figma Plugin Development</li>
+                    <li><span class="bright-bullet"></span>Adobe Photoshop &amp; AE Extensions</li>
+                    <li><span class="bright-bullet"></span>Workflow Automation Scripts</li>
+                  </ul>
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Asset Sync &amp; Data Batching</li>
+                    <li><span class="bright-bullet"></span>Creative Helpers &amp; Tools</li>
+                    <li><span class="bright-bullet"></span>Production Automation</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="bright-panel-col bright-col-visual">
+                <div class="bright-visual-card">
+                  <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80" alt="Design Tooling" class="bright-card-img" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05. DIGITAL PRODUCT -->
+      <div class="bright-service-row" data-service="05" data-image="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80">
+        <button type="button" class="bright-row-trigger" aria-expanded="false">
+          <div class="bright-row-title-wrap">
+            <span class="bright-super-num">05</span>
+            <h3 class="bright-row-title">DIGITAL PRODUCT</h3>
+            <span class="bright-sub-label">UI / UX Systems</span>
+          </div>
+          <div class="bright-toggle-icon" aria-hidden="true">
+            <svg class="bright-plus-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" class="bright-icon-v"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </div>
+        </button>
+        <div class="bright-row-panel-wrap">
+          <div class="bright-row-panel-inner">
+            <div class="bright-panel-grid">
+              <div class="bright-panel-col bright-col-desc">
+                <span class="bright-col-heading">Overview</span>
+                <p class="bright-desc-text">I design clean digital products and interactive web interfaces focused on clear hierarchy, thoughtful micro-interactions, and frictionless user flows.</p>
+              </div>
+              <div class="bright-panel-col bright-col-caps">
+                <span class="bright-col-heading">Capabilities</span>
+                <div class="bright-caps-grid">
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Web &amp; Mobile Interface Design</li>
+                    <li><span class="bright-bullet"></span>Interactive Micro-Interactions</li>
+                    <li><span class="bright-bullet"></span>Design-to-Code Implementation</li>
+                  </ul>
+                  <ul class="bright-caps-list">
+                    <li><span class="bright-bullet"></span>Front-End UI Architecture</li>
+                    <li><span class="bright-bullet"></span>Design Token Integration</li>
+                    <li><span class="bright-bullet"></span>Usability &amp; Aesthetic Audits</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="bright-panel-col bright-col-visual">
+                <div class="bright-visual-card">
+                  <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80" alt="Digital Product UI/UX" class="bright-card-img" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- Floating Cursor Follower for Services Row Hover (Vertical Reel Sliding Reel) -->
+<div class="bright-cursor-follower" id="brightCursorFollower" aria-hidden="true">
+  <div class="bright-cursor-reel" id="brightCursorReel">
+    <div class="bright-cursor-slide" data-index="0">
+      <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80" alt="Branding" />
+    </div>
+    <div class="bright-cursor-slide" data-index="1">
+      <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop&q=80" alt="Motion Design" />
+    </div>
+    <div class="bright-cursor-slide" data-index="2">
+      <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&auto=format&fit=crop&q=80" alt="Cinematography" />
+    </div>
+    <div class="bright-cursor-slide" data-index="3">
+      <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80" alt="Design Tooling" />
+    </div>
+    <div class="bright-cursor-slide" data-index="4">
+      <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80" alt="Digital Product" />
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- ════ PROCESS — 4-STEP INTERACTIVE GROWTH CURVE (1240PX) ════ -->
+<section class="sec process-growth-section" id="process">
+  <div class="process-wrapper">
+    <div class="process-canvas r">
+      
+      <!-- 1. Left Column (Personal Process Header) -->
+      <div class="process-left-col">
+        <span class="process-tagline">{ How I Work }</span>
+        <h2 class="process-headline">A Structured Process Built for High-Impact Outcomes</h2>
+        <p class="process-subtext">A disciplined 4-step approach that turns creative vision into precision-crafted systems.</p>
+        <a href="#services" class="process-cta-btn">
+          <span class="btn-roll">
+            <span class="btn-text-default">Explore Services</span>
+            <span class="btn-text-hover">Explore Services</span>
+          </span>
+        </a>
+      </div>
+
+      <!-- 2. Top Center Controller (Segmented Switcher) -->
+      <div class="process-top-controller">
+        <div class="process-switcher" role="tablist" aria-label="Process Steps">
+          <button type="button" class="process-tab-btn" data-step="0" role="tab" aria-selected="false">Step 01</button>
+          <button type="button" class="process-tab-btn is-active" data-step="1" role="tab" aria-selected="true">Step 02</button>
+          <button type="button" class="process-tab-btn" data-step="2" role="tab" aria-selected="false">Step 03</button>
+          <button type="button" class="process-tab-btn" data-step="3" role="tab" aria-selected="false">Step 04</button>
+        </div>
+      </div>
+
+      <!-- 3. Interactive Stepper & Curve Stage (Center to Right) -->
+      <div class="process-stage-area">
+        
+        <!-- SVG Ramp & 4 Partition Slices -->
+        <svg class="process-curve-svg" viewBox="0 0 1200 500" preserveAspectRatio="none" fill="none">
+          <!-- Background Inactive Base Slope -->
+          <path class="process-curve-base" d="M 360 500 C 580 490, 840 400, 1200 180 L 1200 500 Z" fill="#f4f4f5" />
+
+          <!-- Slice 0 (Step 01) -->
+          <path class="process-slice slice-0" data-step="0" d="M 360 500 L 360 498 C 430 492, 500 480, 570 460 L 570 500 Z" />
+
+          <!-- Slice 1 (Step 02 - Active by default) -->
+          <path class="process-slice slice-1 is-active" data-step="1" d="M 570 500 L 570 460 C 640 440, 710 420, 780 395 L 780 500 Z" />
+
+          <!-- Slice 2 (Step 03) -->
+          <path class="process-slice slice-2" data-step="2" d="M 780 500 L 780 395 C 850 368, 920 340, 990 305 L 990 500 Z" />
+
+          <!-- Slice 3 (Step 04) -->
+          <path class="process-slice slice-3" data-step="3" d="M 990 500 L 990 305 C 1060 268, 1130 228, 1200 180 L 1200 500 Z" />
+        </svg>
+
+        <!-- 4 Floating Outline Step Badges with Vertical Dashed Lines -->
+        <div class="process-badges-layer">
+          
+          <!-- Step 01 Unit -->
+          <div class="process-step-unit process-unit-0" data-step="0">
+            <div class="process-badge">
+              <svg class="process-badge-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <div class="process-badge-label">
+                <span>Discover &amp;</span>
+                <span>Strategy</span>
+              </div>
+            </div>
+            <div class="process-dashed-line"></div>
+          </div>
+
+          <!-- Step 02 Unit (Active by default) -->
+          <div class="process-step-unit process-unit-1 is-active" data-step="1">
+            <div class="process-badge">
+              <svg class="process-badge-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+              </svg>
+              <div class="process-badge-label">
+                <span>Define</span>
+                <span>Direction</span>
+              </div>
+            </div>
+            <div class="process-dashed-line"></div>
+          </div>
+
+          <!-- Step 03 Unit -->
+          <div class="process-step-unit process-unit-2" data-step="2">
+            <div class="process-badge">
+              <svg class="process-badge-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                <circle cx="11" cy="11" r="2"></circle>
+              </svg>
+              <div class="process-badge-label">
+                <span>Design &amp;</span>
+                <span>Craft</span>
+              </div>
+            </div>
+            <div class="process-dashed-line"></div>
+          </div>
+
+          <!-- Step 04 Unit -->
+          <div class="process-step-unit process-unit-3" data-step="3">
+            <div class="process-badge">
+              <svg class="process-badge-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+              </svg>
+              <div class="process-badge-label">
+                <span>Deliver &amp;</span>
+                <span>Scale</span>
+              </div>
+            </div>
+            <div class="process-dashed-line"></div>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   </div>
 </section>
 
-
-
-
-<!-- ════ PROCESS — light ════ -->
-<section class="sec process">
-  <div class="chip r">How I Work</div>
-  <h2 class="stitle r d1">My Design <em>Process</em></h2>
-  <div class="pg">
-    <div class="ps r"><div class="ps-n">01</div><div class="ps-ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="14" stroke="#5E43EC" stroke-width="1.5"/><circle cx="17" cy="17" r="5" stroke="#5E43EC" stroke-width="1.5"/><circle cx="17" cy="17" r="2" fill="#5E43EC" opacity=".5"/></svg></div><h3>Discover</h3><p>Research brand, audience and landscape to find what makes you unique.</p></div>
-    <div class="ps r d1"><div class="ps-n">02</div><div class="ps-ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none"><rect x="5" y="5" width="24" height="24" rx="4" stroke="#5E43EC" stroke-width="1.5"/><path d="M11 17l4 4 8-8" stroke="#5E43EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>Define</h3><p>Translating insights into clear creative strategy and direction.</p></div>
-    <div class="ps r d2"><div class="ps-n">03</div><div class="ps-ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M7 27L17 7l10 20" stroke="#5E43EC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 21h14" stroke="#5E43EC" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div><h3>Design</h3><p>Crafting visuals with precision until every pixel feels exactly right.</p></div>
-    <div class="ps r d3"><div class="ps-n">04</div><div class="ps-ico"><svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M17 5l12 12-12 12L5 17 17 5z" stroke="#5E43EC" stroke-width="1.5"/><circle cx="17" cy="17" r="3" fill="#5E43EC" opacity=".4"/></svg></div><h3>Deliver</h3><p>Clean handoff with all assets and ongoing support so everything lands perfectly.</p></div>
-  </div>
-</section>
-
-<!-- ════ EXPERIENCE &amp; SKILLS ════ -->
-<section class="sec experience" id="experience">
-  <div class="chip r">Background</div>
-  <h2 class="stitle r d1">Experience &amp; <em>Skills</em></h2>
-  <div class="exp-grid">
-    <div class="rl">
-      <div class="exp-lbl">Work Experience</div>
-      <div class="tl">
-        <div class="tl-item">
-          <div class="tl-co">Next Ventures</div>
-          <div class="tl-role">Creative Designer &amp; Visualizer</div>
-          <div class="tl-date">Mar 2025 — Present</div>
-          <div class="tl-chips"><span class="tl-chip">UI Design</span><span class="tl-chip">Motion</span><span class="tl-chip">Branding</span></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-co">Buymode Technologies</div>
-          <div class="tl-role">Senior Designer &amp; Visualizer</div>
-          <div class="tl-date">Jun 2023 — Jan 2025</div>
-          <div class="tl-chips"><span class="tl-chip">Social Media</span><span class="tl-chip">Ad Creative</span></div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-co">Probfly IT</div>
-          <div class="tl-role">Designer &amp; Visualizer</div>
-          <div class="tl-date">Dec 2023 — Jun 2024</div>
-          <div class="tl-chips"><span class="tl-chip">Graphic Design</span><span class="tl-chip">UI</span></div>
-        </div>
-      </div>
+<!-- ════ CAPABILITIES & STACK — MATTER.JS 2D PHYSICS SKILLS PLAYGROUND (1240PX) ════ -->
+<section class="sec skills-playground-section" id="experience">
+  <div class="skills-playground-wrapper">
+    
+    <!-- Floating Header Pill -->
+    <div class="skills-top-badge-wrap">
+      <div class="skills-top-badge">Skills &amp; Specialties</div>
     </div>
-    <div class="rr">
-      <div class="exp-lbl">Design Skills</div>
-      <div class="sk-pills">
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>Figma</span>
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.5L12 5.5l-2.5 2.4.6 3.5L7 9.5l-3.1 1.9.6-3.5L2 5.5l3.5-.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>Adobe Suite</span>
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h6M4 8.5h3.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>UI Design</span>
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".5"/><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.2"/></svg>Motion Design</span>
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 10l4-4 2.5 2.5L11 4l2 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Social Media</span>
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M5 5h4M4 7h6M5 9h4" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".6"/></svg>Branding</span>
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 5.5L9 7l-3.5 1.5V5.5z" fill="currentColor"/></svg>Video Editing</span>
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Prototyping</span>
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 4h12M1 7h8M1 10h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>HTML / CSS</span>
-        <span class="sk-pill"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C3.7 1 1 3.7 1 7s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6z" stroke="currentColor" stroke-width="1.2"/><path d="M7 1c-2 2-3 3.3-3 6s1 4 3 6c2-2 3-3.3 3-6s-1-4-3-6z" stroke="currentColor" stroke-width="1" opacity=".5"/></svg>Vibe Coding</span>
+
+    <div class="skills-playground-canvas" id="skillsCanvas">
+
+      <!-- 1. Figma (Official Multi-color Vector) -->
+      <div class="draggable-skill-pill" data-skill="figma">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <path d="M7.5 2H12v7H7.5A3.5 3.5 0 0 1 7.5 2z" fill="#F24E1E"/>
+            <path d="M12 2h4.5a3.5 3.5 0 1 1 0 7H12V2z" fill="#FF7262"/>
+            <path d="M12 9h4.5a3.5 3.5 0 1 1 0 7H12V9z" fill="#1ABCFE"/>
+            <path d="M7.5 16H12v3.5a3.5 3.5 0 1 1-3.5-3.5z" fill="#0ACF83"/>
+            <path d="M7.5 9H12v7H7.5A3.5 3.5 0 0 1 7.5 9z" fill="#A259FF"/>
+          </svg>
+        </span>
+        <span class="pill-text">Figma</span>
       </div>
+
+      <!-- 2. Adobe Suite (Vibrant Red Emblem) -->
+      <div class="draggable-skill-pill" data-skill="adobe">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <rect width="24" height="24" rx="5" fill="#EB1000"/>
+            <path d="M14.7 4.5H19.5L14.7 19.5H11.7L14.7 4.5ZM9.3 4.5H4.5L9.3 19.5H12.3L9.3 4.5ZM12 11.8L10.3 16.5H13.7L12 11.8Z" fill="#FFFFFF"/>
+          </svg>
+        </span>
+        <span class="pill-text">Adobe Suite</span>
+      </div>
+
+      <!-- 3. UI Design (Vivid Purple/Indigo Layout Interface) -->
+      <div class="draggable-skill-pill" data-skill="ui">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <rect x="2.5" y="3.5" width="19" height="17" rx="3.5" stroke="#6366F1" stroke-width="2" fill="#EEF2FF"/>
+            <path d="M2.5 8.5h19" stroke="#6366F1" stroke-width="1.75"/>
+            <path d="M8.5 8.5v12" stroke="#6366F1" stroke-width="1.75"/>
+            <circle cx="5.5" cy="6" r="1" fill="#6366F1"/>
+            <circle cx="8.5" cy="6" r="1" fill="#818CF8"/>
+            <rect x="11.5" y="11.5" width="7" height="4" rx="1.5" fill="#818CF8"/>
+          </svg>
+        </span>
+        <span class="pill-text">UI Design</span>
+      </div>
+
+      <!-- 4.Vibe Coding (Special Dark Pill with Golden/Purple Sparkle) -->
+      <div class="draggable-skill-pill" data-skill="vibe">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <defs>
+              <linearGradient id="vibeGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#F59E0B"/>
+                <stop offset="50%" stop-color="#EC4899"/>
+                <stop offset="100%" stop-color="#8B5CF6"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" fill="url(#vibeGrad)"/>
+          </svg>
+        </span>
+        <span class="pill-text">Vibe Coding</span>
+      </div>
+
+      <!-- 5. Motion Design (Dynamic Violet Play/Kinetic Icon) -->
+      <div class="draggable-skill-pill" data-skill="motion">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <defs>
+              <linearGradient id="motionGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#8B5CF6"/>
+                <stop offset="100%" stop-color="#D946EF"/>
+              </linearGradient>
+            </defs>
+            <circle cx="12" cy="12" r="9.5" fill="url(#motionGrad)"/>
+            <polygon points="10,8 16.5,12 10,16" fill="#FFFFFF"/>
+          </svg>
+        </span>
+        <span class="pill-text">Motion Design</span>
+      </div>
+
+      <!-- 6. Branding (Custom Uploaded Asset) -->
+      <div class="draggable-skill-pill" data-skill="branding">
+        <span class="pill-ico">
+          <img src="Asset/branding.png" alt="Branding" width="36" height="36" />
+        </span>
+        <span class="pill-text">Branding</span>
+      </div>
+
+      <!-- 7. Video Editing (Cyan / Blue Premiere Pro Icon) -->
+      <div class="draggable-skill-pill" data-skill="video">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="25" height="25">
+            <rect width="24" height="24" rx="5" fill="#00005B"/>
+            <text x="5" y="16.5" fill="#EA77FF" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="12" letter-spacing="-0.5">Pr</text>
+          </svg>
+        </span>
+        <span class="pill-text">Video Editing</span>
+      </div>
+
+      <!-- 8. Cinematography (Custom Uploaded Asset) -->
+      <div class="draggable-skill-pill" data-skill="cinema">
+        <span class="pill-ico">
+          <img src="Asset/cinematography.png" alt="Cinematography" width="36" height="36" />
+        </span>
+        <span class="pill-text">Cinematography</span>
+      </div>
+
+      <!-- 9. HTML / CSS (Authentic Orange & Blue Web Code Tag) -->
+      <div class="draggable-skill-pill" data-skill="html">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="25" height="25" fill="none">
+            <path d="M8.5 7.5L4 12l4.5 4.5" stroke="#E44D26" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15.5 7.5L20 12l-4.5 4.5" stroke="#264DE4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13.5 5.5l-3 13" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="pill-text">HTML / CSS</span>
+      </div>
+
+      <!-- 10. Photoshop (Adobe Ps Icon) -->
+      <div class="draggable-skill-pill" data-skill="photoshop">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="25" height="25">
+            <rect width="24" height="24" rx="5" fill="#001E36"/>
+            <text x="5" y="16.5" fill="#31A8FF" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="12" letter-spacing="-0.5">Ps</text>
+          </svg>
+        </span>
+        <span class="pill-text">Photoshop</span>
+      </div>
+
+      <!-- 11. After Effects (Adobe Ae Icon) -->
+      <div class="draggable-skill-pill" data-skill="aftereffects">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="25" height="25">
+            <rect width="24" height="24" rx="5" fill="#00005B"/>
+            <text x="5" y="16.5" fill="#9999FF" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="12" letter-spacing="-0.5">Ae</text>
+          </svg>
+        </span>
+        <span class="pill-text">After Effects</span>
+      </div>
+
+      <!-- 12. DaVinci (Custom Uploaded Asset) -->
+      <div class="draggable-skill-pill" data-skill="davinci">
+        <span class="pill-ico">
+          <img src="Asset/davinci.png" alt="DaVinci" width="36" height="36" />
+        </span>
+        <span class="pill-text">DaVinci</span>
+      </div>
+
+      <!-- 13. Illustrator (Adobe Ai Icon) -->
+      <div class="draggable-skill-pill" data-skill="illustrator">
+        <span class="pill-ico">
+          <svg viewBox="0 0 24 24" width="25" height="25">
+            <rect width="24" height="24" rx="5" fill="#330000"/>
+            <text x="6" y="16.5" fill="#FF9A00" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="12" letter-spacing="-0.5">Ai</text>
+          </svg>
+        </span>
+        <span class="pill-text">Illustrator</span>
+      </div>
+
+      <!-- 14. FL Studio (Custom Uploaded Asset) -->
+      <div class="draggable-skill-pill" data-skill="flstudio">
+        <span class="pill-ico">
+          <img src="Asset/Fl studio.png" alt="FL Studio" width="36" height="36" />
+        </span>
+        <span class="pill-text">FL Studio</span>
+      </div>
+
     </div>
   </div>
 </section>
@@ -3994,80 +5872,353 @@ footer {
     </div>
   </div>
 </section>
-
-<!-- ════ CTA ════ -->
-<div class="cta r">
-  <div class="cta-ghost">RAKIBUL</div>
-  <h2 class="cta-title">Let's build<br />the next big<br /><em>thing together</em></h2>
-  <div class="cta-btns">
-    <a href="https://web.facebook.com/fb.rakibpixel" target="_blank" class="btn-wh">
-      <span class="btn-roll">
-        <span class="btn-text-default">Start a Project</span>
-        <span class="btn-text-hover">Start a Project</span>
-      </span>
-    </a>
-    <a href="https://be.net/rakibpixel" target="_blank" class="btn-ow">
-      <span class="btn-roll">
-        <span class="btn-text-default">View on Behance</span>
-        <span class="btn-text-hover">View on Behance</span>
-      </span>
-    </a>
-  </div>
 </div>
 
-<!-- ════ CONTACT ════ -->
-<section class="sec contact" id="contact">
-  <div class="rl">
-    <div class="chip">Let's Connect</div>
-    <h2 class="stitle" style="margin-bottom:6px;font-size:clamp(30px,3.5vw,50px)">Get in <em>Touch</em></h2>
-    <p style="color:var(--mu);font-size:15px">Ready to start something great?</p>
-    <div class="cl-links">
-	
-      <a href="https://web.facebook.com/fb.rakibpixel" target="_blank" class="clr"><div class="clr-in"><div class="clr-ico"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" x="0" y="0" viewBox="0 0 504 504" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M377.6 0H126C56.8 0 0 56.8 0 126.4V378c0 69.2 56.8 126 126 126h251.6c69.6 0 126.4-56.8 126.4-126.4V126.4C504 56.8 447.2 0 377.6 0zm-58 252H272v156h-60V252h-32v-64h28v-27.2c0-25.6 12.8-66 66.8-66H324V148h-34.8c-5.6 0-13.2 3.6-13.2 16v24h49.2l-5.6 64z" fill="#ffffff" opacity="1" data-original="#000000" class=""></path></g></svg></div><div><div class="clr-lbl">Facebook</div><div class="clr-val">fb.rakibpixel</div></div></div><span class="clr-arr">↗</span></a>
-	  
-      <a href="https://be.net/rakibpixel" target="_blank" class="clr"><div class="clr-in"><div class="clr-ico"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" x="0" y="0" viewBox="0 0 504.4 504.4" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M195.2 184.2H140v44h51.6c9.2 0 17.2-2.4 17.2-23.6 0-21.2-13.6-20.4-13.6-20.4zM195.2 260.2H140v56h52c8 0 23.2-3.2 23.2-27.2.4-28.4-20-28.8-20-28.8z" fill="#ffffff" opacity="1" data-original="#000000" class=""></path><path d="M377.6.2H126.4C56.8.2 0 57 0 126.6v251.6c0 69.2 56.8 126 126.4 126H378c69.6 0 126.4-56.8 126.4-126.4V126.6C504 57 447.2.2 377.6.2zm-81.6 160h84v20h-84v-20zm-39.2 131.6c0 62.4-61.6 64.4-61.6 64.4H96v-208h98.8c30.8 0 55.2 17.6 55.2 54.4s-29.6 38.8-29.6 38.8c39.2-.4 36.4 50.4 36.4 50.4zm150.8-3.6H306.4c0 40 34.4 36.8 34.4 36.8 32.4 0 31.2-20.8 31.2-20.8h34.4c0 56-66.8 53.6-66.8 53.6-80 0-74.8-78.8-74.8-78.8s0-79.2 74.8-79.2c78.8-.4 68 88.4 68 88.4z" fill="#ffffff" opacity="1" data-original="#000000" class=""></path><path d="M340.4 228.6c-30 0-34.4 31.6-34.4 31.6h64s.4-31.6-29.6-31.6z" fill="#ffffff" opacity="1" data-original="#000000" class=""></path></g></svg></div><div><div class="clr-lbl">Behance</div><div class="clr-val">rakibpixel</div></div></div><span class="clr-arr">↗</span></a>
-	  
-      <a href="https://www.linkedin.com/in/rakibpixel/" target="_blank" class="clr"><div class="clr-in"><div class="clr-ico"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" x="0" y="0" viewBox="0 0 438.536 438.536" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M414.41 24.123C398.333 8.042 378.963 0 356.315 0H82.228C59.58 0 40.21 8.042 24.126 24.123 8.045 40.207.003 59.576.003 82.225v274.084c0 22.647 8.042 42.018 24.123 58.102 16.084 16.084 35.454 24.126 58.102 24.126h274.084c22.648 0 42.018-8.042 58.095-24.126 16.084-16.084 24.126-35.454 24.126-58.102V82.225c-.001-22.649-8.043-42.021-24.123-58.102zM133.618 367.157H67.666V169.016h65.952v198.141zm-5.992-234.825c-6.851 6.567-15.893 9.851-27.124 9.851h-.288c-10.848 0-19.648-3.284-26.407-9.851-6.76-6.567-10.138-14.703-10.138-24.41 0-9.897 3.476-18.083 10.421-24.556 6.95-6.471 15.942-9.708 26.98-9.708 11.039 0 19.89 3.237 26.553 9.708 6.661 6.473 10.088 14.659 10.277 24.556-.001 9.703-3.423 17.839-10.274 24.41zm243.247 234.825h-65.952v-105.92c0-29.879-11.036-44.823-33.116-44.823-8.374 0-15.42 2.331-21.128 6.995-5.715 4.661-9.996 10.324-12.847 16.991-1.335 3.422-1.999 8.75-1.999 15.981v110.775h-65.952c.571-119.529.571-185.579 0-198.142h65.952v27.974c13.867-21.681 33.558-32.544 59.101-32.544 22.84 0 41.21 7.52 55.104 22.554 13.895 15.037 20.841 37.214 20.841 66.519v113.64h-.004z" fill="#ffffff" opacity="1" data-original="#000000" class=""></path></g></svg></div><div><div class="clr-lbl">LinkedIn</div><div class="clr-val">rakibpixel</div></div></div><span class="clr-arr">↗</span></a>
-	  
-      <a href="https://www.instagram.com/rakibpixel" target="_blank" class="clr"><div class="clr-in"><div class="clr-ico"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path d="M301 256c0 24.852-20.148 45-45 45s-45-20.148-45-45 20.148-45 45-45 45 20.148 45 45zm0 0" fill="#ffffff" opacity="1" data-original="#000000" class=""></path><path d="M332 120H180c-33.086 0-60 26.914-60 60v152c0 33.086 26.914 60 60 60h152c33.086 0 60-26.914 60-60V180c0-33.086-26.914-60-60-60zm-76 211c-41.355 0-75-33.645-75-75s33.645-75 75-75 75 33.645 75 75-33.645 75-75 75zm86-146c-8.285 0-15-6.715-15-15s6.715-15 15-15 15 6.715 15 15-6.715 15-15 15zm0 0" fill="#ffffff" opacity="1" data-original="#000000" class=""></path><path d="M377 0H135C60.562 0 0 60.563 0 135v242c0 74.438 60.563 135 135 135h242c74.438 0 135-60.563 135-135V135C512 60.562 451.437 0 377 0zm45 332c0 49.625-40.375 90-90 90H180c-49.625 0-90-40.375-90-90V180c0-49.625 40.375-90 90-90h152c49.625 0 90 40.375 90 90zm0 0" fill="#ffffff" opacity="1" data-original="#000000" class=""></path></g></svg></div><div><div class="clr-lbl">Instagram</div><div class="clr-val">@rakibpixel</div></div></div><span class="clr-arr">↗</span></a>
-    </div>
-  </div>
-  <div class="cf rr">
-    <div class="cfr">
-      <div class="fg"><label>Your Name</label><input type="text" placeholder="John Doe" /></div>
-      <div class="fg"><label>Email</label><input type="email" placeholder="john@example.com" /></div>
-    </div>
-    <div class="fg"><label>Subject</label><input type="text" placeholder="Project inquiry" /></div>
-    <div class="fg"><label>Message</label><textarea rows="5" placeholder="Tell me about your project..."></textarea></div>
-    <button class="cf-sub">
-      <span class="btn-roll">
-        <span class="btn-text-default">Send Message</span>
-        <span class="btn-text-hover">Send Message</span>
-      </span>
-    </button>
-  </div>
-</section>
+<!-- ════ FULL-WIDTH STICKY 3-COLUMN FOOTER WITH EMBEDDED FAQ ════ -->
+<footer class="fullwidth-sticky-footer" id="contact">
+  <div class="sticky-footer-wrapper">
+    
+    <!-- 3-Column Main Grid -->
+    <div class="footer-3col-grid">
+      
+      <!-- 1. Left Column: Brand & Direct Contact Card -->
+      <div class="footer-col-card footer-col-brand footer-reveal-col">
+        <a href="#home" class="footer-brand-logo-wrap" aria-label="Rakib Pixel">
+          <img src="Asset/Logo File/Logo With Text White.svg" alt="Rakib Pixel" class="footer-brand-logo-img" />
+        </a>
+        
+        <div class="footer-avail-badge">
+          <span class="footer-avail-pulse"></span>
+          <span>Available for freelance &amp; select roles</span>
+        </div>
 
-<!-- ════ FOOTER ════ -->
-<footer>
-  <div class="footer-inner">
-    <svg class="foot-svg" width="1558" height="280" viewBox="0 0 1558 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M231.672 279.7L199.605 217.127L269.686 184.588L202.11 0L0 20.0207L0 279.7H100.115L48.1804 51.9346L188.343 148.295L81.7811 199.304L231.672 279.7Z" fill="#5E43EC"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M236.483 213.463L216.866 222.568L226.601 241.561L236.483 213.463Z" fill="#5E43EC"/>
-<path d="M399.242 226.524H374V54.6375H457.179C465.753 54.6375 473.586 55.8795 480.678 58.3637C487.81 60.8478 493.94 64.3336 499.069 68.8211C504.237 73.2685 508.244 78.5974 511.089 84.8078C513.933 90.978 515.356 97.7894 515.356 105.242C515.356 112.053 514.154 118.223 511.75 123.753C509.386 129.242 506.02 133.95 501.653 137.876C497.286 141.803 492.037 144.828 485.907 146.951C479.776 149.075 472.965 150.137 465.472 150.137V150.016C468.918 150.016 472.164 150.597 475.209 151.759C478.254 152.921 481.119 154.644 483.803 156.928C486.528 159.212 489.052 162.036 491.376 165.402C493.7 168.768 495.843 172.654 497.806 177.062L519.983 226.524H492.277L470.16 177.122C468.718 173.876 467.055 171.152 465.172 168.948C463.329 166.704 461.085 164.901 458.441 163.539C455.796 162.177 452.671 161.195 449.065 160.594C445.459 159.993 441.172 159.693 436.204 159.693H396.057L399.242 155.546V226.524ZM397.199 78.0765L399.242 75.4922V140.34L396.057 136.254H453.933C459.583 136.254 464.651 135.572 469.139 134.21C473.626 132.848 477.412 130.905 480.498 128.38C483.623 125.816 486.007 122.691 487.649 119.005C489.292 115.319 490.114 111.152 490.114 106.504C490.114 101.936 489.312 97.8896 487.71 94.3637C486.107 90.8378 483.763 87.8729 480.678 85.4689C477.593 83.0648 473.786 81.2418 469.259 79.9997C464.771 78.7176 459.623 78.0765 453.813 78.0765H397.199Z" fill="white"/>
-<path d="M532.402 140.16C532.402 132.547 533.804 125.676 536.609 119.546C539.413 113.415 543.42 108.187 548.629 103.86C553.877 99.5323 560.228 96.2068 567.68 93.8829C575.133 91.559 583.487 90.3971 592.742 90.3971C602.559 90.3971 611.353 91.7193 619.126 94.3637C626.899 96.968 633.49 100.734 638.899 105.663C644.308 110.591 648.455 116.621 651.34 123.753C654.225 130.844 655.667 138.898 655.667 147.913V226.524H631.326V190.223H631.507C630.465 194.35 629.043 198.197 627.24 201.763C625.437 205.329 623.293 208.594 620.809 211.559C618.325 214.524 615.5 217.168 612.335 219.492C609.21 221.776 605.784 223.719 602.058 225.322C598.372 226.885 594.405 228.067 590.158 228.868C585.911 229.709 581.443 230.13 576.755 230.13C569.503 230.13 562.912 229.168 556.983 227.245C551.053 225.362 545.964 222.678 541.717 219.192C537.51 215.666 534.245 211.459 531.921 206.571C529.637 201.643 528.495 196.173 528.495 190.163C528.495 184.113 529.677 178.664 532.041 173.816C534.445 168.968 537.871 164.861 542.318 161.496C546.806 158.09 552.235 155.486 558.605 153.683C564.976 151.88 572.168 150.978 580.181 150.978H632.228V171.412H579.941C575.453 171.412 571.507 171.793 568.101 172.554C564.695 173.315 561.831 174.457 559.507 175.98C557.223 177.502 555.48 179.385 554.278 181.629C553.116 183.873 552.535 186.457 552.535 189.382C552.535 192.507 553.196 195.292 554.518 197.736C555.881 200.18 557.864 202.223 560.468 203.866C563.073 205.509 566.278 206.771 570.084 207.653C573.931 208.494 578.338 208.915 583.306 208.915C587.994 208.915 592.422 208.534 596.589 207.773C600.796 207.011 604.682 205.93 608.248 204.527C611.814 203.125 615.019 201.422 617.864 199.419C620.709 197.415 623.133 195.172 625.136 192.688C627.139 190.163 628.662 187.419 629.704 184.454C630.786 181.489 631.326 178.364 631.326 175.078V147.913C631.326 142.464 630.405 137.556 628.562 133.188C626.759 128.821 624.175 125.095 620.809 122.01C617.443 118.925 613.357 116.561 608.548 114.918C603.74 113.275 598.331 112.454 592.321 112.454C586.191 112.454 580.882 113.115 576.395 114.437C571.947 115.759 568.261 117.622 565.336 120.026C562.452 122.43 560.288 125.355 558.846 128.801C557.443 132.207 556.742 135.993 556.742 140.16H532.402Z" fill="white"/>
-<path d="M793.007 94.0031L718.603 162.277V161.315L799.378 226.524H764.52L698.169 171.172L698.71 170.871V226.524H674.369V48.6274H698.71V153.622L698.169 153.382L761.755 94.0031H793.007Z" fill="white"/>
-<path d="M837.222 94.0031V226.524H812.882V94.0031H837.222ZM837.823 48.6274V78.6775H812.281V48.6274H837.823Z" fill="white"/>
-<path d="M880.889 48.6274V135.532L880.708 135.592C882.391 128.701 884.755 122.471 887.8 116.901C890.885 111.332 894.532 106.584 898.739 102.658C902.986 98.731 907.754 95.7059 913.042 93.5824C918.331 91.4588 924.001 90.3971 930.051 90.3971C935.5 90.3971 940.668 91.1784 945.557 92.741C950.445 94.3036 954.952 96.5473 959.079 99.4722C963.246 102.357 966.992 105.883 970.318 110.05C973.683 114.217 976.528 118.885 978.852 124.053C981.176 129.222 982.959 134.851 984.201 140.941C985.483 147.031 986.124 153.462 986.124 160.233C986.124 167.005 985.483 173.435 984.201 179.526C982.959 185.616 981.176 191.265 978.852 196.474C976.528 201.643 973.683 206.31 970.318 210.477C966.992 214.604 963.246 218.13 959.079 221.055C954.952 223.98 950.445 226.223 945.557 227.786C940.668 229.349 935.5 230.13 930.051 230.13C924.001 230.13 918.331 229.068 913.042 226.945C907.754 224.821 902.986 221.796 898.739 217.87C894.532 213.943 890.885 209.195 887.8 203.626C884.755 198.016 882.391 191.766 880.708 184.875L880.889 184.995V226.524H856.548V48.6274H880.889ZM880.889 160.233C880.889 165.282 881.309 169.99 882.151 174.357C882.992 178.684 884.214 182.651 885.817 186.257C887.42 189.863 889.403 193.068 891.767 195.873C894.131 198.638 896.815 200.981 899.82 202.905C902.865 204.788 906.211 206.23 909.857 207.232C913.543 208.234 917.51 208.734 921.757 208.734C928.248 208.734 933.977 207.693 938.946 205.609C943.914 203.486 948.081 200.38 951.446 196.294C954.852 192.167 957.416 187.098 959.139 181.088C960.902 175.038 961.784 168.087 961.784 160.233C961.784 152.38 960.902 145.449 959.139 139.439C957.416 133.389 954.872 128.32 951.506 124.233C948.141 120.147 943.954 117.062 938.946 114.978C933.977 112.855 928.248 111.793 921.757 111.793C917.51 111.793 913.543 112.294 909.857 113.295C906.211 114.297 902.865 115.759 899.82 117.683C896.815 119.566 894.131 121.91 891.767 124.714C889.403 127.479 887.42 130.664 885.817 134.27C884.214 137.836 882.992 141.803 882.151 146.17C881.309 150.497 880.889 155.185 880.889 160.233Z" fill="white"/>
-<path d="M1056.94 226.524V54.6375H1136.63C1145.6 54.6375 1153.86 55.9997 1161.39 58.7243C1168.96 61.4488 1175.47 65.2752 1180.92 70.2034C1186.37 75.0916 1190.62 80.9213 1193.66 87.6926C1196.71 94.4238 1198.23 101.836 1198.23 109.93C1198.23 117.983 1196.69 125.415 1193.6 132.227C1190.56 139.038 1186.31 144.908 1180.86 149.836C1175.41 154.764 1168.9 158.611 1161.33 161.375C1153.8 164.14 1145.56 165.522 1136.63 165.522H1077.85L1082.18 160.594V226.524H1056.94ZM1080.13 78.0765L1082.18 75.4922V146.17L1078.99 142.083H1134.64C1140.49 142.083 1145.78 141.342 1150.51 139.86C1155.24 138.337 1159.27 136.193 1162.59 133.429C1165.92 130.624 1168.48 127.238 1170.28 123.272C1172.09 119.305 1172.99 114.858 1172.99 109.93C1172.99 105.041 1172.11 100.634 1170.34 96.7076C1168.58 92.781 1166.06 89.4355 1162.77 86.6709C1159.49 83.9062 1155.5 81.7827 1150.81 80.3002C1146.16 78.8178 1140.94 78.0765 1135.13 78.0765H1080.13Z" fill="white"/>
-<path d="M1240.55 94.0031V226.524H1216.21V94.0031H1240.55ZM1241.15 48.6274V78.6775H1215.61V48.6274H1241.15Z" fill="white"/>
-<path d="M1390.29 94.0031L1341.25 159.753V158.611L1394.5 226.524H1365.65L1322.56 171.713H1323.4L1281.51 226.524H1254.17L1306.51 158.911V160.053L1256.81 94.0031H1285.66L1325.27 146.831H1324.36L1362.95 94.0031H1390.29Z" fill="white"/>
-<path d="M1414.32 160.714C1414.32 168.006 1415.29 174.577 1417.21 180.427C1419.13 186.277 1421.88 191.265 1425.44 195.392C1429.05 199.479 1433.4 202.624 1438.49 204.828C1443.61 207.032 1449.36 208.133 1455.73 208.133C1460.1 208.133 1464.13 207.592 1467.81 206.511C1471.5 205.429 1474.83 203.826 1477.79 201.703C1480.8 199.539 1483.44 196.875 1485.72 193.709C1488.05 190.504 1490.01 186.798 1491.61 182.591H1515.95C1514.23 190.003 1511.55 196.654 1507.9 202.544C1504.25 208.434 1499.81 213.422 1494.56 217.509C1489.35 221.596 1483.4 224.721 1476.71 226.885C1470.06 229.048 1462.87 230.13 1455.13 230.13C1445.36 230.13 1436.46 228.447 1428.45 225.082C1420.48 221.716 1413.62 216.968 1407.89 210.838C1402.2 204.708 1397.8 197.335 1394.67 188.721C1391.55 180.107 1389.98 170.551 1389.98 160.053C1389.98 149.636 1391.53 140.16 1394.61 131.626C1397.7 123.052 1402.06 115.719 1407.71 109.629C1413.36 103.499 1420.13 98.771 1428.03 95.4455C1435.96 92.0799 1444.74 90.3971 1454.35 90.3971C1463.85 90.3971 1472.42 92.0398 1480.07 95.3253C1487.73 98.5707 1494.26 103.198 1499.67 109.208C1505.08 115.218 1509.24 122.491 1512.17 131.025C1515.09 139.559 1516.56 149.115 1516.56 159.693C1516.56 161.215 1516.52 162.738 1516.44 164.26C1516.39 165.743 1516.29 167.365 1516.13 169.128H1409.16V148.093H1504.66L1491.79 168.948C1491.91 167.586 1491.99 166.183 1492.03 164.741C1492.11 163.299 1492.15 161.856 1492.15 160.414C1492.15 152.721 1491.31 145.91 1489.63 139.98C1487.99 134.01 1485.56 128.981 1482.36 124.895C1479.15 120.808 1475.21 117.703 1470.52 115.579C1465.87 113.456 1460.52 112.394 1454.47 112.394C1448.26 112.394 1442.67 113.496 1437.7 115.699C1432.78 117.903 1428.57 121.068 1425.08 125.195C1421.64 129.322 1418.97 134.33 1417.09 140.22C1415.25 146.11 1414.32 152.721 1414.32 160.053V160.714Z" fill="white"/>
-    <span>© 2025 Rakibul — All rights reserved</span>
+        <h3 class="footer-role-summary">Visual Designer &amp; Creative Technologist</h3>
+
+        <p class="footer-brand-bio">
+          Blending strategic visual systems, motion design, and high-performance digital aesthetics for ambitious creators and forward-thinking brands.
+        </p>
+
+        <a href="mailto:rakibpixel.chat@gmail.com" class="footer-email-btn" title="Email Rakibul">
+          <span class="btn-roll">
+            <span class="btn-text-default">rakibpixel.chat@gmail.com</span>
+            <span class="btn-text-hover">rakibpixel.chat@gmail.com</span>
+          </span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </a>
+      </div>
+
+      <!-- 2. Center Column: Compact FAQ Chat Bubble Module -->
+      <div class="footer-col-faq footer-reveal-col" id="faq">
+        <div class="footer-faq-header">
+          <h4 class="footer-faq-title">
+            <span>Frequently Asked</span>
+          </h4>
+          <div class="footer-faq-time-badge">
+            <span class="footer-faq-time-dot"></span>
+            <span id="footerFaqTime">Click to open, 3:30 AM</span>
+          </div>
+        </div>
+
+        <div class="footer-faq-container">
+          
+          <!-- FAQ 1 (Open by Default) -->
+          <div class="footer-faq-item is-open">
+            <button type="button" class="footer-faq-q" aria-expanded="true">
+              <span class="footer-faq-q-text">Are you open for freelance branding, UI, or design systems?</span>
+              <span class="footer-faq-toggle" aria-hidden="true">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </button>
+            <div class="footer-faq-a-wrap">
+              <div class="footer-faq-a-inner">
+                <div class="footer-faq-a">
+                  <p>Yes, absolutely! I'm currently open for select freelance contracts, brand identity systems, high-converting motion design, and full-stack digital product design with ambitious teams worldwide.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="footer-faq-item">
+            <button type="button" class="footer-faq-q" aria-expanded="false">
+              <span class="footer-faq-q-text">What exactly does your design &amp; visualization process look like?</span>
+              <span class="footer-faq-toggle" aria-hidden="true">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </button>
+            <div class="footer-faq-a-wrap">
+              <div class="footer-faq-a-inner">
+                <div class="footer-faq-a">
+                  <p>I combine strategic visual storytelling with engineering precision. From moodboards, art direction, and Figma tokens to keyframe animations and production-ready web interfaces, I ensure your product looks premium and converts seamlessly.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="footer-faq-item">
+            <button type="button" class="footer-faq-q" aria-expanded="false">
+              <span class="footer-faq-q-text">How fast can you deliver a project?</span>
+              <span class="footer-faq-toggle" aria-hidden="true">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </button>
+            <div class="footer-faq-a-wrap">
+              <div class="footer-faq-a-inner">
+                <div class="footer-faq-a">
+                  <p>Turnaround depends on project scope, but typical brand sprints take 1–2 weeks, while full UI/UX or interactive landing pages take 2–3 weeks. I work in transparent async sprints with regular interactive prototypes.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="footer-faq-item">
+            <button type="button" class="footer-faq-q" aria-expanded="false">
+              <span class="footer-faq-q-text">Do you handle both design and front-end development?</span>
+              <span class="footer-faq-toggle" aria-hidden="true">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </button>
+            <div class="footer-faq-a-wrap">
+              <div class="footer-faq-a-inner">
+                <div class="footer-faq-a">
+                  <p>Yes! I design high-fidelity interfaces in Figma and translate them directly into clean, responsive, high-performance HTML/CSS and JavaScript—eliminating handoff gaps and ensuring keyframes match 1:1 with the design vision.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="footer-faq-item">
+            <button type="button" class="footer-faq-q" aria-expanded="false">
+              <span class="footer-faq-q-text">What tools and software do you specialize in?</span>
+              <span class="footer-faq-toggle" aria-hidden="true">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </button>
+            <div class="footer-faq-a-wrap">
+              <div class="footer-faq-a-inner">
+                <div class="footer-faq-a">
+                  <p>My daily stack includes Figma, Adobe Illustrator, Photoshop, After Effects, Premiere Pro, DaVinci Resolve, and modern web technologies. I also develop custom Figma plugins and internal workflow scripts to speed up production.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 6 -->
+          <div class="footer-faq-item">
+            <button type="button" class="footer-faq-q" aria-expanded="false">
+              <span class="footer-faq-q-text">How do we get started on a project together?</span>
+              <span class="footer-faq-toggle" aria-hidden="true">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19" class="footer-faq-icon-v"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+            </button>
+            <div class="footer-faq-a-wrap">
+              <div class="footer-faq-a-inner">
+                <div class="footer-faq-a">
+                  <p>Simply drop me an email at rakibpixel.chat@gmail.com or book a quick 30-minute discovery call using the button below. Let’s talk about your vision, timeline, and deliverables!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 3. Right Column: Navigation & Social Links Card (2 Subcolumns) -->
+      <div class="footer-col-card footer-col-nav-card footer-reveal-col">
+        
+        <!-- Pages Navigation Subcolumn (Right-Aligned) -->
+        <div class="footer-nav-block">
+          <span class="footer-nav-heading">[ Pages ]</span>
+          <ul class="footer-links-list">
+            <li class="footer-link-item">
+              <a href="#about">
+                <span class="btn-roll"><span class="btn-text-default">About</span><span class="btn-text-hover">About</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="#dev-tools">
+                <span class="btn-roll"><span class="btn-text-default">Tools</span><span class="btn-text-hover">Tools</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="#services">
+                <span class="btn-roll"><span class="btn-text-default">Services</span><span class="btn-text-hover">Services</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="#process">
+                <span class="btn-roll"><span class="btn-text-default">How I Work</span><span class="btn-text-hover">How I Work</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="#experience">
+                <span class="btn-roll"><span class="btn-text-default">Skills &amp; Specialties</span><span class="btn-text-hover">Skills &amp; Specialties</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="gallery.html">
+                <span class="btn-roll"><span class="btn-text-default">Gallery</span><span class="btn-text-hover">Gallery</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="#experience">
+                <span class="btn-roll"><span class="btn-text-default">Experience</span><span class="btn-text-hover">Experience</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="https://drive.google.com/file/d/1V-Ful4u5xza3Cz98Q-Ppt5y1OjROQio7/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">Resume</span><span class="btn-text-hover">Resume</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="#blog">
+                <span class="btn-roll"><span class="btn-text-default">Blog</span><span class="btn-text-hover">Blog</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="#awards">
+                <span class="btn-roll"><span class="btn-text-default">Awards</span><span class="btn-text-hover">Awards</span></span>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="#networking">
+                <span class="btn-roll"><span class="btn-text-default">Networking</span><span class="btn-text-hover">Networking</span></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Connect Links Subcolumn (Right-Aligned with Clean SVG Arrow) -->
+        <div class="footer-nav-block">
+          <span class="footer-nav-heading">[ Connect ]</span>
+          <ul class="footer-links-list">
+            <li class="footer-link-item">
+              <a href="https://www.linkedin.com/in/rakibpixel/" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">LinkedIn</span><span class="btn-text-hover">LinkedIn</span></span>
+                <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="https://www.behance.net/rakibpixel" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">Behance</span><span class="btn-text-hover">Behance</span></span>
+                <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="https://dribbble.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">Dribbble</span><span class="btn-text-hover">Dribbble</span></span>
+                <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="https://www.instagram.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">Instagram</span><span class="btn-text-hover">Instagram</span></span>
+                <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="https://web.facebook.com/fb.rakibpixel" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">Facebook</span><span class="btn-text-hover">Facebook</span></span>
+                <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="https://pinterest.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">Pinterest</span><span class="btn-text-hover">Pinterest</span></span>
+                <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="https://x.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">X / Twitter</span><span class="btn-text-hover">X / Twitter</span></span>
+                <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="https://www.artstation.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">ArtStation</span><span class="btn-text-hover">ArtStation</span></span>
+                <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </li>
+            <li class="footer-link-item">
+              <a href="https://github.com/rakibpixel" target="_blank" rel="noopener noreferrer">
+                <span class="btn-roll"><span class="btn-text-default">GitHub</span><span class="btn-text-hover">GitHub</span></span>
+                <svg class="footer-link-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom Meta Bar -->
+    <div class="footer-bottom-meta footer-reveal-col">
+      <div class="footer-meta-left">
+        &copy; 2026 Rakib Pixel. All rights reserved.
+      </div>
+      <div class="footer-meta-right">
+        <span class="footer-meta-tz">Dhaka, BD / GMT+6</span>
+      </div>
+    </div>
+
+  </div>
 </footer>
 
 <!-- ════ PROGRESSIVE GRADIENT BLUR OVERLAY (BUREAU DIMANCHE STYLE) ════ -->
-<div class="bottom-blur-gradient-overlay" aria-hidden="true"></div>
+<div class="bottom-blur-gradient-overlay" id="bottomBlurOverlay" aria-hidden="true"></div>
 
 <!-- ════ FLOATING BOTTOM DISCUSS PILL (STICKY 12PX FROM BOTTOM) ════ -->
 <div class="bottom-discuss-wrapper" id="bottomDiscussWrapper">
@@ -4114,6 +6265,589 @@ footer {
   document.body.style.overflow = '';
 })();
 
+/* BACK TO TOP SMOOTH SCROLL */
+(function(){
+  var btt = document.getElementById('footerBackToTop');
+  if (btt) {
+    btt.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+})();
+
+/* ══════════════════════════════════════
+   SERVICES — BRIGHTEDGE ACCORDION & 1:1 FLOATING CURSOR FOLLOWER (VERTICAL REEL)
+══════════════════════════════════════ */
+(function initBrightServices(){
+  var follower = document.getElementById('brightCursorFollower');
+  var reel = document.getElementById('brightCursorReel');
+  var slides = reel ? reel.querySelectorAll('.bright-cursor-slide') : [];
+  var rows = document.querySelectorAll('.bright-service-row');
+  var servicesList = document.querySelector('.bright-services-list');
+  
+  if (!rows.length || !follower || !reel) return;
+
+  var isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (isTouch) return;
+
+  var posX = -9999;
+  var posY = -9999;
+  var targetX = -9999;
+  var targetY = -9999;
+  var currentScale = 0;
+  var targetScale = 0;
+  var currentOpacity = 0;
+  var targetOpacity = 0;
+  var isHoveringList = false;
+  var currentIndex = 0;
+
+  function setSlide(idx) {
+    if (idx === currentIndex) return;
+    currentIndex = idx;
+    reel.style.transform = 'translate3d(0, -' + (idx * 125) + 'px, 0)';
+    slides.forEach(function(s, i) {
+      if (i === idx) s.classList.add('is-current');
+      else s.classList.remove('is-current');
+    });
+  }
+
+  // 1. Accordion Toggle
+  rows.forEach(function(row, idx){
+    var trigger = row.querySelector('.bright-row-trigger');
+    if (!trigger) return;
+
+    trigger.addEventListener('click', function(e){
+      e.preventDefault();
+      var isOpen = row.classList.toggle('is-open');
+      this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      
+      // If row opened, collapse follower towards cursor
+      if (isOpen) {
+        targetScale = 0;
+        targetOpacity = 0;
+      }
+    });
+
+    // 2. Cursor Follower on Row Hover
+    row.addEventListener('mouseenter', function(e){
+      if (row.classList.contains('is-open')) {
+        targetScale = 0;
+        targetOpacity = 0;
+        return;
+      }
+
+      // If entering fresh, snap position to mouse coordinates to prevent top-left drift
+      if (!isHoveringList || posX < -1000) {
+        posX = e.clientX;
+        posY = e.clientY;
+        targetX = e.clientX;
+        targetY = e.clientY;
+        // set instant slide without transition glitch
+        currentIndex = idx;
+        reel.style.transform = 'translate3d(0, -' + (idx * 125) + 'px, 0)';
+        slides.forEach(function(s, i) {
+          if (i === idx) s.classList.add('is-current');
+          else s.classList.remove('is-current');
+        });
+      } else {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        setSlide(idx);
+      }
+
+      isHoveringList = true;
+      targetScale = 1;
+      targetOpacity = 1;
+    });
+
+    row.addEventListener('mousemove', function(e){
+      if (row.classList.contains('is-open')) {
+        targetScale = 0;
+        targetOpacity = 0;
+        return;
+      }
+      targetX = e.clientX;
+      targetY = e.clientY;
+      targetScale = 1;
+      targetOpacity = 1;
+      setSlide(idx);
+    });
+  });
+
+  // 3. Exit State when leaving services list
+  if (servicesList) {
+    servicesList.addEventListener('mouseleave', function(){
+      isHoveringList = false;
+      targetScale = 0;
+      targetOpacity = 0;
+    });
+  }
+
+  // Window mousemove fallback to ensure continuous tracking across rows
+  window.addEventListener('mousemove', function(e){
+    if (isHoveringList) {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    }
+  }, { passive: true });
+
+  // 4. Smooth 60fps Lerp Engine
+  function renderFollower(){
+    // Lerp position (~0.15 factor for crisp responsive cursor tracking)
+    posX += (targetX - posX) * 0.15;
+    posY += (targetY - posY) * 0.15;
+
+    // Lerp scale & opacity
+    currentScale += (targetScale - currentScale) * 0.18;
+    currentOpacity += (targetOpacity - currentOpacity) * 0.2;
+
+    if (currentOpacity < 0.005 && targetOpacity === 0) {
+      currentOpacity = 0;
+      currentScale = 0;
+    }
+
+    if (currentOpacity > 0.001) {
+      follower.style.opacity = currentOpacity.toFixed(3);
+      follower.style.transform = 'translate3d(' + posX.toFixed(1) + 'px, ' + posY.toFixed(1) + 'px, 0) translate(20px, -115%) rotate(4deg) scale(' + currentScale.toFixed(3) + ')';
+    } else {
+      follower.style.opacity = '0';
+      follower.style.transform = 'translate3d(-9999px, -9999px, 0) translate(20px, -115%) rotate(4deg) scale(0)';
+    }
+
+    requestAnimationFrame(renderFollower);
+  }
+
+  requestAnimationFrame(renderFollower);
+})();
+
+/* ══════════════════════════════════════
+   PROCESS — 4-STEP INTERACTIVE GROWTH CONTROLLER (CLICK-ONLY)
+══════════════════════════════════════ */
+(function initProcessGrowthSection(){
+  var section = document.getElementById('process');
+  if (!section) return;
+
+  var tabs = section.querySelectorAll('.process-tab-btn');
+  var units = section.querySelectorAll('.process-step-unit');
+  var slices = section.querySelectorAll('.process-slice');
+  var currentStep = 1; // Step 02 default active
+
+  function setActiveStep(idx) {
+    if (idx < 0 || idx >= units.length) return;
+    currentStep = idx;
+
+    // 1. Update Segmented Tabs
+    tabs.forEach(function(tab, i){
+      var isActive = (i === idx);
+      tab.classList.toggle('is-active', isActive);
+      tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+
+    // 2. Update Step Badges & Dashed Lines
+    units.forEach(function(unit, i){
+      unit.classList.toggle('is-active', i === idx);
+    });
+
+    // 3. Update SVG Ramp Slices
+    slices.forEach(function(slice, i){
+      slice.classList.toggle('is-active', i === idx);
+    });
+  }
+
+  // Strict Click-Only Trigger on Tabs
+  tabs.forEach(function(tab, idx){
+    tab.addEventListener('click', function(e){
+      e.preventDefault();
+      setActiveStep(idx);
+    });
+  });
+
+  // Strict Click-Only Trigger on Badges
+  units.forEach(function(unit, idx){
+    unit.addEventListener('click', function(e){
+      e.preventDefault();
+      setActiveStep(idx);
+    });
+  });
+
+  // Strict Click-Only Trigger on Slices
+  slices.forEach(function(slice, idx){
+    slice.addEventListener('click', function(){
+      setActiveStep(idx);
+    });
+  });
+})();
+
+/* ══════════════════════════════════════
+   CAPABILITIES & STACK — MATTER.JS 2D PHYSICS ENGINE (CONTINUOUS GRAVITY)
+══════════════════════════════════════ */
+(function initMatterSkillsPlayground(){
+  var section = document.getElementById('experience');
+  var canvas = document.getElementById('skillsCanvas');
+  if (!section || !canvas) return;
+
+  var pillEls = canvas.querySelectorAll('.draggable-skill-pill');
+  if (!pillEls.length) return;
+
+  // Verify Matter.js is loaded
+  if (typeof Matter === 'undefined') {
+    console.warn('Matter.js not loaded, loading dynamically...');
+    var script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js';
+    script.onload = function(){ initMatterSkillsPlayground(); };
+    document.head.appendChild(script);
+    return;
+  }
+
+  var Engine = Matter.Engine,
+      Runner = Matter.Runner,
+      Bodies = Matter.Bodies,
+      Composite = Matter.Composite,
+      Body = Matter.Body,
+      Events = Matter.Events,
+      Mouse = Matter.Mouse,
+      MouseConstraint = Matter.MouseConstraint;
+
+  // 1. Initialize Engine with continuous active vertical gravity (1.0)
+  var engine = Engine.create({
+    gravity: { x: 0, y: 1.0, scale: 0.001 }
+  });
+
+  var runner = Runner.create();
+  Runner.run(runner, engine);
+
+  var pillItems = [];
+  var walls = [];
+
+  function getCanvasBounds(){
+    return {
+      w: canvas.clientWidth || 1176,
+      h: canvas.clientHeight || 500
+    };
+  }
+
+  // 2. Centered Inward Boundary Walls & Elevated Bottom Floor (for 14 Skills)
+  function createWalls(){
+    walls.forEach(function(w){ Composite.remove(engine.world, w); });
+    walls = [];
+
+    var b = getCanvasBounds();
+    var isMobile = b.w < 768;
+    var wallThickness = 200;
+    var floorBottomPadding = isMobile ? 28 : 45; // elevated floor for 14 skills
+    var wallPadding = isMobile ? 12 : Math.min(160, b.w * 0.13); // ~140px-160px inward
+
+    // Elevated Floor (floorY = canvasHeight - floorBottomPadding)
+    var floor = Bodies.rectangle(b.w / 2, b.h - floorBottomPadding + (wallThickness / 2), b.w * 2, wallThickness, {
+      isStatic: true,
+      restitution: 0.25,
+      friction: 0.4,
+      frictionStatic: 0.5,
+      label: 'wall_bottom'
+    });
+
+    // Inward Left Wall (constrains pile to middle zone)
+    var leftWall = Bodies.rectangle(wallPadding - (wallThickness / 2), b.h / 2, wallThickness, b.h * 4, {
+      isStatic: true,
+      restitution: 0.25,
+      friction: 0.4,
+      frictionStatic: 0.5,
+      label: 'wall_left'
+    });
+
+    // Inward Right Wall
+    var rightWall = Bodies.rectangle(b.w - wallPadding + (wallThickness / 2), b.h / 2, wallThickness, b.h * 4, {
+      isStatic: true,
+      restitution: 0.25,
+      friction: 0.4,
+      frictionStatic: 0.5,
+      label: 'wall_right'
+    });
+
+    walls = [floor, leftWall, rightWall];
+
+    // Angled Funnel Wedges on Desktop (elevated with floor)
+    if (!isMobile) {
+      var leftWedge = Bodies.rectangle(wallPadding + 40, b.h - floorBottomPadding - 25, 130, 26, {
+        isStatic: true,
+        angle: -0.25,
+        restitution: 0.25,
+        friction: 0.4,
+        frictionStatic: 0.5,
+        label: 'wedge_left'
+      });
+      var rightWedge = Bodies.rectangle(b.w - wallPadding - 40, b.h - floorBottomPadding - 25, 130, 26, {
+        isStatic: true,
+        angle: 0.25,
+        restitution: 0.25,
+        friction: 0.4,
+        frictionStatic: 0.5,
+        label: 'wedge_right'
+      });
+      walls.push(leftWedge, rightWedge);
+    }
+
+    Composite.add(engine.world, walls);
+  }
+
+  // 3. Create Pill Bodies with Balanced Friction & Soft Settling (All 14 Skills)
+  function createPillBodies(){
+    var b = getCanvasBounds();
+    var isMobile = b.w < 768;
+    pillItems = [];
+
+    var centerX = b.w * 0.5;
+    var colsCount = isMobile ? 3 : 4;
+    var spreadX = isMobile ? b.w * 0.28 : b.w * 0.19;
+
+    pillEls.forEach(function(el, i){
+      var rect = el.getBoundingClientRect();
+      var w = rect.width || 170;
+      var h = rect.height || 50;
+
+      // Protective Collision Cushion
+      var bodyW = w + (isMobile ? 10 : 18);
+      var bodyH = h + (isMobile ? 8 : 14);
+      var radius = Math.min(bodyW, bodyH) * 0.48;
+
+      var col = (i % colsCount) - ((colsCount - 1) / 2);
+      var row = Math.floor(i / colsCount);
+      var spawnX = centerX + col * spreadX + (Math.random() - 0.5) * 30;
+      var spawnY = 60 + row * 55;
+
+      var body = Bodies.rectangle(spawnX, spawnY, bodyW, bodyH, {
+        chamfer: { radius: radius },
+        restitution: 0.25,     // soft, controlled landing without excessive bounce
+        friction: 0.4,         // balanced surface friction
+        frictionStatic: 0.5,   // subtle angle hold
+        frictionAir: 0.045,    // smooth, damped air resistance
+        density: 0.0025,       // solid mass density
+        label: 'pill_' + (el.getAttribute('data-skill') || i)
+      });
+
+      Body.setAngle(body, (Math.random() - 0.5) * 0.3);
+
+      Composite.add(engine.world, body);
+
+      el.style.zIndex = 10 + i;
+
+      pillItems.push({
+        el: el,
+        body: body,
+        width: w,
+        height: h,
+        bodyW: bodyW,
+        bodyH: bodyH
+      });
+    });
+  }
+
+  createWalls();
+  createPillBodies();
+
+  // 4. Mouse & Touch Constraints (Drag & Drop with Continuous Gravity)
+  var mouse = Mouse.create(canvas);
+  var mouseConstraint = MouseConstraint.create(engine, {
+    mouse: mouse,
+    constraint: {
+      stiffness: 0.25,
+      damping: 0.08,
+      render: { visible: false }
+    }
+  });
+
+  Composite.add(engine.world, mouseConstraint);
+
+  // Prevent scroll stealing
+  mouse.element.removeEventListener('mousewheel', mouse.mousewheel);
+  mouse.element.removeEventListener('DOMMouseScroll', mouse.mousewheel);
+
+  // Visual cursor feedback
+  Events.on(mouseConstraint, 'startdrag', function(event){
+    var draggedBody = event.body;
+    pillItems.forEach(function(item){
+      if (item.body === draggedBody) {
+        item.el.classList.add('is-held');
+        item.el.style.zIndex = 100;
+        canvas.classList.add('is-grabbing');
+      }
+    });
+  });
+
+  Events.on(mouseConstraint, 'enddrag', function(event){
+    var draggedBody = event.body;
+    pillItems.forEach(function(item, idx){
+      if (item.body === draggedBody) {
+        item.el.classList.remove('is-held');
+        item.el.style.zIndex = 10 + idx;
+        canvas.classList.remove('is-grabbing');
+      }
+    });
+  });
+
+  // 5. Sync Physics Simulation with DOM Elements (60fps GPU acceleration)
+  Events.on(runner, 'afterUpdate', function(){
+    var b = getCanvasBounds();
+    var isMobile = b.w < 768;
+    var floorBottomPadding = isMobile ? 28 : 45;
+    var wallPadding = isMobile ? 12 : Math.min(160, b.w * 0.13);
+
+    pillItems.forEach(function(item){
+      var body = item.body;
+
+      // Soft boundary clamp respecting elevated floor
+      var padX = item.bodyW * 0.5 + 2;
+      var padY = item.bodyH * 0.5 + 2;
+
+      var minX = wallPadding + padX;
+      var maxX = b.w - wallPadding - padX;
+      var minY = -300;
+      var maxY = b.h - floorBottomPadding - padY;
+
+      if (body.position.x < minX || body.position.x > maxX || body.position.y > maxY) {
+        var clampedX = Math.max(minX, Math.min(maxX, body.position.x));
+        var clampedY = Math.max(minY, Math.min(maxY, body.position.y));
+        Body.setPosition(body, { x: clampedX, y: clampedY });
+      }
+
+      var renderX = body.position.x - item.width * 0.5;
+      var renderY = body.position.y - item.height * 0.5;
+
+      item.el.style.transform = 'translate3d(' + renderX.toFixed(2) + 'px, ' + renderY.toFixed(2) + 'px, 0) rotate(' + body.angle.toFixed(4) + 'rad)';
+    });
+  });
+
+  // 6. Spawn & Drop Sequence with Subtle Angles & Soft Spin (All 14 Skills)
+  function triggerDropPhysics(){
+    var b = getCanvasBounds();
+    var isMobile = b.w < 768;
+    var centerX = b.w * 0.5;
+    var colsCount = isMobile ? 3 : 4;
+    var spreadX = isMobile ? b.w * 0.28 : b.w * 0.19;
+
+    pillItems.forEach(function(item, i){
+      var body = item.body;
+      var col = (i % colsCount) - ((colsCount - 1) / 2);
+      var row = Math.floor(i / colsCount);
+
+      // Controlled Gentle Angles: strictly between -18deg and +18deg (upright & legible)
+      var randAngle = (Math.random() - 0.5) * 0.65;
+
+      var spawnX = centerX + col * spreadX + (Math.random() - 0.5) * 30;
+      var spawnY = -80 - (row * 55) - (Math.random() * 20);
+
+      Body.setPosition(body, { x: spawnX, y: spawnY });
+      Body.setAngle(body, randAngle);
+      Body.setVelocity(body, {
+        x: (Math.random() - 0.5) * 1.5,
+        y: 2.8 + Math.random() * 2.0
+      });
+      // Soft gentle angular spin
+      Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.03);
+    });
+  }
+
+  // 7. ScrollTrigger Integration (Repeatable on viewport entry)
+  if (typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 75%',
+      onEnter: function(){
+        triggerDropPhysics();
+      },
+      onEnterBack: function(){
+        triggerDropPhysics();
+      }
+    });
+  } else if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          triggerDropPhysics();
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(section);
+  } else {
+    setTimeout(triggerDropPhysics, 350);
+  }
+
+  // 8. Window Resize handling
+  window.addEventListener('resize', function(){
+    createWalls();
+  });
+})();
+
+/* ══════════════════════════════════════
+   SCROLL-DRIVEN BIDIRECTIONAL KINETIC MARQUEE ENGINE (SCROLL ONLY)
+══════════════════════════════════════ */
+(function initKineticMarquee(){
+  var track1 = document.getElementById('kineticTrack1');
+  var track2 = document.getElementById('kineticTrack2');
+  if (!track1 || !track2) return;
+
+  var inner1 = track1.querySelector('.kinetic-track-inner');
+  var inner2 = track2.querySelector('.kinetic-track-inner');
+
+  var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+  var targetScroll = currentScroll;
+
+  window.addEventListener('scroll', function(){
+    targetScroll = window.pageYOffset || document.documentElement.scrollTop;
+  }, { passive: true });
+
+  function tick(){
+    // Smooth lerp scroll follow for ultra-fluid kinetic response
+    currentScroll += (targetScroll - currentScroll) * 0.1;
+
+    var width1 = inner1 ? inner1.offsetWidth : 1200;
+    var width2 = inner2 ? inner2.offsetWidth : 1200;
+
+    // Track 1 (Right to Left on scroll down)
+    var x1 = -(currentScroll * 0.45) % width1;
+    if (x1 > 0) x1 -= width1;
+    track1.style.transform = 'translate3d(' + x1 + 'px, 0, 0)';
+
+    // Track 2 (Left to Right on scroll down)
+    var x2 = (currentScroll * 0.45) % width2;
+    if (x2 < 0) x2 += width2;
+    track2.style.transform = 'translate3d(' + (x2 - width2) + 'px, 0, 0)';
+
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+})();
+
+/* ══════════════════════════════════════
+   FOOTER FAQ ACCORDION & DYNAMIC LIVE TIME
+══════════════════════════════════════ */
+(function initFooterFaq(){
+  // 1. Dynamic User Local Time Clock
+  function updateFaqClock() {
+    var timeEl = document.getElementById('footerFaqTime');
+    if (timeEl) {
+      var now = new Date();
+      var timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+      timeEl.textContent = 'Click to open, ' + timeStr;
+    }
+  }
+  updateFaqClock();
+  setInterval(updateFaqClock, 20000);
+
+  // 2. FAQ Accordion Toggle
+  document.querySelectorAll('.footer-faq-q').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      var item = this.closest('.footer-faq-item');
+      if (!item) return;
+      var isOpen = item.classList.toggle('is-open');
+      this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+})();
+
 /* CONDENSED CV TOGGLE */
 function toggleCvAccordion() {
   var widget = document.getElementById('cvWidget');
@@ -4130,12 +6864,13 @@ function toggleCvAccordion() {
 }
 
 /* ══════════════════════════════════════
-   SMART SCROLL HANDLER (NAVBAR COMPACT & BOTTOM DISCUSS PILL VISIBILITY)
+   SMART SCROLL HANDLER (NAVBAR & DYNAMIC FOOTER-AWARE DISCUSS PILL AUTO-HIDE)
 ══════════════════════════════════════ */
 (function(){
   var nav = document.getElementById('nav');
   var discussWrap = document.getElementById('bottomDiscussWrapper');
-  var footerEl = document.querySelector('footer') || document.getElementById('contact');
+  var blurOverlay = document.getElementById('bottomBlurOverlay') || document.querySelector('.bottom-blur-gradient-overlay');
+  var footerEl = document.querySelector('footer.fullwidth-sticky-footer') || document.querySelector('footer') || document.getElementById('contact');
   var lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
   var ticking = false;
 
@@ -4159,24 +6894,65 @@ function toggleCvAccordion() {
       }
     }
 
-    // 2. Sticky Bottom Discuss Pill Visibility (PURE PIXEL CONTROLS)
+    // 2. Dynamic Footer-Aware Bottom Discuss Pill (Smooth Auto-Hide at Footer)
     if (discussWrap) {
-      // ── [১] কত পিক্সেল স্ক্রল করার পর বাটনটি আসবে (Start):
-      var START_SCROLL_PX = 1000;
+      var isPastHero = currentScrollY > 360;
+      var isNearFooter = false;
+      var reviewSec = document.querySelector('.bd-reviews-section');
 
-      // ── [২] কত পিক্সেল স্ক্রল করার পর বাটনটি চলে যাবে (End):
-      var END_SCROLL_PX = 8000;
+      if (reviewSec) {
+        var reviewRect = reviewSec.getBoundingClientRect();
+        if (reviewRect.bottom <= windowHeight + 40) {
+          isNearFooter = true;
+        }
+      } else if (footerEl) {
+        var footerRect = footerEl.getBoundingClientRect();
+        if (footerRect.top <= windowHeight + 20) {
+          isNearFooter = true;
+        }
+      }
 
-      // স্ক্রল রেঞ্জের ভেতরে থাকলে দৃশ্যমান হবে, বাইরে গেলে হাইড হয়ে যাবে
-      if (currentScrollY >= START_SCROLL_PX && currentScrollY <= END_SCROLL_PX) {
+      if (isPastHero && !isNearFooter) {
         discussWrap.classList.add('is-visible');
       } else {
         discussWrap.classList.remove('is-visible');
       }
     }
+
+    // 3. Bottom Blur Overlay Auto-Hide when reaching Footer
+    if (blurOverlay) {
+      var siteFlow = document.getElementById('siteMainFlow') || document.querySelector('.site-main-flow') || document.querySelector('.bd-reviews-section');
+      var isNearBottom = false;
+      if (siteFlow) {
+        var flowRect = siteFlow.getBoundingClientRect();
+        if (flowRect.bottom <= windowHeight + 10) {
+          isNearBottom = true;
+        }
+      }
+      if (isNearBottom || (currentScrollY + windowHeight >= docHeight - 40)) {
+        blurOverlay.classList.add('is-hidden');
+      } else {
+        blurOverlay.classList.remove('is-hidden');
+      }
+    }
     
     lastScrollY = Math.max(0, currentScrollY);
     ticking = false;
+  }
+
+  // Reactive Intersection Observer for Footer
+  if (window.IntersectionObserver && footerEl) {
+    var footerObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          footerEl.querySelectorAll('.footer-reveal-col').forEach(function(col){
+            col.classList.add('is-revealed');
+          });
+          if (blurOverlay) blurOverlay.classList.add('is-hidden');
+        }
+      });
+    }, { rootMargin: '40px 0px 0px 0px', threshold: 0.01 });
+    footerObserver.observe(footerEl);
   }
 
   window.addEventListener('scroll', function(){
