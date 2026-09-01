@@ -75,7 +75,6 @@
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
       min-height: 100vh;
     }
 
@@ -1011,9 +1010,6 @@ footer.fullwidth-sticky-footer {
 .footer-3col-grid > .footer-reveal-col:nth-child(3) {
   transition-delay: 0.28s;
 }
-
-.footer-bottom-meta
-
 /* Glass Card Containers for Left & Right Columns */
 .footer-col-card {
   background: rgba(255, 255, 255, 0.025);
@@ -1485,15 +1481,6 @@ footer.fullwidth-sticky-footer {
 /* ══════════════════════════════════════
    PREMIUM SMOOTH & REPEATABLE FOOTER REVEAL
 ══════════════════════════════════════ */
-
-
-
-
-.footer-col-brand
-.footer-col-faq
-.footer-col-nav-card
-.footer-bottom-meta
-
 </style>
   <link rel="stylesheet" href="../custom-components.css" />
 </head>
@@ -1510,10 +1497,11 @@ footer.fullwidth-sticky-footer {
 
   <site-nav></site-nav>
   <!-- ════ MAIN PAGE SHELL (WITH IDE GUTTER) ════ -->
-  <div class="ide-page-container">
-    
-    <!-- Code Editor Left Line Number Gutter (Auto-Calculated) -->
-    <aside class="ide-line-gutter" id="ideLineGutter" aria-hidden="true">
+  <div class="site-main-flow">
+    <div class="ide-page-container">
+      
+      <!-- Code Editor Left Line Number Gutter (Auto-Calculated) -->
+      <aside class="ide-line-gutter" id="ideLineGutter" aria-hidden="true">
       <!-- Generated dynamically by JS -->
     </aside>
 
@@ -1594,6 +1582,7 @@ footer.fullwidth-sticky-footer {
 
     </main>
   </div>
+</div>
 
   <!-- ════ INTERACTIVE SLIDE-OVER DRAWER & BACKDROP ════ -->
   <div class="ide-drawer-backdrop" id="drawerBackdrop" aria-hidden="true" onclick="closeToolDrawer()"></div>

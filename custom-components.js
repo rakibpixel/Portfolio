@@ -254,43 +254,12 @@
       el.outerHTML = getNavHtml();
     });
 
-    // 2. Ensure main content is cleanly wrapped in full-width .site-main-flow if not present
-    if (!isGalleryPage && !document.querySelector('.site-main-flow')) {
-      const footer = document.querySelector('site-footer') || document.querySelector('footer');
-      if (footer) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'site-main-flow';
-        
-        const children = Array.from(document.body.children);
-        const toWrap = [];
-        let canWrap = false;
-        
-        for (const child of children) {
-          if (child.classList && child.classList.contains('nav-wrapper')) {
-            canWrap = true;
-            continue;
-          }
-          if (child === footer || child.tagName.toLowerCase() === 'site-footer' || child.tagName.toLowerCase() === 'footer') {
-            break;
-          }
-          if (canWrap && child.id !== 'customCursor' && child.id !== 'toolDrawer' && child.id !== 'drawerBackdrop' && child.tagName.toLowerCase() !== 'script') {
-            toWrap.push(child);
-          }
-        }
-        
-        if (toWrap.length > 0) {
-          document.body.insertBefore(wrapper, footer);
-          toWrap.forEach(el => wrapper.appendChild(el));
-        }
-      }
-    }
-
-    // 3. Inject Sticky Footer
+    // 2. Inject Sticky Footer
     document.querySelectorAll('site-footer').forEach(el => {
       el.outerHTML = getFooterHtml();
     });
 
-    // 4. Auto-Inject Bottom Progressive Blur Overlay (if not on Gallery)
+    // 3. Auto-Inject Bottom Progressive Blur Overlay (if not on Gallery)
     if (!isGalleryPage && !document.querySelector('.bottom-blur-gradient-overlay')) {
       const overlay = document.createElement('div');
       overlay.className = 'bottom-blur-gradient-overlay';

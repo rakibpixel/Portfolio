@@ -26,9 +26,9 @@
   --e:cubic-bezier(.22,1,.36,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;overflow-x:clip}
+html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--fg);font-family:var(--sans);
-  line-height:1.6;overflow-x:clip;cursor:none;-webkit-font-smoothing:antialiased}
+  line-height:1.6;cursor:none;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit}
 img{display:block;max-width:100%}
 button{cursor:none;border:none;background:none;font:inherit;color:inherit}
@@ -2168,23 +2168,31 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
   z-index: 5;
 }
 
+.home-blog-section {
+  position: relative;
+  background: var(--bg);
+  padding: 80px 0 120px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .home-blog-container {
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 32px;
   width: 100%;
+  position: relative;
   box-sizing: border-box;
-  border-left: 1px solid var(--ln);
-  border-right: 1px solid var(--ln);
 }
 
 .home-blog-header {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 50px;
-  gap: 24px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 28px;
+  gap: 12px;
+  will-change: opacity, transform;
 }
 
 .home-blog-tagline {
@@ -2201,12 +2209,12 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
   border: 1px solid rgba(94, 67, 236, 0.18);
   padding: 5px 13px;
   border-radius: 999px;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 }
 
 .home-blog-title {
   font-family: var(--dp);
-  font-size: clamp(32px, 3.8vw, 48px);
+  font-size: clamp(30px, 3.5vw, 44px);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.15;
@@ -2220,209 +2228,189 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
   font-weight: 400;
 }
 
-.home-blog-cta-all {
+/* Stacking Stage & Cards */
+.blog-stack-stage {
+  position: relative;
+  width: 100%;
+  height: 560px;
+  max-height: 76vh;
+}
+
+.blog-stack-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: none;
+  border: none;
+  display: block;
+  text-decoration: none;
+  transform-origin: center top;
+  will-change: transform, filter, opacity;
+  background: #0c0a1a;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.blog-stack-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.blog-stack-card:hover .blog-stack-bg-img {
+  transform: scale(1.03);
+}
+
+.blog-stack-scrim {
+  background: linear-gradient(135deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 45%, transparent 100%);
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.blog-stack-meta-overlay {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  pointer-events: none;
+  max-width: 80%;
+}
+
+/* Apple Frosted Glass Category Pill */
+.blog-stack-pill {
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-block;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Lighter, refined headline */
+.blog-stack-headline {
+  font-family: var(--dp);
+  font-size: clamp(19px, 2vw, 25px);
+  font-weight: 600;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin-top: 4px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  opacity: 0.96;
+}
+
+/* Bottom Animated Rolling Button (Appears below stack after cards finish) */
+.home-blog-bottom-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 28px;
+  width: 100%;
+  position: relative;
+  z-index: 15;
+}
+
+.home-blog-cta-bottom {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   font-family: var(--sans);
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 600;
   color: #0c0a1a;
   background: #ffffff;
   border: 1px solid rgba(12, 10, 26, 0.14);
-  padding: 10px 20px;
+  padding: 12px 28px;
   border-radius: 999px;
-  box-shadow: 0 4px 12px rgba(12, 10, 26, 0.04);
+  box-shadow: 0 6px 18px rgba(12, 10, 26, 0.05);
   transition: all 0.25s ease;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.home-blog-cta-all:hover {
+.home-blog-cta-bottom:hover {
   background: var(--v);
   color: #ffffff;
   border-color: var(--v);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(94, 67, 236, 0.25);
+  box-shadow: 0 10px 24px rgba(94, 67, 236, 0.28);
 }
 
-.home-blog-cta-all svg {
-  transition: transform 0.2s ease;
-}
-
-.home-blog-cta-all:hover svg {
-  transform: translateX(3px);
-}
-
-/* Stacking Track & Sticky Cards */
-.blog-stack-track {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  position: relative;
-  padding-bottom: 40px;
-}
-
-.blog-stack-card {
-  position: sticky;
-  top: calc(100px + var(--index) * 20px);
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 24px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-  height: 340px;
-  max-height: 360px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  align-items: stretch;
-  text-decoration: none;
-  color: inherit;
-  transform-origin: center top;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
-  will-change: transform;
-}
-
-.blog-stack-card:hover {
-  border-color: rgba(94, 67, 236, 0.3);
-  box-shadow: 0 20px 44px -10px rgba(0, 0, 0, 0.1);
-}
-
-.blog-stack-content {
-  padding: 32px 36px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.blog-stack-top {
-  display: flex;
-  flex-direction: column;
-}
-
-.blog-stack-badge-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.blog-stack-badge {
+.home-blog-cta-bottom .btn-roll {
   display: inline-flex;
-  align-items: center;
-  background: #f4f4f5;
-  color: #18181b;
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 999px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.blog-stack-meta-top {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: #71717a;
-}
-
-.blog-stack-title {
-  font-family: var(--dp);
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.3;
-  color: #09090b;
-  margin: 12px 0;
-  transition: color 0.2s ease;
-}
-
-.blog-stack-card:hover .blog-stack-title {
-  color: var(--v);
-}
-
-.blog-stack-excerpt {
-  font-family: var(--sans);
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: #52525b;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  flex-direction: column;
+  height: 1.3em;
   overflow: hidden;
-}
-
-.blog-stack-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 18px;
-  border-top: 1px solid rgba(12, 10, 26, 0.07);
-  margin-top: 14px;
-}
-
-.blog-stack-read-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 600;
-  color: #09090b;
-  transition: gap 0.2s ease, color 0.2s ease;
-}
-
-.blog-stack-card:hover .blog-stack-read-btn {
-  color: var(--v);
-  gap: 12px;
-}
-
-.blog-stack-read-btn svg {
-  transition: transform 0.2s ease;
-}
-
-.blog-stack-card:hover .blog-stack-read-btn svg {
-  transform: translateX(3px);
-}
-
-.blog-stack-visual {
-  width: 100%;
-  height: 100%;
   position: relative;
-  overflow: hidden;
-  background: #f4f4f5;
 }
 
-.blog-stack-visual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.home-blog-cta-bottom .btn-text-default,
+.home-blog-cta-bottom .btn-text-hover {
   display: block;
-  transition: transform 0.4s ease;
+  transition: transform 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+  line-height: 1.3em;
 }
 
-.blog-stack-card:hover .blog-stack-visual img {
-  transform: scale(1.04);
+.home-blog-cta-bottom .btn-text-hover {
+  position: absolute;
+  top: 100%;
+  left: 0;
 }
 
-@media (max-width: 900px) {
+.home-blog-cta-bottom:hover .btn-text-default {
+  transform: translateY(-100%);
+}
+
+.home-blog-cta-bottom:hover .btn-text-hover {
+  transform: translateY(-100%);
+}
+
+@media (max-width: 899px) {
   .home-blog-container {
     padding: 0 20px;
-    border-left: none;
-    border-right: none;
   }
-  .blog-stack-card {
-    grid-template-columns: 1fr;
+  .blog-stack-stage {
     height: auto;
     max-height: none;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
-  .blog-stack-visual {
-    height: 200px;
+  .blog-stack-card {
+    position: relative;
+    height: 420px;
+    border-radius: 22px;
   }
-  .blog-stack-content {
-    padding: 24px 20px;
+  .blog-stack-meta-overlay {
+    top: 24px;
+    left: 24px;
+    max-width: 90%;
+  }
+  .blog-stack-headline {
+    font-size: 20px;
   }
 }
 
@@ -2742,8 +2730,7 @@ body::after{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;o
   z-index: 10;
   border-bottom-left-radius: 40px;
   border-bottom-right-radius: 40px;
-  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.28);
-  overflow: hidden;
+  box-shadow: none;
 }
 
 /* ══════════════════════════════════════
@@ -5598,115 +5585,69 @@ footer {
 <section class="sec home-blog-section" id="blog">
   <div class="home-blog-container">
     
-    <!-- Section Header -->
-    <div class="home-blog-header">
+    <!-- Blog Section Header -->
+    <div class="home-blog-header" id="blogHeader">
       <div class="home-blog-title-wrap">
         <div class="home-blog-tagline">
           <span>// { WRITINGS &amp; INSIGHTS }</span>
         </div>
         <h2 class="home-blog-title">Selected Thoughts &amp; <em>Perspectives</em></h2>
       </div>
-      <a href="blog/index.html" class="home-blog-cta-all">
-        <span>View All Articles</span>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-      </a>
     </div>
 
-    <!-- 4-Card Sticky Stacking Track -->
-    <div class="blog-stack-track">
+    <!-- 4-Card Pinning Stacking Stage -->
+    <div class="blog-stack-stage">
 
       <!-- Stacking Card 01 -->
-      <a href="blog/dynamic-component-architecture.html" class="blog-stack-card" style="--index: 0;">
-        <div class="blog-stack-content">
-          <div class="blog-stack-top">
-            <div class="blog-stack-badge-row">
-              <span class="blog-stack-badge">Design Systems</span>
-              <span class="blog-stack-meta-top">Aug 24, 2026 • 5 min read</span>
-            </div>
-            <h3 class="blog-stack-title">Moving Beyond Static UI Kits Toward Dynamic Component Architecture</h3>
-            <p class="blog-stack-excerpt">Standard component libraries often fail when products scale rapidly. Exploring how tokenized layouts, adaptive variables, and strict hierarchy keep large-scale design ecosystems consistent.</p>
-          </div>
-          <div class="blog-stack-bottom">
-            <span class="blog-stack-read-btn">
-              <span>Read Full Article</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </span>
-          </div>
-        </div>
-        <div class="blog-stack-visual">
-          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&auto=format&fit=crop&q=80" alt="Moving Beyond Static UI Kits Toward Dynamic Component Architecture" loading="lazy" />
+      <a href="blog/dynamic-component-architecture.html" class="blog-stack-card blog-card-1" style="--i: 0;">
+        <img class="blog-stack-bg-img" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&auto=format&fit=crop&q=85" alt="Dynamic Component Architecture" />
+        <div class="blog-stack-scrim"></div>
+        <div class="blog-stack-meta-overlay">
+          <span class="blog-stack-pill">Design Systems</span>
+          <h3 class="blog-stack-headline">DYNAMIC COMPONENT ARCHITECTURE</h3>
         </div>
       </a>
 
       <!-- Stacking Card 02 -->
-      <a href="blog/intentional-motion-design.html" class="blog-stack-card" style="--index: 1;">
-        <div class="blog-stack-content">
-          <div class="blog-stack-top">
-            <div class="blog-stack-badge-row">
-              <span class="blog-stack-badge">Motion &amp; Interaction</span>
-              <span class="blog-stack-meta-top">Aug 12, 2026 • 4 min read</span>
-            </div>
-            <h3 class="blog-stack-title">The Craft of Intentional Motion in Digital Product Design</h3>
-            <p class="blog-stack-excerpt">Animation in digital products should never be mere decoration. Practical rules for applying physics, micro-interactions, and spatial cues that guide user attention naturally.</p>
-          </div>
-          <div class="blog-stack-bottom">
-            <span class="blog-stack-read-btn">
-              <span>Read Full Article</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </span>
-          </div>
-        </div>
-        <div class="blog-stack-visual">
-          <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=1000&auto=format&fit=crop&q=80" alt="The Craft of Intentional Motion in Digital Product Design" loading="lazy" />
+      <a href="blog/intentional-motion-design.html" class="blog-stack-card blog-card-2" style="--i: 1;">
+        <img class="blog-stack-bg-img" src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=1600&auto=format&fit=crop&q=85" alt="Intentional Motion & Interaction" />
+        <div class="blog-stack-scrim"></div>
+        <div class="blog-stack-meta-overlay">
+          <span class="blog-stack-pill">Motion Design</span>
+          <h3 class="blog-stack-headline">INTENTIONAL MOTION &amp; INTERACTION</h3>
         </div>
       </a>
 
       <!-- Stacking Card 03 -->
-      <a href="blog/automating-creative-workflows.html" class="blog-stack-card" style="--index: 2;">
-        <div class="blog-stack-content">
-          <div class="blog-stack-top">
-            <div class="blog-stack-badge-row">
-              <span class="blog-stack-badge">Creative Tooling</span>
-              <span class="blog-stack-meta-top">Jul 29, 2026 • 6 min read</span>
-            </div>
-            <h3 class="blog-stack-title">Automating Repetitive Creative Workflows with Custom Scripts</h3>
-            <p class="blog-stack-excerpt">Designers spend hundreds of hours on tedious export and formatting routines. A deep dive into creating internal plugins and lightweight automation scripts that save hours every sprint.</p>
-          </div>
-          <div class="blog-stack-bottom">
-            <span class="blog-stack-read-btn">
-              <span>Read Full Article</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </span>
-          </div>
-        </div>
-        <div class="blog-stack-visual">
-          <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1000&auto=format&fit=crop&q=80" alt="Automating Repetitive Creative Workflows with Custom Scripts" loading="lazy" />
+      <a href="blog/automating-creative-workflows.html" class="blog-stack-card blog-card-3" style="--i: 2;">
+        <img class="blog-stack-bg-img" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1600&auto=format&fit=crop&q=85" alt="Automating Workflow Scripts" />
+        <div class="blog-stack-scrim"></div>
+        <div class="blog-stack-meta-overlay">
+          <span class="blog-stack-pill">Creative Tooling</span>
+          <h3 class="blog-stack-headline">AUTOMATING WORKFLOW SCRIPTS</h3>
         </div>
       </a>
 
       <!-- Stacking Card 04 -->
-      <a href="blog/high-recall-brand-systems.html" class="blog-stack-card" style="--index: 3;">
-        <div class="blog-stack-content">
-          <div class="blog-stack-top">
-            <div class="blog-stack-badge-row">
-              <span class="blog-stack-badge">Visual Identity</span>
-              <span class="blog-stack-meta-top">Jul 15, 2026 • 5 min read</span>
-            </div>
-            <h3 class="blog-stack-title">Designing High-Recall Brand Systems for Contemporary Tech Brands</h3>
-            <p class="blog-stack-excerpt">In crowded digital markets, minimalism can easily become forgettable. Strategies for crafting distinctive visual language, kinetic typography, and memorable brand moments.</p>
-          </div>
-          <div class="blog-stack-bottom">
-            <span class="blog-stack-read-btn">
-              <span>Read Full Article</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </span>
-          </div>
-        </div>
-        <div class="blog-stack-visual">
-          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000&auto=format&fit=crop&q=80" alt="Designing High-Recall Brand Systems for Contemporary Tech Brands" loading="lazy" />
+      <a href="blog/high-recall-brand-systems.html" class="blog-stack-card blog-card-4" style="--i: 3;">
+        <img class="blog-stack-bg-img" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&auto=format&fit=crop&q=85" alt="High-Recall Brand Systems" />
+        <div class="blog-stack-scrim"></div>
+        <div class="blog-stack-meta-overlay">
+          <span class="blog-stack-pill">Visual Identity</span>
+          <h3 class="blog-stack-headline">HIGH-RECALL BRAND SYSTEMS</h3>
         </div>
       </a>
 
+    </div>
+
+    <!-- Animated View All Button (Positioned Below Cards) -->
+    <div class="home-blog-bottom-action">
+      <a href="blog/index.html" class="home-blog-cta-bottom" id="blogViewAllBtn">
+        <span class="btn-roll">
+          <span class="btn-text-default">View All Articles</span>
+          <span class="btn-text-hover">View All Articles</span>
+        </span>
+      </a>
     </div>
   </div>
 </section>
@@ -7018,6 +6959,70 @@ if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
       }
     }
   });
+
+  // ══════════════════════════════════════
+  // BRIGHTEDGE BLOG CARDS PINNING & STACKING CHOREOGRAPHY
+  // ══════════════════════════════════════
+  (function initBlogStackingPhysics() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    ScrollTrigger.matchMedia({
+      "(min-width: 900px)": function() {
+        var cards = gsap.utils.toArray('.blog-stack-card');
+        if (cards.length < 4) return;
+
+        // Set initial card & UI states (upcoming cards strictly hidden off-screen)
+        gsap.set(cards[0], { y: '0%', scale: 1, filter: 'none', opacity: 1, visibility: 'visible', zIndex: 1, force3D: true });
+        gsap.set(cards[1], { y: '140%', scale: 1, filter: 'none', opacity: 0, visibility: 'hidden', zIndex: 2, force3D: true });
+        gsap.set(cards[2], { y: '140%', scale: 1, filter: 'none', opacity: 0, visibility: 'hidden', zIndex: 3, force3D: true });
+        gsap.set(cards[3], { y: '140%', scale: 1, filter: 'none', opacity: 0, visibility: 'hidden', zIndex: 4, force3D: true });
+        gsap.set('#blogHeader', { opacity: 1, y: 0 });
+        gsap.set('#blogViewAllBtn', { opacity: 0, y: 25, scale: 0.94 });
+
+        var tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: '.home-blog-section',
+            start: 'top top+=50px',
+            end: '+=2600px',
+            pin: '.home-blog-container',
+            anticipatePin: 1,
+            scrub: 0.9,
+            pinSpacing: true,
+            invalidateOnRefresh: true
+          }
+        });
+
+        // 0. Header fades out completely and floats up right as scroll starts
+        tl.to('#blogHeader', { opacity: 0, y: -40, ease: 'power1.out', duration: 0.4 }, 0);
+
+        // Step 1: Card 2 reveals and glides up. Card 1 scales down cleanly to 0.93 with subtle blur
+        tl.set(cards[1], { opacity: 1, visibility: 'visible' }, 0.05)
+          .to(cards[1], { y: '0%', ease: 'none', duration: 1 }, 0.1)
+          .to(cards[0], { scale: 0.93, y: -20, filter: 'blur(2.5px)', ease: 'none', duration: 1 }, 0.1);
+
+        // Step 2: Card 3 reveals and glides up. Card 2 scales to 0.93 & blur(2.5px), Card 1 scales to 0.86 & blur(5px)
+        tl.set(cards[2], { opacity: 1, visibility: 'visible' }, 1.05)
+          .to(cards[2], { y: '0%', ease: 'none', duration: 1 }, 1.1)
+          .to(cards[1], { scale: 0.93, y: -20, filter: 'blur(2.5px)', ease: 'none', duration: 1 }, 1.1)
+          .to(cards[0], { scale: 0.86, y: -40, filter: 'blur(5px)', ease: 'none', duration: 1 }, 1.1);
+
+        // Step 3: Card 4 reveals and glides up to complete deck. Earlier cards stack neatly with subtle depth
+        tl.set(cards[3], { opacity: 1, visibility: 'visible' }, 2.05)
+          .to(cards[3], { y: '0%', ease: 'none', duration: 1 }, 2.1)
+          .to(cards[2], { scale: 0.93, y: -20, filter: 'blur(2.5px)', ease: 'none', duration: 1 }, 2.1)
+          .to(cards[1], { scale: 0.86, y: -40, filter: 'blur(5px)', ease: 'none', duration: 1 }, 2.1)
+          .to(cards[0], { scale: 0.80, y: -60, filter: 'blur(6px)', ease: 'none', duration: 1 }, 2.1);
+
+        // Step 4: Rolling "View All Articles" button animates in below the stacked deck
+        tl.to('#blogViewAllBtn', { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.4)' }, 2.65);
+      },
+      "(max-width: 899px)": function() {
+        var cards = gsap.utils.toArray('.blog-stack-card');
+        gsap.set(cards, { clearProps: "all" });
+        gsap.set('#blogHeader, #blogViewAllBtn', { clearProps: "all" });
+      }
+    });
+  })();
 }
 //]]>
 </script>

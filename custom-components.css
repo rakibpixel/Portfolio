@@ -236,12 +236,34 @@
   border-bottom-left-radius: 40px !important;
   border-bottom-right-radius: 40px !important;
   box-shadow: none !important;
-  overflow: hidden;
 }
 
-/* Clear bottom radius ONLY on top-level section containers, preserving cards, buttons, badges, and avatar images */
-.bd-reviews-section,
 .ide-page-container {
+  position: relative;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.gallery-container,
+.projects-page-container,
+.article-page-wrap {
+  position: relative;
+  z-index: 10;
+  background: var(--bg, #f8f9fb);
+  border-bottom-left-radius: 40px !important;
+  border-bottom-right-radius: 40px !important;
+  box-shadow: none !important;
+}
+
+.article-container {
+  position: relative;
+  z-index: 10;
+  background: transparent;
+}
+
+/* Clear bottom radius ONLY on top-level section containers inside homepage flow */
+.bd-reviews-section {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
