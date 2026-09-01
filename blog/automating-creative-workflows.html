@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automating Repetitive Creative Workflows with Custom Scripts — Rakibul Hassan</title>
+  <meta name="description" content="A deep dive into creating internal plugins and lightweight automation scripts that save hours every sprint and unlock creative bandwidth." />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&amp;family=DM+Serif+Display:ital@0;1&amp;family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&amp;display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fbfbfe;
+      --fg: #0c0a1a;
+      --v: #5e43ec;
+      --mu: rgba(12, 10, 26, 0.64);
+      --dp: 'Bricolage Grotesque', sans-serif;
+      --sans: 'DM Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'DM Serif Display', serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: clip; }
+    body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.6; overflow-x: clip; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* Nav */
+    .nav-wrapper { position: fixed; top: 24px; left: 0; width: 100%; display: flex; justify-content: center; z-index: 9999; pointer-events: none; padding: 0 16px; box-sizing: border-box; }
+    #nav
+    
+    
+    
+    
+    .nav-links li a { font-family: var(--sans); font-size: 13.5px; font-weight: 500; color: rgba(12, 10, 26, 0.7); padding: 6px 12px; border-radius: 999px; transition: all 0.2s ease; }
+    .nav-links li a:hover { color: #0c0a1a; background: rgba(12, 10, 26, 0.05); }
+    .nav-links li a.active { color: #0c0a1a; font-weight: 600; background: rgba(12, 10, 26, 0.06); }
+    .nav-cta { display: inline-flex; align-items: center; background: #0c0a1a; color: #ffffff !important; font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 7px 16px; border-radius: 999px; transition: transform 0.2s ease, background 0.2s ease; flex-shrink: 0; }
+    .nav-cta:hover { background: var(--v); transform: translateY(-1px); }
+    
+    #nav
+    .article-container { max-width: 840px; margin: 0 auto; padding: 130px 24px 100px; width: 100%; box-sizing: border-box; }
+    .article-breadcrumb-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 32px; font-family: var(--mono); font-size: 12.5px; color: var(--mu); }
+    .back-btn-pill { display: inline-flex; align-items: center; gap: 6px; color: #0c0a1a; font-weight: 600; background: #ffffff; border: 1px solid rgba(12, 10, 26, 0.1); padding: 6px 14px; border-radius: 999px; transition: all 0.2s ease; }
+    .back-btn-pill:hover { border-color: var(--v); color: var(--v); transform: translateX(-2px); }
+    .article-header { margin-bottom: 40px; }
+    .article-badge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .article-category-badge { display: inline-flex; align-items: center; background: rgba(94, 67, 236, 0.08); border: 1px solid rgba(94, 67, 236, 0.2); color: var(--v); font-family: var(--mono); font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 999px; letter-spacing: 0.04em; }
+    .article-meta-time { font-family: var(--mono); font-size: 13px; color: #71717a; }
+    .article-title { font-family: var(--dp); font-size: clamp(30px, 4vw, 46px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.18; color: var(--fg); margin-bottom: 20px; }
+    .article-lead { font-family: var(--sans); font-size: clamp(17px, 1.3vw, 20px); line-height: 1.6; color: #4b5563; margin-bottom: 32px; }
+
+    .author-card-bar { display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: #ffffff; border: 1px solid rgba(12, 10, 26, 0.08); border-radius: 16px; margin-bottom: 40px; box-shadow: 0 4px 16px rgba(12, 10, 26, 0.03); }
+    .author-avatar { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; border: 2px solid #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex-shrink: 0; }
+    .author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .author-info { display: flex; flex-direction: column; }
+    .author-name { font-family: var(--dp); font-size: 15px; font-weight: 700; color: #0c0a1a; }
+    .author-role { font-size: 13px; color: #6b7280; }
+
+    .article-featured-image { width: 100%; border-radius: 20px; overflow: hidden; margin-bottom: 48px; background: #eef0f5; border: 1px solid rgba(12, 10, 26, 0.08); box-shadow: 0 16px 36px -8px rgba(12, 10, 26, 0.08); }
+    .article-featured-image img { width: 100%; height: auto; max-height: 480px; object-fit: cover; display: block; }
+
+    .article-body { font-size: 17.5px; line-height: 1.8; color: #27272a; }
+    .article-body h2 { font-family: var(--dp); font-size: clamp(24px, 2.5vw, 30px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; color: #0c0a1a; margin: 48px 0 20px; }
+    .article-body h3 { font-family: var(--dp); font-size: 21px; font-weight: 700; letter-spacing: -0.015em; color: #18181b; margin: 32px 0 14px; }
+    .article-body p { margin-bottom: 24px; }
+    .article-body blockquote { margin: 36px 0; padding: 24px 28px; background: rgba(94, 67, 236, 0.04); border-left: 4px solid var(--v); border-radius: 0 16px 16px 0; font-family: var(--serif); font-size: 21px; font-style: italic; line-height: 1.5; color: #1e1b4b; }
+
+    .article-callout-box { background: #ffffff; border: 1px solid rgba(12, 10, 26, 0.1); border-radius: 16px; padding: 26px 28px; margin: 36px 0; box-shadow: 0 8px 24px rgba(12, 10, 26, 0.04); }
+    .article-callout-title { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--v); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .article-callout-box ul { margin: 0; padding-left: 20px; }
+    .article-callout-box li { margin-bottom: 8px; font-size: 15.5px; line-height: 1.6; color: #374151; }
+    .article-footer-nav { margin-top: 64px; padding-top: 36px; border-top: 1px solid rgba(12, 10, 26, 0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+
+    /* Blur & Footer */
+    .bottom-blur-gradient-overlay { position: fixed; bottom: 0; left: 0; width: 100%; height: 110px; pointer-events: none; z-index: 850; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%); -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%); will-change: backdrop-filter, opacity, transform; transition: opacity 0.35s ease; }
+    .bottom-blur-gradient-overlay.is-hidden { opacity: 0 !important; pointer-events: none !important; }
+    
+/* ══════════════════════════════════════
+   FULL-WIDTH STICKY 3-COLUMN FOOTER WITH EMBEDDED FAQ
+   (Sticky Bottom Underneath Site Main Flow)
+══════════════════════════════════════ */
+footer.fullwidth-sticky-footer {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-top: -40px;
+  min-height: 540px;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background: #09090b;
+  color: #ffffff;
+  padding: 150px 0 36px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  footer.fullwidth-sticky-footer {
+    padding: 90px 0 30px 0;
+  }
+}
+
+.sticky-footer-wrapper {
+  margin: 0 auto;
+  padding: 0 90px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. Main 3-Column Grid (Balanced Symmetry) */
+.footer-3col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1fr;
+  gap: 70px;
+  align-items: start;
+  width: 100%;
+}
+
+/* Scroll Reveal Animations for Footer Columns */
+
+
+
+
+.footer-3col-grid > .footer-reveal-col:nth-child(1) {
+  transition-delay: 0.04s;
+}
+.footer-3col-grid > .footer-reveal-col:nth-child(2) {
+  transition-delay: 0.16s;
+}
+.footer-3col-grid > .footer-reveal-col:nth-child(3) {
+  transition-delay: 0.28s;
+}
+
+.footer-bottom-meta
+
+/* Glass Card Containers for Left & Right Columns */
+.footer-col-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 24px;
+  padding: 28px 26px;
+  box-sizing: border-box;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Left Column: Brand & Direct Contact */
+.footer-col-brand {
+  align-items: flex-start;
+}
+
+.footer-brand-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  margin-bottom: 2px;
+}
+
+.footer-brand-logo-img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+.footer-avail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: #34d399;
+}
+
+.footer-avail-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+  animation: footerLivePulse 2.2s infinite;
+  flex-shrink: 0;
+}
+
+.footer-role-summary {
+  font-family: var(--dp);
+  font-size: 15px;
+  font-weight: 700;
+  color: #f4f4f5;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.footer-brand-bio {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: #a1a1aa;
+  margin: 0;
+}
+
+.footer-email-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 100px;
+  background: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f4f4f5;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 4px;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.footer-email-btn:hover {
+  background: #27272a;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.footer-email-btn svg {
+  color: #a1a1aa;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.footer-email-btn:hover svg {
+  transform: translate(2px, -2px);
+  color: #ffffff;
+}
+
+/* Center Column: Compact FAQ Chat Bubble Module */
+.footer-col-faq {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-faq-header {
+  width: 100%;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.footer-faq-title {
+  font-family: var(--dp);
+  font-size: clamp(16px, 1.4vw, 19px);
+  font-weight: 700;
+  color: #f4f4f5;
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Dynamic Live Time Badge in FAQ Header */
+.footer-faq-time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: #a1a1aa;
+  white-space: nowrap;
+}
+
+.footer-faq-time-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+}
+
+.footer-faq-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* Question Pill (Left Aligned Dark Badge) */
+.footer-faq-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-faq-q {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #f4f4f5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  outline: none;
+}
+
+.footer-faq-q:hover {
+  background: #1f1f23;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.footer-faq-q-text {
+  line-height: 1.35;
+  color: #f4f4f5;
+  font-family: var(--sans);
+  flex-grow: 1;
+}
+
+.footer-faq-toggle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.footer-faq-item.is-open .footer-faq-toggle {
+  background: rgba(255, 255, 255, 0.22);
+  transform: rotate(180deg);
+}
+
+.footer-faq-icon-v {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+.footer-faq-item.is-open .footer-faq-icon-v {
+  transform: scaleY(0);
+  opacity: 0;
+}
+
+/* Answer Bubble (Right Aligned / Chat Style) */
+.footer-faq-a-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1), margin 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  will-change: grid-template-rows;
+}
+
+.footer-faq-item.is-open .footer-faq-a-wrap {
+  grid-template-rows: 1fr;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.footer-faq-a-inner {
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.footer-faq-a {
+  background: #0084ff;
+  color: #ffffff;
+  border-radius: 18px 18px 4px 18px;
+  padding: 12px 18px;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 3px 0 5px auto;
+  max-width: 90%;
+  box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(0, 132, 255, 0.28);
+  transform: translateY(-6px) scale(0.96);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+.footer-faq-item.is-open .footer-faq-a {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.footer-faq-a p {
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Right Column Card: Structured 2-Subcolumn Layout (Right Aligned) */
+.footer-col-nav-card {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 22px;
+  padding: 26px 22px;
+}
+
+.footer-nav-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 4px;
+}
+
+.footer-nav-heading {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #71717a;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  text-align: right;
+  width: 100%;
+}
+
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  width: 100%;
+}
+
+.footer-link-item {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer-link-item a {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #a1a1aa;
+  line-height: 1.7;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  text-align: right;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.footer-link-item a:hover {
+  color: #ffffff;
+}
+
+.footer-link-arrow {
+  color: #a1a1aa;
+  transition: transform 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.footer-link-item a:hover .footer-link-arrow {
+  transform: translate(2px, -2px);
+  color: #ffffff;
+}
+
+/* Bottom Meta Bar */
+.footer-bottom-meta {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 40px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #71717a;
+  width: 100%;
+}
+
+.footer-meta-left {
+  color: #71717a;
+}
+
+.footer-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-meta-tz {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #71717a;
+}
+
+/* Responsive Adaptation */
+@media (max-width: 1024px) {
+  footer.fullwidth-sticky-footer {
+    position: relative;
+    padding: 56px 0 30px 0;
+  }
+  .footer-3col-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .footer-col-card {
+    padding: 24px 20px;
+  }
+  .footer-col-nav-card {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-bottom-meta {
+    flex-direction: column-reverse;
+    gap: 16px;
+    align-items: flex-start;
+    margin-top: 32px;
+    padding-top: 20px;
+  }
+}
+
+
+
+/* ══════════════════════════════════════
+   UNIVERSAL DUAL-ROW ROLLING TEXT ON HOVER
+══════════════════════════════════════ */
+.btn-roll {
+  position: relative;
+  display: inline-block;
+  height: 1.25em;
+  line-height: 1.25em;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.btn-roll span {
+  display: block;
+  height: 1.25em;
+  line-height: 1.25em;
+  white-space: nowrap;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.btn-roll .btn-text-hover {
+  color: inherit;
+}
+
+.btn-hero-primary:hover .btn-roll .btn-text-default,
+.btn-view-all-projects:hover .btn-roll .btn-text-default,
+.btn-wh:hover .btn-roll .btn-text-default,
+.btn-ow:hover .btn-roll .btn-text-default,
+.cf-sub:hover .btn-roll .btn-text-default,
+.footer-email-btn:hover .btn-roll .btn-text-default,
+.footer-link-item a:hover .btn-roll .btn-text-default,
+.footer-top-btn:hover .btn-roll .btn-text-default,
+.btn-roll:hover .btn-text-default {
+  transform: translateY(-1.25em);
+}
+
+.btn-hero-primary:hover .btn-roll .btn-text-hover,
+.btn-view-all-projects:hover .btn-roll .btn-text-hover,
+.btn-wh:hover .btn-roll .btn-text-hover,
+.btn-ow:hover .btn-roll .btn-text-hover,
+.cf-sub:hover .btn-roll .btn-text-hover,
+.footer-email-btn:hover .btn-roll .btn-text-hover,
+.footer-link-item a:hover .btn-roll .btn-text-hover,
+.footer-top-btn:hover .btn-roll .btn-text-hover,
+.btn-roll:hover .btn-text-hover {
+  transform: translateY(-1.25em);
+}
+
+/* ══════════════════════════════════════
+   PREMIUM SMOOTH & REPEATABLE FOOTER REVEAL
+══════════════════════════════════════ */
+
+
+
+
+.footer-col-brand
+.footer-col-faq
+.footer-col-nav-card
+.footer-bottom-meta
+
+</style>
+  <link rel="stylesheet" href="../custom-components.css" />
+</head>
+<body>
+
+  <site-nav></site-nav>
+
+  <div class="site-main-flow" id="siteMainFlow">
+    <main class="article-container">
+      
+      <div class="article-breadcrumb-bar">
+        <a href="index.html" class="back-btn-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>Back to All Articles</span>
+        </a>
+        <span>Blog / Creative Tooling</span>
+      </div>
+
+      <header class="article-header">
+        <div class="article-badge-row">
+          <span class="article-category-badge">Creative Tooling</span>
+          <span class="article-meta-time">Jul 29, 2026 • 6 min read</span>
+        </div>
+        <h1 class="article-title">Automating Repetitive Creative Workflows with Custom Scripts</h1>
+        <p class="article-lead">Designers spend hundreds of hours on tedious export and formatting routines. A deep dive into creating internal plugins and lightweight automation scripts that save hours every sprint and unlock creative bandwidth.</p>
+        
+        <div class="author-card-bar">
+          <div class="author-avatar">
+            <img src="../Asset/Round Profile.webp" alt="Rakibul Hassan" />
+          </div>
+          <div class="author-info">
+            <span class="author-name">Rakibul Hassan</span>
+            <span class="author-role">Creative Technologist &amp; Visualizer</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="article-featured-image">
+        <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=1200&auto=format&fit=crop&q=80" alt="Automating Creative Workflows" />
+      </div>
+
+      <article class="article-body">
+        
+        <h2>1. The Hidden Tax of Manual Production Routines</h2>
+        <p>Across design teams, substantial portions of creative hours are quietly consumed by mechanical housekeeping: slicing social media banners into twenty different aspect ratios, manually naming exported layers, adjusting typography tracking across localized mockups, and updating batch color swatches.</p>
+        <p>This operational overhead does not merely eat away at sprint capacity—it introduces severe cognitive fatigue, increasing error rates in production assets.</p>
+
+        <blockquote>
+          "If you perform a mechanical task more than three times a week, write a script to do it in 200 milliseconds."
+        </blockquote>
+
+        <h2>2. Architecture of Custom Figma &amp; Adobe CEP Tooling</h2>
+        <p>Modern creative platforms expose rich, document-level APIs that allow designers with basic TypeScript knowledge to build transformative utility extensions:</p>
+
+        <div class="article-callout-box">
+          <div class="article-callout-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span>Automation Toolkit Spectrum</span>
+          </div>
+          <ul>
+            <li><strong>Figma Plugin API (Node / WebAssembly):</strong> Directly traverses canvas AST trees to batch-rename frame hierarchies, auto-populate real user data from staging APIs, and validate contrast ratios on the fly.</li>
+            <li><strong>Adobe CEP / ExtendScript:</strong> Automates multi-render queues, synchronizes After Effects keyframes with audio markers, and applies uniform color LUTs across hundreds of video cuts.</li>
+            <li><strong>Node.js Asset Pipelines:</strong> Converts raw SVGs into optimized React/Vue component trees with automated SVGO lossless compression during pre-commit hooks.</li>
+          </ul>
+        </div>
+
+        <h2>3. Case Study: Slashing Production Handoff from 6 Hours to 4 Minutes</h2>
+        <p>In a recent multi-brand rebranding initiative, our creative team faced the daunting task of re-rendering 450 promotional motion templates across 6 distinct language locales. By engineering an internal After Effects script that parsed a centralized Google Sheet and auto-generated localized compositions, the total rendering pipeline dropped from three full working days to just under 15 minutes of unattended batch processing.</p>
+
+      </article>
+
+      <div class="article-footer-nav">
+        <a href="index.html" class="back-btn-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>Back to All Articles</span>
+        </a>
+        <a href="high-recall-brand-systems.html" class="back-btn-pill" style="color: var(--v); border-color: rgba(94,67,236,0.3);">
+          <span>Next: High-Recall Brand Systems →</span>
+        </a>
+      </div>
+
+    </main>
+  </div>
+
+  
+
+  <site-footer></site-footer>
+
+  <script>
+    (function initNav() {
+      const nav = document.getElementById('nav');
+      const dotsBtn = document.getElementById('navDotsBtn');
+      let lastY = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (y > 120 && y > lastY) nav.classList.add('is-compact');
+        else if (y < lastY || y <= 50) nav.classList.remove('is-compact');
+        lastY = Math.max(0, y);
+      }, { passive: true });
+      if (dotsBtn) dotsBtn.addEventListener('click', () => nav.classList.toggle('is-compact'));
+    })();
+
+    
+  </script>
+  <script src="../custom-components.js" defer></script>
+</body>
+</html>

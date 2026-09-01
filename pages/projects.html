@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Projects — Rakibul Hassan | Creative Designer</title>
+  <meta name="description" content="Explore the full portfolio of creative design works, branding, UI/UX case studies, motion design, and advertising campaigns by Rakibul Hassan." />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #fbfbfe;
+      --fg: #0c0a1a;
+      --v: #5e43ec;
+      --mu: rgba(12, 10, 26, 0.62);
+      --border: rgba(12, 10, 26, 0.08);
+      --dp: 'Plus Jakarta Sans', sans-serif;
+      --sans: 'Plus Jakarta Sans', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'Playfair Display', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--dp);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════
+       RECTANGULAR FOLLOWER BADGE CURSOR
+    ══════════════════════════════════════ */
+    .project-badge-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 100000;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #0b0b0b;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 3px;
+      padding: 7px 13px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transform: translate3d(-50%, -50%, 0) scale(0);
+      opacity: 0;
+      will-change: transform, opacity;
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+      transform-origin: center center;
+    }
+    .project-badge-cursor.is-active {
+      transform: translate3d(-50%, -50%, 0) scale(1);
+      opacity: 1;
+    }
+    .project-badge-cursor .badge-text {
+      font-family: var(--dp);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .project-badge-cursor .badge-arrow {
+      width: 13px;
+      height: 13px;
+      stroke: #a3e635;
+      flex-shrink: 0;
+      display: block;
+      transition: transform 0.2s ease;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .project-badge-cursor {
+        display: none !important;
+      }
+    }
+
+    /* ══════════════════════════════════════
+       PROGRESSIVE GRADIENT BLUR OVERLAY
+    ══════════════════════════════════════ */
+    .bottom-blur-gradient-overlay {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 110px;
+      pointer-events: none;
+      z-index: 850;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
+      -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0) 100%);
+      will-change: backdrop-filter, opacity, transform;
+      transition: opacity 0.35s ease;
+    }
+    .bottom-blur-gradient-overlay.is-hidden {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    
+/* ══════════════════════════════════════
+   FULL-WIDTH STICKY 3-COLUMN FOOTER WITH EMBEDDED FAQ
+   (Sticky Bottom Underneath Site Main Flow)
+══════════════════════════════════════ */
+footer.fullwidth-sticky-footer {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-top: -40px;
+  min-height: 540px;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background: #09090b;
+  color: #ffffff;
+  padding: 150px 0 36px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  footer.fullwidth-sticky-footer {
+    padding: 90px 0 30px 0;
+  }
+}
+
+.sticky-footer-wrapper {
+  margin: 0 auto;
+  padding: 0 90px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. Main 3-Column Grid (Balanced Symmetry) */
+.footer-3col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1fr;
+  gap: 70px;
+  align-items: start;
+  width: 100%;
+}
+
+/* Scroll Reveal Animations for Footer Columns */
+
+
+
+
+.footer-3col-grid > .footer-reveal-col:nth-child(1) {
+  transition-delay: 0.04s;
+}
+.footer-3col-grid > .footer-reveal-col:nth-child(2) {
+  transition-delay: 0.16s;
+}
+.footer-3col-grid > .footer-reveal-col:nth-child(3) {
+  transition-delay: 0.28s;
+}
+
+.footer-bottom-meta
+
+/* Glass Card Containers for Left & Right Columns */
+.footer-col-card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 24px;
+  padding: 28px 26px;
+  box-sizing: border-box;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Left Column: Brand & Direct Contact */
+.footer-col-brand {
+  align-items: flex-start;
+}
+
+.footer-brand-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  margin-bottom: 2px;
+}
+
+.footer-brand-logo-img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+.footer-avail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: #34d399;
+}
+
+.footer-avail-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+  animation: footerLivePulse 2.2s infinite;
+  flex-shrink: 0;
+}
+
+.footer-role-summary {
+  font-family: var(--dp);
+  font-size: 15px;
+  font-weight: 700;
+  color: #f4f4f5;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.footer-brand-bio {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: #a1a1aa;
+  margin: 0;
+}
+
+.footer-email-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 100px;
+  background: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f4f4f5;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 4px;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.footer-email-btn:hover {
+  background: #27272a;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.footer-email-btn svg {
+  color: #a1a1aa;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.footer-email-btn:hover svg {
+  transform: translate(2px, -2px);
+  color: #ffffff;
+}
+
+/* Center Column: Compact FAQ Chat Bubble Module */
+.footer-col-faq {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-faq-header {
+  width: 100%;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.footer-faq-title {
+  font-family: var(--dp);
+  font-size: clamp(16px, 1.4vw, 19px);
+  font-weight: 700;
+  color: #f4f4f5;
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Dynamic Live Time Badge in FAQ Header */
+.footer-faq-time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: #a1a1aa;
+  white-space: nowrap;
+}
+
+.footer-faq-time-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+}
+
+.footer-faq-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* Question Pill (Left Aligned Dark Badge) */
+.footer-faq-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-faq-q {
+  background: #141416;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #f4f4f5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  outline: none;
+}
+
+.footer-faq-q:hover {
+  background: #1f1f23;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.footer-faq-q-text {
+  line-height: 1.35;
+  color: #f4f4f5;
+  font-family: var(--sans);
+  flex-grow: 1;
+}
+
+.footer-faq-toggle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.footer-faq-item.is-open .footer-faq-toggle {
+  background: rgba(255, 255, 255, 0.22);
+  transform: rotate(180deg);
+}
+
+.footer-faq-icon-v {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+.footer-faq-item.is-open .footer-faq-icon-v {
+  transform: scaleY(0);
+  opacity: 0;
+}
+
+/* Answer Bubble (Right Aligned / Chat Style) */
+.footer-faq-a-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1), margin 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  will-change: grid-template-rows;
+}
+
+.footer-faq-item.is-open .footer-faq-a-wrap {
+  grid-template-rows: 1fr;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.footer-faq-a-inner {
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.footer-faq-a {
+  background: #0084ff;
+  color: #ffffff;
+  border-radius: 18px 18px 4px 18px;
+  padding: 12px 18px;
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 3px 0 5px auto;
+  max-width: 90%;
+  box-sizing: border-box;
+  box-shadow: 0 6px 20px rgba(0, 132, 255, 0.28);
+  transform: translateY(-6px) scale(0.96);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+.footer-faq-item.is-open .footer-faq-a {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.footer-faq-a p {
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Right Column Card: Structured 2-Subcolumn Layout (Right Aligned) */
+.footer-col-nav-card {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 22px;
+  padding: 26px 22px;
+}
+
+.footer-nav-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 4px;
+}
+
+.footer-nav-heading {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #71717a;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  text-align: right;
+  width: 100%;
+}
+
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  width: 100%;
+}
+
+.footer-link-item {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer-link-item a {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #a1a1aa;
+  line-height: 1.7;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  text-align: right;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.footer-link-item a:hover {
+  color: #ffffff;
+}
+
+.footer-link-arrow {
+  color: #a1a1aa;
+  transition: transform 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.footer-link-item a:hover .footer-link-arrow {
+  transform: translate(2px, -2px);
+  color: #ffffff;
+}
+
+/* Bottom Meta Bar */
+.footer-bottom-meta {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 40px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #71717a;
+  width: 100%;
+}
+
+.footer-meta-left {
+  color: #71717a;
+}
+
+.footer-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-meta-tz {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #71717a;
+}
+
+/* Responsive Adaptation */
+@media (max-width: 1024px) {
+  footer.fullwidth-sticky-footer {
+    position: relative;
+    padding: 56px 0 30px 0;
+  }
+  .footer-3col-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .footer-col-card {
+    padding: 24px 20px;
+  }
+  .footer-col-nav-card {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-bottom-meta {
+    flex-direction: column-reverse;
+    gap: 16px;
+    align-items: flex-start;
+    margin-top: 32px;
+    padding-top: 20px;
+  }
+}
+
+
+
+/* ══════════════════════════════════════
+   UNIVERSAL DUAL-ROW ROLLING TEXT ON HOVER
+══════════════════════════════════════ */
+.btn-roll {
+  position: relative;
+  display: inline-block;
+  height: 1.25em;
+  line-height: 1.25em;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.btn-roll span {
+  display: block;
+  height: 1.25em;
+  line-height: 1.25em;
+  white-space: nowrap;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.btn-roll .btn-text-hover {
+  color: inherit;
+}
+
+.btn-hero-primary:hover .btn-roll .btn-text-default,
+.btn-view-all-projects:hover .btn-roll .btn-text-default,
+.btn-wh:hover .btn-roll .btn-text-default,
+.btn-ow:hover .btn-roll .btn-text-default,
+.cf-sub:hover .btn-roll .btn-text-default,
+.footer-email-btn:hover .btn-roll .btn-text-default,
+.footer-link-item a:hover .btn-roll .btn-text-default,
+.footer-top-btn:hover .btn-roll .btn-text-default,
+.btn-roll:hover .btn-text-default {
+  transform: translateY(-1.25em);
+}
+
+.btn-hero-primary:hover .btn-roll .btn-text-hover,
+.btn-view-all-projects:hover .btn-roll .btn-text-hover,
+.btn-wh:hover .btn-roll .btn-text-hover,
+.btn-ow:hover .btn-roll .btn-text-hover,
+.cf-sub:hover .btn-roll .btn-text-hover,
+.footer-email-btn:hover .btn-roll .btn-text-hover,
+.footer-link-item a:hover .btn-roll .btn-text-hover,
+.footer-top-btn:hover .btn-roll .btn-text-hover,
+.btn-roll:hover .btn-text-hover {
+  transform: translateY(-1.25em);
+}
+
+/* ══════════════════════════════════════
+   PREMIUM SMOOTH & REPEATABLE FOOTER REVEAL
+══════════════════════════════════════ */
+
+
+
+
+.footer-col-brand
+.footer-col-faq
+.footer-col-nav-card
+.footer-bottom-meta
+
+</style>
+  <link rel="stylesheet" href="../custom-components.css" />
+</head>
+<body>
+
+  <!-- ════ RECTANGULAR FOLLOWER BADGE CURSOR ════ -->
+  <div class="project-badge-cursor" id="projectBadgeCursor">
+    <span class="badge-text">VIEW PROJECT</span>
+    <svg class="badge-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="7" y1="17" x2="17" y2="7"></line>
+      <polyline points="7 7 17 7 17 17"></polyline>
+    </svg>
+  </div>
+
+  <site-nav></site-nav>
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <div class="page-head">
+      <span class="chip">Selected Works</span>
+      <h1 class="page-title">All Creative <em>Projects</em></h1>
+      <p class="page-sub">A curated showcase of brand identities, UI/UX case studies, motion design, and marketing campaign creatives.</p>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
+      <button class="filter-btn" data-filter="uiux">UI/UX</button>
+      <button class="filter-btn" data-filter="advertising">Advertising</button>
+      <button class="filter-btn" data-filter="motion">Motion &amp; Social</button>
+    </div>
+
+    <!-- GRID -->
+    <div class="projects-grid">
+      
+      <!-- Project 1 -->
+      <a href="https://www.behance.net/gallery/244548443/Portfolio-2025-Creative-Design-Works" target="_blank" class="project-card" data-cat="branding">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/aea3e7244548443.Y3JvcCwzMDAwLDIzNDYsMCww.png" alt="Creative Design Works 2025" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">Creative Design Works 2025</h3>
+            <span class="project-cat">Branding &amp; Visual Identity</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 2 -->
+      <a href="https://www.behance.net/gallery/239347273/CASE-STUDY-ID-Card-Automation-System" target="_blank" class="project-card" data-cat="uiux">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/690abd239347273.Y3JvcCw4MDgsNjMyLDAsMA.jpg" alt="ID Card Automation System" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">ID Card Automation System</h3>
+            <span class="project-cat">UI/UX Case Study</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 3 -->
+      <a href="https://www.behance.net/gallery/201488859/Creative-ADS-for-Nike-Shoes" target="_blank" class="project-card" data-cat="advertising">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/612f4f201488859.Y3JvcCwzOTk5LDMxMjgsMCww.jpg" alt="Nike Creative ADS" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">Creative ADS — Nike Shoes</h3>
+            <span class="project-cat">Advertising &amp; Campaigns</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 4 -->
+      <a href="https://www.behance.net/gallery/188268843/Social-Media-ADS" target="_blank" class="project-card" data-cat="motion">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/dd7780188268843.Y3JvcCwzMDAwLDIzNDYsMCww.jpg" alt="Social Media Campaigns" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">Social Media ADS &amp; Motion</h3>
+            <span class="project-cat">Motion &amp; Social Content</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 5 -->
+      <a href="https://www.behance.net/gallery/217720957/Youtube-Thumbnail" target="_blank" class="project-card" data-cat="advertising">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/9937b9217720957.Y3JvcCwzMDAwLDIzNDYsMCww.png" alt="YouTube Thumbnail Design" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">YouTube Thumbnail Design</h3>
+            <span class="project-cat">Content &amp; Advertising</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Project 6 -->
+      <a href="https://www.behance.net/gallery/182336311/Ecommerce-Shop-Gadget-Banner-Design-Portfolio" target="_blank" class="project-card" data-cat="branding">
+        <div class="project-img-wrap">
+          <img src="https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/87b1f8182336311.Y3JvcCwxOTk5LDE1NjQsMCww.jpg" alt="Ecommerce Gadget Banner" />
+        </div>
+        <div class="project-info">
+          <div class="project-meta">
+            <h3 class="project-title">Ecommerce Shop Gadget Banner</h3>
+            <span class="project-cat">Social Media &amp; E-commerce</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  
+
+  <site-footer></site-footer>
+
+  <script>
+    // Filter tabs logic
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter');
+
+        projectCards.forEach(card => {
+          if (filter === 'all' || card.getAttribute('data-cat') === filter) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // ══════════════════════════════════════
+    // RECTANGULAR FOLLOWER BADGE CURSOR
+    // ══════════════════════════════════════
+    (function initBadgeCursor() {
+      const badge = document.getElementById('projectBadgeCursor');
+      if (!badge) return;
+
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let badgeX = mouseX;
+      let badgeY = mouseY;
+      let isHoveringProject = false;
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }, { passive: true });
+
+      document.addEventListener('mouseover', (e) => {
+        const projectItem = e.target.closest('.project-card, .project-item, .project-preview');
+        if (projectItem) {
+          isHoveringProject = true;
+          badge.classList.add('is-active');
+        } else {
+          isHoveringProject = false;
+          badge.classList.remove('is-active');
+        }
+      });
+
+      document.addEventListener('mouseleave', () => {
+        isHoveringProject = false;
+        badge.classList.remove('is-active');
+      });
+
+      function loop() {
+        badgeX += (mouseX - badgeX) * 0.18;
+        badgeY += (mouseY - badgeY) * 0.18;
+        badge.style.transform = `translate3d(${badgeX}px, ${badgeY}px, 0) translate(-50%, -50%) scale(${isHoveringProject ? 1 : 0})`;
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+    })();
+
+    // ══════════════════════════════════════
+    // NAVBAR SMART COMPACT ON SCROLL
+    // ══════════════════════════════════════
+    (function(){
+      const nav = document.getElementById('nav');
+      const dotsBtn = document.getElementById('navDotsBtn');
+      let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+      function updateNav() {
+        const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+        if (!nav) return;
+        
+        if (currentScrollY > 120 && currentScrollY > lastScrollY) {
+          nav.classList.add('is-compact');
+        } else if (currentScrollY < lastScrollY || currentScrollY <= 50) {
+          nav.classList.remove('is-compact');
+        }
+        lastScrollY = Math.max(0, currentScrollY);
+      }
+
+      window.addEventListener('scroll', updateNav, { passive: true });
+
+      if (dotsBtn) {
+        dotsBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          nav.classList.toggle('is-compact');
+        });
+      }
+    })();
+
+    // ══════════════════════════════════════
+    // FOOTER FAQ ACCORDION & DYNAMIC LIVE TIME
+    // ══════════════════════════════════════
+    (function initFooterFaq(){
+      function updateFaqClock() {
+        var timeEl = document.getElementById('footerFaqTime');
+        if (timeEl) {
+          var now = new Date();
+          var timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+          timeEl.textContent = 'Click to open, ' + timeStr;
+        }
+      }
+      updateFaqClock();
+      setInterval(updateFaqClock, 20000);
+
+      // FAQ Accordion Toggle
+      document.querySelectorAll('.footer-faq-q').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.preventDefault();
+          var item = this.closest('.footer-faq-item');
+          if (!item) return;
+          var isOpen = item.classList.toggle('is-open');
+          this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+      });
+
+      // Footer Column Reveal Observer
+      var footerEl = document.querySelector('footer.fullwidth-sticky-footer');
+      if (window.IntersectionObserver && footerEl) {
+        var footerObserver = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if (entry.isIntersecting) {
+              footerEl.querySelectorAll('.footer-reveal-col').forEach(function(col){
+                col.classList.add('is-revealed');
+              });
+              if (blurOverlay) blurOverlay.classList.add('is-hidden');
+            }
+          });
+        }, { rootMargin: '40px 0px 0px 0px', threshold: 0.01 });
+        footerObserver.observe(footerEl);
+      } else if (footerEl) {
+        footerEl.querySelectorAll('.footer-reveal-col').forEach(function(col){
+          col.classList.add('is-revealed');
+        });
+      }
+
+      // Auto-hide Bottom Blur Overlay when Footer is visible
+      var blurOverlay = document.getElementById('bottomBlurOverlay') || document.querySelector('.bottom-blur-gradient-overlay');
+      if (blurOverlay && footerEl) {
+        function checkBlurVisibility() {
+          var footerRect = footerEl.getBoundingClientRect();
+          var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+          if (footerRect.top <= windowHeight + 10) {
+            blurOverlay.classList.add('is-hidden');
+          } else {
+            blurOverlay.classList.remove('is-hidden');
+          }
+        }
+        window.addEventListener('scroll', checkBlurVisibility, { passive: true });
+        window.addEventListener('resize', checkBlurVisibility, { passive: true });
+        window.addEventListener('load', checkBlurVisibility);
+        setTimeout(checkBlurVisibility, 200);
+      }
+    })();
+  </script>
+<script>
+
+</script>
+  <script src="../custom-components.js" defer></script>
+</body>
+</html>
